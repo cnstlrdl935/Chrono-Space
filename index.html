@@ -963,73 +963,207 @@
     }
 
 
+/* =====================================
+   초시계
+===================================== */
 
-    // 초시계 시작
+let stopwatchTime = 0;
 
-    function startStopwatch() {
+// 실제 시작 시각
+let stopwatchStartTime = 0;
 
+// 정지했을 때까지의 누적 시간
+let stopwatchElapsed = 0;
 
-      if (
-        stopwatchInterval !== null
-      ) {
-
-        return;
-
-      }
-
-
-      stopwatchInterval =
-        setInterval(function() {
+let stopwatchAnimation = null;
 
 
-          stopwatchTime++;
+// 초시계 화면 업데이트
+function updateStopwatch() {
+
+  const totalMilliseconds =
+    stopwatchElapsed +
+    (stopwatchTime
+      ? performance.now() - stopwatchStartTime
+      : 0);
 
 
-          updateStopwatch();
+  // 1시간 = 3,600,000밀리초
+  const oneHour = 60 * 60 * 1000;
 
 
-        }, 1000);
-
-    }
+  let displayText;
 
 
+  // ==============================
+  // 1시간 미만
+  // 분 : 초 : 밀리초
+  // ==============================
 
-    // 초시계 정지
+  if (totalMilliseconds < oneHour) {
 
-    function pauseStopwatch() {
+    const minutes =
+      Math.floor(
+        totalMilliseconds / 60000
+      );
 
+    const seconds =
+      Math.floor(
+        (totalMilliseconds % 60000) / 1000
+      );
 
-      clearInterval(
-        stopwatchInterval
+    const milliseconds =
+      Math.floor(
+        (totalMilliseconds % 1000) / 10
       );
 
 
-      stopwatchInterval = null;
+    displayText =
 
-    }
+      String(minutes).padStart(2, "0") +
+      ":" +
+
+      String(seconds).padStart(2, "0") +
+      ":" +
+
+      String(milliseconds).padStart(2, "0");
+
+  }
 
 
+  // ==============================
+  // 1시간 이상
+  // 시간 : 분 : 초
+  // ==============================
 
-    // 초시계 초기화
+  else {
 
-    function resetStopwatch() {
+    const hours =
+      Math.floor(
+        totalMilliseconds / 3600000
+      );
 
+    const minutes =
+      Math.floor(
+        (totalMilliseconds % 3600000) / 60000
+      );
 
-      clearInterval(
-        stopwatchInterval
+    const seconds =
+      Math.floor(
+        (totalMilliseconds % 60000) / 1000
       );
 
 
-      stopwatchInterval = null;
+    displayText =
+
+      String(hours).padStart(2, "0") +
+      ":" +
+
+      String(minutes).padStart(2, "0") +
+      ":" +
+
+      String(seconds).padStart(2, "0");
+
+  }
 
 
-      stopwatchTime = 0;
+  document
+    .getElementById("stopwatchDisplay")
+    .textContent = displayText;
 
 
-      updateStopwatch();
+  // 실행 중이면 계속 업데이트
+  if (stopwatchTime) {
 
-    }
+    stopwatchAnimation =
+      requestAnimationFrame(updateStopwatch);
 
+  }
+
+}
+
+
+
+// 초시계 시작
+function startStopwatch() {
+
+  if (stopwatchTime) {
+    return;
+  }
+
+
+  stopwatchStartTime =
+    performance.now();
+
+
+  stopwatchTime = 1;
+
+
+  updateStopwatch();
+
+}
+
+
+
+// 초시계 정지
+function pauseStopwatch() {
+
+  if (!stopwatchTime) {
+    return;
+  }
+
+
+  stopwatchElapsed +=
+    performance.now() -
+    stopwatchStartTime;
+
+
+  stopwatchTime = 0;
+
+
+  if (stopwatchAnimation) {
+
+    cancelAnimationFrame(
+      stopwatchAnimation
+    );
+
+    stopwatchAnimation = null;
+
+  }
+
+
+  updateStopwatch();
+
+}
+
+
+
+// 초시계 초기화
+function resetStopwatch() {
+
+  if (stopwatchAnimation) {
+
+    cancelAnimationFrame(
+      stopwatchAnimation
+    );
+
+    stopwatchAnimation = null;
+
+  }
+
+
+  stopwatchTime = 0;
+
+  stopwatchStartTime = 0;
+
+  stopwatchElapsed = 0;
+
+
+  document
+    .getElementById("stopwatchDisplay")
+    .textContent = "00:00:00";
+
+}
 
   </script>
 
