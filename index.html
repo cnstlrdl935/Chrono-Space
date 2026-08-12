@@ -20,19 +20,18 @@
 
     :root {
 
-      /* 오른쪽 메인 배경 */
       --bg-color: #eef2ff;
 
-      /* 글자는 고정 */
+      /* 글자색은 고정 */
       --text-color: #334155;
       --title-color: #334155;
       --display-color: #334155;
 
-      /* 왼쪽 메뉴는 항상 흰색 */
+      /* 왼쪽 사이드바는 항상 흰색 */
       --sidebar-bg: #ffffff;
       --sidebar-border: #e5e7eb;
 
-      /* 일반 버튼 */
+      /* 버튼 */
       --button-bg: #d9dcff;
       --button-text: #334155;
 
@@ -47,12 +46,11 @@
       --input-bg: rgba(255, 255, 255, 0.72);
       --input-border: rgba(51, 65, 85, 0.22);
 
-      /* 설정 박스 */
+      /* 설정 */
       --setting-bg: rgba(255, 255, 255, 0.40);
 
       --shadow:
         rgba(30, 41, 59, 0.12);
-
     }
 
 
@@ -61,18 +59,13 @@
     ================================================== */
 
     * {
-
       box-sizing: border-box;
-
     }
 
 
     html {
-
       width: 100%;
-
       min-height: 100%;
-
     }
 
 
@@ -99,7 +92,6 @@
 
       transition:
         background 0.3s ease;
-
     }
 
 
@@ -114,12 +106,11 @@
       width: 100%;
 
       min-height: 100vh;
-
     }
 
 
     /* ==================================================
-       왼쪽 메뉴
+       왼쪽 사이드바
        ★ 항상 흰색
     ================================================== */
 
@@ -133,8 +124,7 @@
 
       padding: 25px 15px;
 
-      background:
-        #ffffff;
+      background: #ffffff;
 
       border-right:
         1px solid var(--sidebar-border);
@@ -148,8 +138,7 @@
 
       gap: 10px;
 
-      z-index: 10;
-
+      z-index: 100;
     }
 
 
@@ -165,13 +154,11 @@
 
       text-align: center;
 
-      color:
-        #334155;
+      color: #334155;
 
       margin-bottom: 20px;
 
       letter-spacing: 0.5px;
-
     }
 
 
@@ -207,15 +194,11 @@
         background 0.2s ease,
         color 0.2s ease,
         transform 0.2s ease;
-
     }
 
 
     .menu-button:hover {
-
-      transform:
-        translateY(-1px);
-
+      transform: translateY(-1px);
     }
 
 
@@ -226,12 +209,11 @@
 
       color:
         var(--active-text);
-
     }
 
 
     /* ==================================================
-       메인 영역
+       메인
     ================================================== */
 
     .main {
@@ -255,7 +237,6 @@
 
       transition:
         background 0.3s ease;
-
     }
 
 
@@ -276,7 +257,7 @@
       min-height: 500px;
 
       padding:
-        60px 35px 55px;
+        70px 35px 55px;
 
       border-radius: 24px;
 
@@ -296,7 +277,6 @@
 
       color:
         var(--text-color);
-
     }
 
 
@@ -309,7 +289,100 @@
       justify-content: center;
 
       align-items: center;
+    }
 
+
+    /* ==================================================
+       전체화면일 때
+    ================================================== */
+
+    .screen:fullscreen {
+
+      width: 100vw;
+
+      height: 100vh;
+
+      max-width: none;
+
+      min-height: 100vh;
+
+      border-radius: 0;
+
+      background:
+        var(--bg-color);
+
+      box-shadow: none;
+
+      padding: 80px 30px;
+    }
+
+
+    .screen:fullscreen .display {
+
+      font-size: clamp(
+        50px,
+        10vw,
+        110px
+      );
+    }
+
+
+    .screen:fullscreen h1 {
+
+      font-size: 40px;
+    }
+
+
+    /* ==================================================
+       전체화면 버튼
+    ================================================== */
+
+    .fullscreen-button {
+
+      position: absolute;
+
+      top: 20px;
+
+      right: 20px;
+
+      border: none;
+
+      background:
+        var(--button-bg);
+
+      color:
+        var(--button-text);
+
+      padding:
+        9px 14px;
+
+      border-radius:
+        9px;
+
+      font-size:
+        13px;
+
+      font-weight:
+        600;
+
+      cursor:
+        pointer;
+
+      transition:
+        0.2s ease;
+
+      z-index:
+        20;
+    }
+
+
+    .fullscreen-button:hover {
+
+      transform:
+        scale(1.04);
+
+      filter:
+        brightness(0.95);
     }
 
 
@@ -322,35 +395,37 @@
       margin:
         0 0 20px 0;
 
-      font-size: 30px;
+      font-size:
+        30px;
 
       color:
         var(--title-color);
-
     }
 
 
     /* ==================================================
        날짜
+       ★ 시간 아래 표시
     ================================================== */
 
     .date {
 
-      position: absolute;
+      position: static;
 
-      top: 25px;
+      margin-top:
+        -15px;
 
-      left: 30px;
-
-      font-size: 15px;
+      font-size:
+        16px;
 
       color:
         var(--text-color);
 
-      font-weight: 500;
+      font-weight:
+        500;
 
-      text-align: left;
-
+      text-align:
+        center;
     }
 
 
@@ -363,24 +438,27 @@
       margin:
         0 0 10px 0;
 
-      display: flex;
+      display:
+        flex;
 
-      flex-direction: column;
+      flex-direction:
+        column;
 
-      align-items: center;
-
+      align-items:
+        center;
     }
 
 
     .timezone-box label {
 
-      margin-bottom: 8px;
+      margin-bottom:
+        8px;
 
       color:
         var(--text-color);
 
-      font-size: 14px;
-
+      font-size:
+        14px;
     }
 
 
@@ -409,7 +487,6 @@
 
       outline:
         none;
-
     }
 
 
@@ -439,7 +516,6 @@
 
       text-align:
         center;
-
     }
 
 
@@ -463,7 +539,6 @@
 
       margin:
         5px 0 25px;
-
     }
 
 
@@ -477,7 +552,6 @@
 
       align-items:
         center;
-
     }
 
 
@@ -491,7 +565,6 @@
 
       color:
         var(--text-color);
-
     }
 
 
@@ -523,7 +596,6 @@
 
       color:
         var(--text-color);
-
     }
 
 
@@ -531,7 +603,6 @@
 
       border-color:
         var(--active-bg);
-
     }
 
 
@@ -552,7 +623,6 @@
 
       color:
         var(--text-color);
-
     }
 
 
@@ -582,7 +652,6 @@
 
       margin-top:
         5px;
-
     }
 
 
@@ -615,7 +684,6 @@
 
       transition:
         0.2s ease;
-
     }
 
 
@@ -630,7 +698,6 @@
 
       color:
         var(--active-text);
-
     }
 
 
@@ -638,7 +705,6 @@
 
       filter:
         brightness(0.94);
-
     }
 
 
@@ -656,7 +722,6 @@
 
       border:
         1px solid var(--input-border) !important;
-
     }
 
 
@@ -669,6 +734,8 @@
       text-align:
         left;
 
+      overflow-y:
+        auto;
     }
 
 
@@ -679,7 +746,6 @@
 
       margin-bottom:
         25px !important;
-
     }
 
 
@@ -699,7 +765,6 @@
 
       margin-bottom:
         20px;
-
     }
 
 
@@ -713,7 +778,6 @@
 
       color:
         var(--title-color);
-
     }
 
 
@@ -727,7 +791,6 @@
 
       color:
         var(--text-color);
-
     }
 
 
@@ -745,7 +808,6 @@
 
       gap:
         12px;
-
     }
 
 
@@ -773,7 +835,6 @@
       box-shadow:
         0 3px 8px
         rgba(0, 0, 0, 0.08);
-
     }
 
 
@@ -781,7 +842,6 @@
 
       transform:
         scale(1.06);
-
     }
 
 
@@ -793,11 +853,12 @@
       box-shadow:
         0 0 0 2px white,
         0 0 0 4px #334155;
-
     }
 
 
-    /* 파스텔 색 */
+    /* ==================================================
+       파스텔 색
+    ================================================== */
 
     .pastel-pink {
       background: #ffd6e0;
@@ -872,7 +933,6 @@
 
       cursor:
         pointer;
-
     }
 
 
@@ -908,12 +968,11 @@
 
       outline:
         none;
-
     }
 
 
     /* ==================================================
-       하단 투명 태스크바
+       투명 태스크바
     ================================================== */
 
     .taskbar {
@@ -947,7 +1006,6 @@
 
       z-index:
         5;
-
     }
 
 
@@ -957,12 +1015,10 @@
 
     @media (max-width: 700px) {
 
-
       .layout {
 
         flex-direction:
           column;
-
       }
 
 
@@ -985,7 +1041,6 @@
 
         align-items:
           center;
-
       }
 
 
@@ -996,7 +1051,6 @@
 
         margin-bottom:
           5px;
-
       }
 
 
@@ -1013,7 +1067,6 @@
 
         font-size:
           14px;
-
       }
 
 
@@ -1024,7 +1077,6 @@
 
         padding:
           15px;
-
       }
 
 
@@ -1034,8 +1086,7 @@
           450px;
 
         padding:
-          55px 15px 40px;
-
+          60px 15px 40px;
       }
 
 
@@ -1043,7 +1094,6 @@
 
         font-size:
           42px;
-
       }
 
 
@@ -1051,7 +1101,6 @@
 
         gap:
           5px;
-
       }
 
 
@@ -1062,7 +1111,6 @@
 
         font-size:
           20px;
-
       }
 
 
@@ -1070,7 +1118,6 @@
 
         gap:
           8px;
-
       }
 
 
@@ -1078,7 +1125,19 @@
 
         left:
           0;
+      }
 
+
+      .fullscreen-button {
+
+        top:
+          15px;
+
+        right:
+          15px;
+
+        padding:
+          8px 10px;
       }
 
     }
@@ -1094,7 +1153,6 @@
 
         font-size:
           34px;
-
       }
 
 
@@ -1102,7 +1160,6 @@
 
         width:
           65px;
-
       }
 
 
@@ -1110,7 +1167,6 @@
 
         gap:
           2px;
-
       }
 
     }
@@ -1202,13 +1258,14 @@
         class="screen active">
 
 
-        <div
-          id="dateDisplay"
-          class="date">
+        <button
+          id="clockFullscreenButton"
+          class="fullscreen-button"
+          onclick="toggleFullscreen('clock')">
 
-          날짜
+          ⛶ 전체화면
 
-        </div>
+        </button>
 
 
         <h1 id="clockTitle">
@@ -1290,6 +1347,17 @@
         </div>
 
 
+        <!-- 날짜를 시간 아래로 이동 -->
+
+        <div
+          id="dateDisplay"
+          class="date">
+
+          날짜
+
+        </div>
+
+
       </section>
 
 
@@ -1301,6 +1369,16 @@
       <section
         id="timer"
         class="screen">
+
+
+        <button
+          id="timerFullscreenButton"
+          class="fullscreen-button"
+          onclick="toggleFullscreen('timer')">
+
+          ⛶ 전체화면
+
+        </button>
 
 
         <h1 id="timerTitle">
@@ -1443,6 +1521,16 @@
         class="screen">
 
 
+        <button
+          id="stopwatchFullscreenButton"
+          class="fullscreen-button"
+          onclick="toggleFullscreen('stopwatch')">
+
+          ⛶ 전체화면
+
+        </button>
+
+
         <h1 id="stopwatchTitle">
 
           초시계
@@ -1498,6 +1586,16 @@
         class="screen settings-screen">
 
 
+        <button
+          id="settingsFullscreenButton"
+          class="fullscreen-button"
+          onclick="toggleFullscreen('settings')">
+
+          ⛶ 전체화면
+
+        </button>
+
+
         <h1
           id="settingsTitle"
           class="settings-title">
@@ -1507,7 +1605,7 @@
         </h1>
 
 
-        <!-- 배경색 설정 -->
+        <!-- 배경색 -->
 
         <div class="setting-section">
 
@@ -1697,11 +1795,10 @@
 
 
     /* ==================================================
-       언어
+       언어 데이터
     ================================================== */
 
     const translations = {
-
 
       ko: {
 
@@ -1728,6 +1825,10 @@
         stop: "정지",
 
         reset: "초기화",
+
+        fullscreen: "⛶ 전체화면",
+
+        exitFullscreen: "⛶ 나가기",
 
         background: "배경색",
 
@@ -1780,6 +1881,10 @@
 
         reset: "Reset",
 
+        fullscreen: "⛶ Fullscreen",
+
+        exitFullscreen: "⛶ Exit",
+
         background: "Background",
 
         backgroundDescription:
@@ -1831,6 +1936,10 @@
 
         reset: "リセット",
 
+        fullscreen: "⛶ 全画面",
+
+        exitFullscreen: "⛶ 終了",
+
         background: "背景色",
 
         backgroundDescription:
@@ -1870,10 +1979,6 @@
       "#eef2ff";
 
 
-    /*
-      배경색별 버튼 색상
-    */
-
     const buttonColors = {
 
       "#ffd6e0": "#e89aaa",
@@ -1910,20 +2015,11 @@
       selectedButton
     ) {
 
-
-      /*
-        ★ 오른쪽 메인 배경만 변경
-      */
-
       document.documentElement.style.setProperty(
         "--bg-color",
         color
       );
 
-
-      /*
-        ★ 버튼 색 변경
-      */
 
       const buttonColor =
         buttonColors[color]
@@ -1942,19 +2038,13 @@
       );
 
 
-      /*
-        ★ 왼쪽 메뉴는 흰색으로 고정
-      */
+      /* 왼쪽은 무조건 흰색 */
 
       document.documentElement.style.setProperty(
         "--sidebar-bg",
         "#ffffff"
       );
 
-
-      /*
-        선택 표시
-      */
 
       document
         .querySelectorAll(".pastel-color")
@@ -1976,10 +2066,6 @@
       }
 
 
-      /*
-        저장
-      */
-
       localStorage.setItem(
         "backgroundColor",
         color
@@ -1993,7 +2079,6 @@
     ================================================== */
 
     function resetBackgroundColor() {
-
 
       setBackgroundColor(
         defaultBackgroundColor,
@@ -2015,7 +2100,6 @@
 
     if (savedColor) {
 
-
       const savedButton =
         document.querySelector(
           '.pastel-color[data-color="' +
@@ -2033,7 +2117,6 @@
 
     else {
 
-
       setBackgroundColor(
         defaultBackgroundColor,
         null
@@ -2049,7 +2132,6 @@
     function showScreen(
       screenName
     ) {
-
 
       document
         .querySelectorAll(".screen")
@@ -2092,7 +2174,6 @@
     ================================================== */
 
     function updateClock() {
-
 
       const timezone =
         document
@@ -2218,7 +2299,6 @@
 
     function updateTimer() {
 
-
       const hours =
         Math.floor(
           timerTime / 3600
@@ -2266,7 +2346,6 @@
 
     function toggleTimer() {
 
-
       const button =
         document
           .getElementById(
@@ -2274,12 +2353,9 @@
           );
 
 
-      /*
-        정지
-      */
+      /* 정지 */
 
       if (timerRunning) {
-
 
         clearInterval(
           timerInterval
@@ -2298,16 +2374,12 @@
 
 
         return;
-
       }
 
 
-      /*
-        새로 시작
-      */
+      /* 시작 */
 
       if (timerTime === 0) {
-
 
         const hours =
           Number(
@@ -2352,7 +2424,6 @@
 
         ) {
 
-
           alert(
             translations[
               currentLanguage
@@ -2361,7 +2432,6 @@
 
 
           return;
-
         }
 
 
@@ -2373,7 +2443,6 @@
 
         ) {
 
-
           alert(
             translations[
               currentLanguage
@@ -2382,7 +2451,6 @@
 
 
           return;
-
         }
 
 
@@ -2396,7 +2464,6 @@
 
 
         updateTimer();
-
       }
 
 
@@ -2412,9 +2479,7 @@
       timerInterval =
         setInterval(function() {
 
-
           timerTime--;
-
 
           updateTimer();
 
@@ -2423,7 +2488,6 @@
             timerTime <= 0
           ) {
 
-
             clearInterval(
               timerInterval
             );
@@ -2431,9 +2495,7 @@
 
             timerInterval = null;
 
-
             timerRunning = false;
-
 
             timerTime = 0;
 
@@ -2455,7 +2517,6 @@
 
           }
 
-
         }, 1000);
 
     }
@@ -2466,7 +2527,6 @@
     ================================================== */
 
     function resetTimer() {
-
 
       clearInterval(
         timerInterval
@@ -2539,14 +2599,12 @@
 
     function updateStopwatch() {
 
-
       let totalMilliseconds;
 
 
       if (
         stopwatchRunning
       ) {
-
 
         totalMilliseconds =
 
@@ -2561,10 +2619,8 @@
 
       else {
 
-
         totalMilliseconds =
           stopwatchElapsed;
-
       }
 
 
@@ -2585,7 +2641,6 @@
         totalMilliseconds <
         oneHour
       ) {
-
 
         const minutes =
           Math.floor(
@@ -2638,7 +2693,6 @@
 
       else {
 
-
         const hours =
           Math.floor(
             totalMilliseconds /
@@ -2678,7 +2732,6 @@
 
           String(seconds)
             .padStart(2, "0");
-
       }
 
 
@@ -2694,12 +2747,10 @@
         stopwatchRunning
       ) {
 
-
         stopwatchAnimation =
           requestAnimationFrame(
             updateStopwatch
           );
-
       }
 
     }
@@ -2711,7 +2762,6 @@
 
     function toggleStopwatch() {
 
-
       const button =
         document
           .getElementById(
@@ -2719,14 +2769,11 @@
           );
 
 
-      /*
-        정지
-      */
+      /* 정지 */
 
       if (
         stopwatchRunning
       ) {
-
 
         stopwatchElapsed +=
 
@@ -2746,7 +2793,6 @@
           stopwatchAnimation !== null
         ) {
 
-
           cancelAnimationFrame(
             stopwatchAnimation
           );
@@ -2754,7 +2800,6 @@
 
           stopwatchAnimation =
             null;
-
         }
 
 
@@ -2768,13 +2813,10 @@
 
 
         return;
-
       }
 
 
-      /*
-        시작
-      */
+      /* 시작 */
 
       stopwatchRunning =
         true;
@@ -2801,11 +2843,9 @@
 
     function resetStopwatch() {
 
-
       if (
         stopwatchAnimation !== null
       ) {
-
 
         cancelAnimationFrame(
           stopwatchAnimation
@@ -2814,7 +2854,6 @@
 
         stopwatchAnimation =
           null;
-
       }
 
 
@@ -2851,11 +2890,120 @@
 
 
     /* ==================================================
+       전체화면
+    ================================================== */
+
+    function toggleFullscreen(
+      screenId
+    ) {
+
+      const screen =
+        document.getElementById(
+          screenId
+        );
+
+
+      /*
+        현재 전체화면이 아니면
+        해당 화면을 전체화면으로
+      */
+
+      if (
+        !document.fullscreenElement
+      ) {
+
+        if (
+          screen.requestFullscreen
+        ) {
+
+          screen
+            .requestFullscreen()
+            .catch(function(error) {
+
+              console.log(
+                "전체화면 오류:",
+                error
+              );
+
+            });
+
+        }
+
+      }
+
+      else {
+
+        /*
+          이미 전체화면이면 나가기
+        */
+
+        if (
+          document.exitFullscreen
+        ) {
+
+          document.exitFullscreen();
+
+        }
+
+      }
+
+    }
+
+
+    /* ==================================================
+       전체화면 상태 변화
+    ================================================== */
+
+    document.addEventListener(
+      "fullscreenchange",
+      updateFullscreenButtons
+    );
+
+
+    function updateFullscreenButtons() {
+
+      const t =
+        translations[
+          currentLanguage
+        ];
+
+
+      const fullscreenButtons =
+        document.querySelectorAll(
+          ".fullscreen-button"
+        );
+
+
+      fullscreenButtons.forEach(
+        function(button) {
+
+          if (
+            document.fullscreenElement
+          ) {
+
+            button.textContent =
+              t.exitFullscreen;
+
+          }
+
+          else {
+
+            button.textContent =
+              t.fullscreen;
+
+          }
+
+        }
+      );
+
+    }
+
+
+    /* ==================================================
        언어 변경
     ================================================== */
 
     function changeLanguage() {
-
 
       currentLanguage =
         document
@@ -2882,7 +3030,6 @@
 
     function applyLanguage() {
 
-
       const t =
         translations[
           currentLanguage
@@ -2893,9 +3040,7 @@
         currentLanguage;
 
 
-      /*
-        메뉴
-      */
+      /* 메뉴 */
 
       document
         .getElementById("logo")
@@ -2927,9 +3072,7 @@
         t.settings;
 
 
-      /*
-        현재시간
-      */
+      /* 현재시간 */
 
       document
         .getElementById("clockTitle")
@@ -2943,9 +3086,7 @@
         t.timezone;
 
 
-      /*
-        타이머
-      */
+      /* 타이머 */
 
       document
         .getElementById("timerTitle")
@@ -2986,9 +3127,7 @@
           : t.start;
 
 
-      /*
-        초시계
-      */
+      /* 초시계 */
 
       document
         .getElementById("stopwatchTitle")
@@ -3011,9 +3150,7 @@
           : t.start;
 
 
-      /*
-        설정
-      */
+      /* 설정 */
 
       document
         .getElementById("settingsTitle")
@@ -3034,7 +3171,9 @@
 
 
       document
-        .getElementById("defaultBackgroundButton")
+        .getElementById(
+          "defaultBackgroundButton"
+        )
         .textContent =
         t.defaultBackground;
 
@@ -3046,9 +3185,14 @@
 
 
       document
-        .getElementById("languageDescription")
+        .getElementById(
+          "languageDescription"
+        )
         .textContent =
         t.languageDescription;
+
+
+      updateFullscreenButtons();
 
 
       updateClock();
@@ -3067,6 +3211,7 @@
 
 
     applyLanguage();
+
 
   </script>
 
