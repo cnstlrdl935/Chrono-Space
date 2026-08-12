@@ -1,3713 +1,2527 @@
 <!DOCTYPE html>
 <html lang="ko">
-
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#eef2ff">
+  <title>ChronoSpace</title>
+
+  <style>
+    :root {
+      --bg-color: #eef2ff;
+      --sidebar-bg: #ffffff;
+      --text-color: #334155;
+      --button-bg: #d9dcff;
+      --button-text: #334155;
+      --active-bg: #7c83d9;
+      --active-text: #ffffff;
+      --screen-bg: rgba(255,255,255,0.48);
+      --input-bg: rgba(255,255,255,0.72);
+      --border-color: rgba(51,65,85,0.20);
+      --shadow: rgba(30,41,59,0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      width: 100%;
+      min-height: 100%;
+      margin: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family:
+        Arial,
+        "Noto Sans KR",
+        sans-serif;
+      background: var(--bg-color);
+      color: var(--text-color);
+      overflow-x: hidden;
+      transition: background 0.3s ease;
+    }
+
+    button,
+    input,
+    select {
+      font-family: inherit;
+    }
+
+    /* =========================
+       Layout
+    ========================= */
+
+    .layout {
+      display: flex;
+      width: 100%;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      width: 210px;
+      min-height: 100vh;
+      flex-shrink: 0;
+
+      padding: 25px 15px;
+
+      background: var(--sidebar-bg);
+      border-right: 1px solid #e5e7eb;
+
+      box-shadow: 3px 0 20px var(--shadow);
+
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+
+      z-index: 100;
+    }
+
+    .logo {
+      margin-bottom: 20px;
+      text-align: center;
+
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+
+      color: var(--text-color);
+    }
+
+    .menu-button {
+      width: 100%;
+      border: none;
+
+      padding: 14px 15px;
+      border-radius: 12px;
+
+      background: var(--button-bg);
+      color: var(--button-text);
+
+      font-size: 16px;
+      font-weight: 600;
 
-<meta charset="UTF-8">
+      cursor: pointer;
 
-<meta
-  name="viewport"
-  content="width=device-width, initial-scale=1.0">
+      transition:
+        transform 0.2s ease,
+        filter 0.2s ease,
+        background 0.2s ease;
+    }
 
-<title>ChronoSpace</title>
+    .menu-button:hover {
+      transform: translateY(-1px);
+      filter: brightness(0.97);
+    }
 
+    .menu-button.active {
+      background: var(--active-bg);
+      color: var(--active-text);
+    }
 
-<style>
+    /* =========================
+       Main
+    ========================= */
 
-/* ==================================================
-   기본 변수
-================================================== */
+    .main {
+      flex: 1;
+      min-width: 0;
+      min-height: 100vh;
 
-:root {
+      padding: 30px;
 
-  --bg-color: #eef2ff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
 
-  --text-color: #334155;
+      background: var(--bg-color);
 
-  --title-color: #334155;
+      transition: background 0.3s ease;
+    }
 
-  --display-color: #334155;
+    /* =========================
+       Screens
+    ========================= */
 
-  --sidebar-bg: #ffffff;
+    .screen {
+      position: relative;
 
-  --sidebar-border: #e5e7eb;
+      display: none;
 
-  --button-bg: #d9dcff;
+      width: 100%;
+      max-width: 760px;
+      min-height: 500px;
 
-  --button-text: #334155;
+      padding: 70px 35px 55px;
 
-  --active-bg: #7c83d9;
+      border-radius: 24px;
 
-  --active-text: #ffffff;
+      background: var(--screen-bg);
 
-  --screen-bg: rgba(255,255,255,0.48);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
 
-  --input-bg: rgba(255,255,255,0.72);
+      box-shadow: 0 15px 40px var(--shadow);
 
-  --input-border: rgba(51,65,85,0.22);
+      text-align: center;
+      color: var(--text-color);
+    }
 
-  --setting-bg: rgba(255,255,255,0.40);
+    .screen.active {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
 
-  --shadow: rgba(30,41,59,0.12);
-}
+    /* =========================
+       Fullscreen
+    ========================= */
 
+    .screen:fullscreen {
+      width: 100vw;
+      height: 100vh;
+      max-width: none;
+      min-height: 100vh;
 
-/* ==================================================
-   전체
-================================================== */
+      margin: 0;
+      padding: 30px;
 
-* {
-  box-sizing: border-box;
-}
+      border-radius: 0;
 
+      background: var(--bg-color);
+      box-shadow: none;
 
-html {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
 
-  width: 100%;
+      overflow: hidden;
+    }
 
-  min-height: 100%;
-}
+    /*
+      IMPORTANT:
+      In fullscreen, ONLY .display is positioned
+      in the exact center of the screen.
+    */
 
+    .screen:fullscreen .display {
+      position: absolute;
 
-body {
+      left: 50%;
+      top: 50%;
 
-  margin: 0;
+      transform: translate(-50%, -50%);
 
-  width: 100%;
+      margin: 0;
 
-  min-height: 100vh;
+      z-index: 5;
 
-  font-family:
-    Arial,
-    "Noto Sans KR",
-    sans-serif;
+      text-align: center;
 
-  background:
-    var(--bg-color);
+      font-size: clamp(50px, 10vw, 110px);
+    }
 
-  color:
-    var(--text-color);
+    .screen:fullscreen h1 {
+      position: absolute;
+      top: 35px;
+      left: 50%;
 
-  overflow-x: hidden;
+      transform: translateX(-50%);
 
-  transition:
-    background 0.3s ease;
-}
+      margin: 0;
 
+      font-size: 34px;
 
-/* ==================================================
-   레이아웃
-================================================== */
+      z-index: 10;
+    }
 
-.layout {
+    .fullscreen-button {
+      position: absolute;
 
-  display: flex;
+      top: 20px;
+      right: 20px;
 
-  width: 100%;
+      border: none;
+      border-radius: 9px;
 
-  min-height: 100vh;
-}
+      padding: 9px 14px;
 
+      background: var(--button-bg);
+      color: var(--button-text);
 
-/* ==================================================
-   왼쪽 메뉴
-================================================== */
+      font-size: 13px;
+      font-weight: 600;
 
-.sidebar {
+      cursor: pointer;
 
-  width: 210px;
+      z-index: 30;
 
-  flex-shrink: 0;
+      transition:
+        transform 0.2s ease,
+        filter 0.2s ease;
+    }
 
-  min-height: 100vh;
+    .fullscreen-button:hover {
+      transform: scale(1.04);
+      filter: brightness(0.95);
+    }
 
-  padding: 25px 15px;
+    /* =========================
+       Titles
+    ========================= */
 
-  background: #ffffff;
+    .screen h1 {
+      margin: 0 0 20px;
 
-  border-right:
-    1px solid var(--sidebar-border);
+      font-size: 30px;
 
-  box-shadow:
-    3px 0 20px var(--shadow);
+      color: var(--text-color);
+    }
 
-  display: flex;
+    /* =========================
+       Clock
+    ========================= */
 
-  flex-direction: column;
+    .clock-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
 
-  gap: 10px;
+      width: 100%;
+    }
 
-  z-index: 100;
-}
+    .timezone-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
 
+      margin-bottom: 10px;
+    }
 
-.logo {
+    .timezone-box label {
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
 
-  font-size: 22px;
+    .timezone-box select {
+      min-width: 230px;
 
-  font-weight: bold;
+      padding: 11px 15px;
 
-  text-align: center;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
 
-  color: #334155;
+      outline: none;
 
-  margin-bottom: 20px;
+      background: var(--input-bg);
+      color: var(--text-color);
 
-  letter-spacing: 0.5px;
-}
+      font-size: 15px;
 
+      cursor: pointer;
+    }
 
-/* ==================================================
-   메뉴 버튼
-================================================== */
+    .display {
+      margin: 30px 0;
 
-.menu-button {
+      color: var(--text-color);
 
-  width: 100%;
+      font-family: monospace;
+      font-size: 62px;
+      font-weight: 700;
 
-  border: none;
+      line-height: 1;
 
-  background:
-    var(--button-bg);
+      white-space: nowrap;
 
-  color:
-    var(--button-text);
+      text-align: center;
+    }
 
-  padding: 14px 15px;
+    .date {
+      margin-top: -15px;
 
-  border-radius: 12px;
+      font-size: 16px;
+      font-weight: 500;
 
-  font-size: 16px;
+      color: var(--text-color);
 
-  font-weight: 600;
+      text-align: center;
+    }
 
-  cursor: pointer;
+    /* =========================
+       Timer
+    ========================= */
 
-  text-align: center;
+    .timer-inputs {
+      display: flex;
+      justify-content: center;
+      align-items: center;
 
-  transition:
-    background 0.2s ease,
-    color 0.2s ease,
-    transform 0.2s ease;
-}
+      gap: 12px;
 
+      margin: 5px 0 25px;
+    }
 
-.menu-button:hover {
+    .timer-input-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
 
-  transform:
-    translateY(-1px);
-}
+    .timer-input-box label {
+      margin-bottom: 7px;
 
+      font-size: 14px;
+    }
 
-.menu-button.active {
+    .timer-input-box input {
+      width: 100px;
 
-  background:
-    var(--active-bg);
+      padding: 14px 8px;
 
-  color:
-    var(--active-text);
-}
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
 
+      outline: none;
 
-/* ==================================================
-   메인
-================================================== */
+      background: var(--input-bg);
+      color: var(--text-color);
 
-.main {
+      font-size: 22px;
+      text-align: center;
+    }
 
-  flex: 1;
+    .timer-input-box input:focus {
+      border-color: var(--active-bg);
+    }
 
-  min-width: 0;
+    .colon {
+      margin-top: 23px;
 
-  min-height: 100vh;
+      font-size: 30px;
+      font-weight: 700;
+    }
 
-  padding: 30px;
+    /* =========================
+       Buttons
+    ========================= */
 
-  display: flex;
+    .buttons {
+      width: 100%;
 
-  justify-content: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
 
-  align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
 
-  background:
-    var(--bg-color);
+    .buttons button {
+      min-width: 110px;
 
-  transition:
-    background 0.3s ease;
-}
+      border: none;
+      border-radius: 11px;
 
+      padding: 12px 25px;
 
-/* ==================================================
-   화면
-================================================== */
+      font-size: 16px;
+      font-weight: 600;
 
-.screen {
+      cursor: pointer;
 
-  display: none;
+      transition:
+        transform 0.2s ease,
+        filter 0.2s ease;
+    }
 
-  position: relative;
+    .buttons button:hover {
+      transform: translateY(-1px);
+      filter: brightness(0.96);
+    }
 
-  width: 100%;
+    .start-button {
+      background: var(--active-bg);
+      color: var(--active-text);
+    }
 
-  max-width: 760px;
+    .reset-button {
+      background: var(--button-bg);
+      color: var(--button-text);
 
-  min-height: 500px;
+      border: 1px solid var(--border-color) !important;
+    }
 
-  padding: 70px 35px 55px;
+    /* =========================
+       Settings
+    ========================= */
 
-  border-radius: 24px;
+    .settings-screen {
+      text-align: left;
+      overflow-y: auto;
+    }
 
-  background:
-    var(--screen-bg);
+    .settings-title {
+      text-align: center;
+      margin-bottom: 25px !important;
+    }
 
-  backdrop-filter:
-    blur(15px);
+    .setting-section {
+      width: 100%;
 
-  -webkit-backdrop-filter:
-    blur(15px);
+      margin-bottom: 20px;
+      padding: 25px;
 
-  box-shadow:
-    0 15px 40px var(--shadow);
+      border-radius: 16px;
 
-  text-align: center;
+      background: var(--screen-bg);
+    }
 
-  color:
-    var(--text-color);
-}
+    .setting-section h2 {
+      margin: 0 0 8px;
 
+      font-size: 20px;
+    }
 
-.screen.active {
+    .setting-description {
+      margin: 0 0 20px;
 
-  display: flex;
+      font-size: 14px;
+    }
 
-  flex-direction: column;
+    /* =========================
+       Pastel Colors
+    ========================= */
 
-  justify-content: center;
+    .pastel-colors {
+      display: grid;
 
-  align-items: center;
-}
+      grid-template-columns: repeat(5, 1fr);
 
+      gap: 12px;
+    }
 
-/* ==================================================
-   전체화면
-================================================== */
+    .pastel-color {
+      width: 100%;
+      aspect-ratio: 1 / 1;
 
-.screen:fullscreen {
+      border: 3px solid transparent;
+      border-radius: 14px;
 
-  width: 100vw;
+      cursor: pointer;
 
-  height: 100vh;
+      box-shadow:
+        0 3px 8px rgba(0,0,0,0.08);
 
-  max-width: none;
+      transition:
+        transform 0.15s ease,
+        border-color 0.15s ease;
+    }
 
-  min-height: 100vh;
+    .pastel-color:hover {
+      transform: scale(1.06);
+    }
 
-  border-radius: 0;
+    .pastel-color.selected {
+      border-color: #334155;
 
-  background:
-    var(--bg-color);
+      box-shadow:
+        0 0 0 2px white,
+        0 0 0 4px #334155;
+    }
 
-  box-shadow: none;
+    .pastel-pink {
+      background: #ffd6e0;
+    }
 
-  padding: 30px;
+    .pastel-peach {
+      background: #ffe0c2;
+    }
 
-  display: flex;
+    .pastel-yellow {
+      background: #fff1b8;
+    }
 
-  flex-direction: column;
+    .pastel-green {
+      background: #d8f3dc;
+    }
 
-  justify-content: center;
+    .pastel-mint {
+      background: #c7f9e9;
+    }
 
-  align-items: center;
+    .pastel-sky {
+      background: #cfe8ff;
+    }
 
-  text-align: center;
-}
+    .pastel-blue {
+      background: #d9dcff;
+    }
 
+    .pastel-purple {
+      background: #eadcff;
+    }
 
-.screen:fullscreen h1 {
+    .pastel-lavender {
+      background: #f0ddff;
+    }
 
-  font-size: 40px;
+    .pastel-cream {
+      background: #fff7df;
+    }
 
-  margin-bottom: 20px;
-}
+    .default-background-button {
+      display: block;
 
+      margin: 20px auto 0;
 
-.screen:fullscreen .display {
+      border: none;
+      border-radius: 10px;
 
-  font-size:
-    clamp(50px, 10vw, 110px);
+      padding: 11px 18px;
 
-  margin: 20px 0;
-}
+      background: var(--button-bg);
+      color: var(--button-text);
 
+      font-size: 14px;
 
-/* ==================================================
-   전체화면 버튼
-================================================== */
+      cursor: pointer;
+    }
 
-.fullscreen-button {
+    .language-select {
+      width: 100%;
 
-  position: absolute;
+      padding: 13px 15px;
 
-  top: 20px;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
 
-  right: 20px;
+      outline: none;
 
-  border: none;
+      background: var(--input-bg);
+      color: var(--text-color);
 
-  background:
-    var(--button-bg);
+      font-size: 15px;
 
-  color:
-    var(--button-text);
+      cursor: pointer;
+    }
 
-  padding:
-    9px 14px;
+    /* =========================
+       Transparent bottom bar
+    ========================= */
 
-  border-radius:
-    9px;
+    .taskbar {
+      position: fixed;
 
-  font-size:
-    13px;
+      left: 210px;
+      right: 0;
+      bottom: 0;
 
-  font-weight:
-    600;
+      height: 45px;
 
-  cursor:
-    pointer;
+      background: transparent;
 
-  transition:
-    0.2s ease;
+      border: none;
+      box-shadow: none;
 
-  z-index: 20;
-}
+      pointer-events: none;
 
+      z-index: 5;
+    }
 
-.fullscreen-button:hover {
+    /* =========================
+       Mobile
+    ========================= */
 
-  transform:
-    scale(1.04);
+    @media (max-width: 700px) {
+      .layout {
+        flex-direction: column;
+      }
 
-  filter:
-    brightness(0.95);
-}
+      .sidebar {
+        width: 100%;
+        min-height: auto;
 
+        padding: 12px;
 
-/* ==================================================
-   제목
-================================================== */
+        flex-direction: row;
+        flex-wrap: wrap;
 
-.screen h1 {
+        align-items: center;
+      }
 
-  margin:
-    0 0 20px 0;
+      .logo {
+        width: 100%;
+        margin-bottom: 5px;
+      }
 
-  font-size:
-    30px;
+      .menu-button {
+        flex: 1;
+        min-width: 70px;
 
-  color:
-    var(--title-color);
-}
+        padding: 10px 8px;
 
+        font-size: 14px;
+      }
 
-/* ==================================================
-   시간대
-================================================== */
+      .main {
+        min-height: calc(100vh - 100px);
+        padding: 15px;
+      }
 
-.timezone-box {
+      .screen {
+        min-height: 450px;
+        padding: 60px 15px 40px;
+      }
 
-  margin:
-    0 0 10px 0;
+      .display {
+        font-size: 42px;
+      }
 
-  display:
-    flex;
+      .timer-inputs {
+        gap: 5px;
+      }
 
-  flex-direction:
-    column;
+      .timer-input-box input {
+        width: 80px;
+        font-size: 20px;
+      }
 
-  align-items:
-    center;
-}
+      .pastel-colors {
+        gap: 8px;
+      }
 
+      .taskbar {
+        left: 0;
+      }
 
-.timezone-box label {
+      .fullscreen-button {
+        top: 15px;
+        right: 15px;
 
-  margin-bottom:
-    8px;
+        padding: 8px 10px;
+      }
 
-  color:
-    var(--text-color);
+      .screen:fullscreen .display {
+        font-size: clamp(40px, 12vw, 80px);
+      }
+    }
 
-  font-size:
-    14px;
-}
+    @media (max-width: 400px) {
+      .display {
+        font-size: 34px;
+      }
 
+      .timer-input-box input {
+        width: 65px;
+      }
 
-.timezone-box select {
-
-  padding:
-    11px 15px;
-
-  border:
-    1px solid var(--input-border);
-
-  border-radius:
-    10px;
-
-  background:
-    var(--input-bg);
-
-  color:
-    var(--text-color);
-
-  font-size:
-    15px;
-
-  cursor:
-    pointer;
-
-  outline:
-    none;
-
-  max-width:
-    300px;
-}
-
-
-/* ==================================================
-   현재시간 묶음
-================================================== */
-
-.clock-content {
-
-  display:
-    flex;
-
-  flex-direction:
-    column;
-
-  align-items:
-    center;
-
-  justify-content:
-    center;
-
-  text-align:
-    center;
-}
-
-
-/* ==================================================
-   표시
-================================================== */
-
-.display {
-
-  font-family:
-    monospace;
-
-  font-size:
-    62px;
-
-  font-weight:
-    bold;
-
-  color:
-    var(--display-color);
-
-  margin:
-    30px 0;
-
-  white-space:
-    nowrap;
-
-  text-align:
-    center;
-}
-
-
-/* ==================================================
-   날짜
-================================================== */
-
-.date {
-
-  position: static;
-
-  margin-top:
-    -15px;
-
-  font-size:
-    16px;
-
-  color:
-    var(--text-color);
-
-  font-weight:
-    500;
-
-  text-align:
-    center;
-}
-
-
-/* ==================================================
-   타이머 입력
-================================================== */
-
-.timer-inputs {
-
-  display:
-    flex;
-
-  justify-content:
-    center;
-
-  align-items:
-    center;
-
-  gap:
-    12px;
-
-  margin:
-    5px 0 25px;
-}
-
-
-.timer-input-box {
-
-  display:
-    flex;
-
-  flex-direction:
-    column;
-
-  align-items:
-    center;
-}
-
-
-.timer-input-box label {
-
-  font-size:
-    14px;
-
-  margin-bottom:
-    7px;
-
-  color:
-    var(--text-color);
-}
-
-
-.timer-input-box input {
-
-  width:
-    100px;
-
-  padding:
-    14px 8px;
-
-  font-size:
-    22px;
-
-  text-align:
-    center;
-
-  border:
-    1px solid var(--input-border);
-
-  border-radius:
-    10px;
-
-  outline:
-    none;
-
-  background:
-    var(--input-bg);
-
-  color:
-    var(--text-color);
-}
-
-
-.timer-input-box input:focus {
-
-  border-color:
-    var(--active-bg);
-}
-
-
-/* ==================================================
-   콜론
-================================================== */
-
-.colon {
-
-  font-size:
-    30px;
-
-  font-weight:
-    bold;
-
-  margin-top:
-    23px;
-
-  color:
-    var(--text-color);
-}
-
-
-/* ==================================================
-   버튼
-================================================== */
-
-.buttons {
-
-  width:
-    100%;
-
-  display:
-    flex;
-
-  justify-content:
-    center;
-
-  align-items:
-    center;
-
-  gap:
-    10px;
-
-  flex-wrap:
-    wrap;
-
-  margin-top:
-    5px;
-}
-
-
-.buttons button {
-
-  min-width:
-    110px;
-
-  border:
-    none;
-
-  padding:
-    12px 25px;
-
-  border-radius:
-    11px;
-
-  font-size:
-    16px;
-
-  font-weight:
-    600;
-
-  cursor:
-    pointer;
-
-  transition:
-    0.2s ease;
-}
-
-
-.start-button {
-
-  background:
-    var(--active-bg);
-
-  color:
-    var(--active-text);
-}
-
-
-.start-button:hover {
-
-  filter:
-    brightness(0.94);
-}
-
-
-.reset-button {
-
-  background:
-    var(--button-bg);
-
-  color:
-    var(--button-text);
-
-  border:
-    1px solid var(--input-border) !important;
-}
-
-
-/* ==================================================
-   설정
-================================================== */
-
-.settings-screen {
-
-  text-align:
-    left;
-
-  overflow-y:
-    auto;
-}
-
-
-.settings-title {
-
-  text-align:
-    center;
-
-  margin-bottom:
-    25px !important;
-}
-
-
-.setting-section {
-
-  width:
-    100%;
-
-  background:
-    var(--setting-bg);
-
-  border-radius:
-    16px;
-
-  padding:
-    25px;
-
-  margin-bottom:
-    20px;
-}
-
-
-.setting-section h2 {
-
-  margin:
-    0 0 8px 0;
-
-  font-size:
-    20px;
-
-  color:
-    var(--title-color);
-}
-
-
-.setting-description {
-
-  margin:
-    0 0 20px 0;
-
-  font-size:
-    14px;
-
-  color:
-    var(--text-color);
-}
-
-
-/* ==================================================
-   파스텔 색상
-================================================== */
-
-.pastel-colors {
-
-  display:
-    grid;
-
-  grid-template-columns:
-    repeat(5, 1fr);
-
-  gap:
-    12px;
-}
-
-
-.pastel-color {
-
-  width:
-    100%;
-
-  aspect-ratio:
-    1 / 1;
-
-  border-radius:
-    14px;
-
-  border:
-    3px solid transparent;
-
-  cursor:
-    pointer;
-
-  transition:
-    transform 0.15s ease,
-    border-color 0.15s ease;
-
-  box-shadow:
-    0 3px 8px
-    rgba(0,0,0,0.08);
-}
-
-
-.pastel-color:hover {
-
-  transform:
-    scale(1.06);
-}
-
-
-.pastel-color.selected {
-
-  border-color:
-    #334155;
-
-  box-shadow:
-    0 0 0 2px white,
-    0 0 0 4px #334155;
-}
-
-
-.pastel-pink {
-  background: #ffd6e0;
-}
-
-.pastel-peach {
-  background: #ffe0c2;
-}
-
-.pastel-yellow {
-  background: #fff1b8;
-}
-
-.pastel-green {
-  background: #d8f3dc;
-}
-
-.pastel-mint {
-  background: #c7f9e9;
-}
-
-.pastel-sky {
-  background: #cfe8ff;
-}
-
-.pastel-blue {
-  background: #d9dcff;
-}
-
-.pastel-purple {
-  background: #eadcff;
-}
-
-.pastel-lavender {
-  background: #f0ddff;
-}
-
-.pastel-cream {
-  background: #fff7df;
-}
-
-
-/* ==================================================
-   기본색
-================================================== */
-
-.default-background-button {
-
-  display:
-    block;
-
-  margin:
-    20px auto 0;
-
-  border:
-    none;
-
-  background:
-    var(--button-bg);
-
-  color:
-    var(--button-text);
-
-  padding:
-    11px 18px;
-
-  border-radius:
-    10px;
-
-  font-size:
-    14px;
-
-  cursor:
-    pointer;
-}
-
-
-/* ==================================================
-   언어
-================================================== */
-
-.language-select {
-
-  width:
-    100%;
-
-  padding:
-    13px 15px;
-
-  border:
-    1px solid var(--input-border);
-
-  border-radius:
-    10px;
-
-  background:
-    var(--input-bg);
-
-  color:
-    var(--text-color);
-
-  font-size:
-    15px;
-
-  cursor:
-    pointer;
-
-  outline:
-    none;
-}
-
-
-/* ==================================================
-   투명 태스크바
-================================================== */
-
-.taskbar {
-
-  position:
-    fixed;
-
-  left:
-    210px;
-
-  right:
-    0;
-
-  bottom:
-    0;
-
-  height:
-    45px;
-
-  background:
-    transparent;
-
-  border:
-    none;
-
-  box-shadow:
-    none;
-
-  pointer-events:
-    none;
-
-  z-index:
-    5;
-}
-
-
-/* ==================================================
-   모바일
-================================================== */
-
-@media (max-width:700px) {
-
-  .layout {
-
-    flex-direction:
-      column;
-  }
-
-
-  .sidebar {
-
-    width:
-      100%;
-
-    min-height:
-      auto;
-
-    padding:
-      12px;
-
-    flex-direction:
-      row;
-
-    flex-wrap:
-      wrap;
-
-    align-items:
-      center;
-  }
-
-
-  .logo {
-
-    width:
-      100%;
-
-    margin-bottom:
-      5px;
-  }
-
-
-  .menu-button {
-
-    flex:
-      1;
-
-    min-width:
-      70px;
-
-    padding:
-      10px 8px;
-
-    font-size:
-      14px;
-  }
-
-
-  .main {
-
-    min-height:
-      calc(100vh - 100px);
-
-    padding:
-      15px;
-  }
-
-
-  .screen {
-
-    min-height:
-      450px;
-
-    padding:
-      60px 15px 40px;
-  }
-
-
-  .display {
-
-    font-size:
-      42px;
-  }
-
-
-  .timer-inputs {
-
-    gap:
-      5px;
-  }
-
-
-  .timer-input-box input {
-
-    width:
-      80px;
-
-    font-size:
-      20px;
-  }
-
-
-  .pastel-colors {
-
-    gap:
-      8px;
-  }
-
-
-  .taskbar {
-
-    left:
-      0;
-  }
-
-
-  .fullscreen-button {
-
-    top:
-      15px;
-
-    right:
-      15px;
-
-    padding:
-      8px 10px;
-  }
-
-}
-
-
-/* ==================================================
-   작은 화면
-================================================== */
-
-@media (max-width:400px) {
-
-  .display {
-
-    font-size:
-      34px;
-  }
-
-
-  .timer-input-box input {
-
-    width:
-      65px;
-  }
-
-
-  .timer-inputs {
-
-    gap:
-      2px;
-  }
-
-}
-
-</style>
-
+      .timer-inputs {
+        gap: 2px;
+      }
+    }
+  </style>
 </head>
-
 
 <body>
 
+  <div class="layout">
 
-<div class="layout">
+    <!-- =========================
+         Sidebar
+    ========================= -->
+
+    <aside class="sidebar">
+
+      <div id="logo" class="logo">
+        ChronoSpace
+      </div>
+
+      <button
+        id="clockButton"
+        class="menu-button active"
+        onclick="showScreen('clock')">
+        현재시간
+      </button>
+
+      <button
+        id="timerButton"
+        class="menu-button"
+        onclick="showScreen('timer')">
+        타이머
+      </button>
+
+      <button
+        id="stopwatchButton"
+        class="menu-button"
+        onclick="showScreen('stopwatch')">
+        초시계
+      </button>
+
+      <button
+        id="settingsButton"
+        class="menu-button"
+        onclick="showScreen('settings')">
+        설정
+      </button>
+
+    </aside>
 
 
-<!-- ==================================================
-     왼쪽 메뉴
-================================================== -->
+    <main class="main">
 
-<aside class="sidebar">
+      <!-- =========================
+           Clock
+      ========================= -->
+
+      <section
+        id="clock"
+        class="screen active">
+
+        <button
+          id="clockFullscreenButton"
+          class="fullscreen-button"
+          onclick="toggleFullscreen('clock')">
+          ⛶ 전체화면
+        </button>
+
+        <h1 id="clockTitle">
+          현재시간
+        </h1>
+
+        <div class="timezone-box">
+
+          <label
+            id="timezoneLabel"
+            for="timezone">
+            시간대
+          </label>
+
+          <select
+            id="timezone"
+            onchange="updateClock()">
+
+            <option value="Asia/Seoul">
+              대한민국 (서울)
+            </option>
+
+            <option value="Asia/Tokyo">
+              일본 (도쿄)
+            </option>
+
+            <option value="Asia/Shanghai">
+              중국 (상하이)
+            </option>
+
+            <option value="Asia/Hong_Kong">
+              홍콩
+            </option>
+
+            <option value="Asia/Singapore">
+              싱가포르
+            </option>
+
+            <option value="Asia/Bangkok">
+              태국 (방콕)
+            </option>
+
+            <option value="Asia/Jakarta">
+              인도네시아 (자카르타)
+            </option>
+
+            <option value="Asia/Kolkata">
+              인도 (뉴델리)
+            </option>
+
+            <option value="Asia/Dubai">
+              아랍에미리트 (두바이)
+            </option>
+
+            <option value="Australia/Perth">
+              호주 (퍼스)
+            </option>
+
+            <option value="Australia/Sydney">
+              호주 (시드니)
+            </option>
+
+            <option value="Pacific/Auckland">
+              뉴질랜드 (오클랜드)
+            </option>
+
+            <option value="Europe/London">
+              영국 (런던)
+            </option>
+
+            <option value="Europe/Paris">
+              프랑스 (파리)
+            </option>
+
+            <option value="Europe/Berlin">
+              독일 (베를린)
+            </option>
+
+            <option value="Europe/Rome">
+              이탈리아 (로마)
+            </option>
+
+            <option value="Europe/Moscow">
+              러시아 (모스크바)
+            </option>
+
+            <option value="America/New_York">
+              미국 (뉴욕)
+            </option>
+
+            <option value="America/Chicago">
+              미국 (시카고)
+            </option>
+
+            <option value="America/Denver">
+              미국 (덴버)
+            </option>
+
+            <option value="America/Los_Angeles">
+              미국 (로스앤젤레스)
+            </option>
+
+            <option value="America/Toronto">
+              캐나다 (토론토)
+            </option>
+
+            <option value="America/Vancouver">
+              캐나다 (밴쿠버)
+            </option>
+
+            <option value="America/Mexico_City">
+              멕시코 (멕시코시티)
+            </option>
+
+            <option value="America/Sao_Paulo">
+              브라질 (상파울루)
+            </option>
+
+          </select>
+
+        </div>
+
+        <div class="clock-content">
+
+          <div
+            id="clockDisplay"
+            class="display">
+            00:00:00
+          </div>
+
+          <div
+            id="dateDisplay"
+            class="date">
+            날짜
+          </div>
+
+        </div>
+
+      </section>
 
 
-  <div
-    id="logo"
-    class="logo">
+      <!-- =========================
+           Timer
+      ========================= -->
 
-    ChronoSpace
+      <section
+        id="timer"
+        class="screen">
+
+        <button
+          id="timerFullscreenButton"
+          class="fullscreen-button"
+          onclick="toggleFullscreen('timer')">
+          ⛶ 전체화면
+        </button>
+
+        <h1 id="timerTitle">
+          타이머
+        </h1>
+
+        <div
+          id="timerDisplay"
+          class="display">
+          00:00:00
+        </div>
+
+        <div class="timer-inputs">
+
+          <div class="timer-input-box">
+
+            <label
+              id="hoursLabel"
+              for="timerHours">
+              시간
+            </label>
+
+            <input
+              type="number"
+              id="timerHours"
+              min="0"
+              max="23"
+              value="0">
+
+          </div>
+
+          <div class="colon">:</div>
+
+          <div class="timer-input-box">
+
+            <label
+              id="minutesLabel"
+              for="timerMinutes">
+              분
+            </label>
+
+            <input
+              type="number"
+              id="timerMinutes"
+              min="0"
+              max="59"
+              value="0">
+
+          </div>
+
+          <div class="colon">:</div>
+
+          <div class="timer-input-box">
+
+            <label
+              id="secondsLabel"
+              for="timerSeconds">
+              초
+            </label>
+
+            <input
+              type="number"
+              id="timerSeconds"
+              min="0"
+              max="59"
+              value="0">
+
+          </div>
+
+        </div>
+
+        <div class="buttons">
+
+          <button
+            id="timerStartButton"
+            class="start-button"
+            onclick="toggleTimer()">
+            시작
+          </button>
+
+          <button
+            id="timerResetButton"
+            class="reset-button"
+            onclick="resetTimer()">
+            초기화
+          </button>
+
+        </div>
+
+      </section>
+
+
+      <!-- =========================
+           Stopwatch
+      ========================= -->
+
+      <section
+        id="stopwatch"
+        class="screen">
+
+        <button
+          id="stopwatchFullscreenButton"
+          class="fullscreen-button"
+          onclick="toggleFullscreen('stopwatch')">
+          ⛶ 전체화면
+        </button>
+
+        <h1 id="stopwatchTitle">
+          초시계
+        </h1>
+
+        <div
+          id="stopwatchDisplay"
+          class="display">
+          00:00:00
+        </div>
+
+        <div class="buttons">
+
+          <button
+            id="stopwatchStartButton"
+            class="start-button"
+            onclick="toggleStopwatch()">
+            시작
+          </button>
+
+          <button
+            id="stopwatchResetButton"
+            class="reset-button"
+            onclick="resetStopwatch()">
+            초기화
+          </button>
+
+        </div>
+
+      </section>
+
+
+      <!-- =========================
+           Settings
+      ========================= -->
+
+      <section
+        id="settings"
+        class="screen settings-screen">
+
+        <button
+          id="settingsFullscreenButton"
+          class="fullscreen-button"
+          onclick="toggleFullscreen('settings')">
+          ⛶ 전체화면
+        </button>
+
+        <h1
+          id="settingsTitle"
+          class="settings-title">
+          설정
+        </h1>
+
+
+        <div class="setting-section">
+
+          <h2 id="backgroundTitle">
+            배경색
+          </h2>
+
+          <p
+            id="backgroundDescription"
+            class="setting-description">
+            파스텔톤 색상 중에서 원하는 배경색을 선택하세요.
+          </p>
+
+          <div class="pastel-colors">
+
+            <button
+              class="pastel-color pastel-pink"
+              data-color="#ffd6e0"
+              onclick="setBackgroundColor('#ffd6e0', this)">
+            </button>
+
+            <button
+              class="pastel-color pastel-peach"
+              data-color="#ffe0c2"
+              onclick="setBackgroundColor('#ffe0c2', this)">
+            </button>
+
+            <button
+              class="pastel-color pastel-yellow"
+              data-color="#fff1b8"
+              onclick="setBackgroundColor('#fff1b8', this)">
+            </button>
+
+            <button
+              class="pastel-color pastel-green"
+              data-color="#d8f3dc"
+              onclick="setBackgroundColor('#d8f3dc', this)">
+            </button>
+
+            <button
+              class="pastel-color pastel-mint"
+              data-color="#c7f9e9"
+              onclick="setBackgroundColor('#c7f9e9', this)">
+            </button>
+
+            <button
+              class="pastel-color pastel-sky"
+              data-color="#cfe8ff"
+              onclick="setBackgroundColor('#cfe8ff', this)">
+            </button>
+
+            <button
+              class="pastel-color pastel-blue"
+              data-color="#d9dcff"
+              onclick="setBackgroundColor('#d9dcff', this)">
+            </button>
+
+            <button
+              class="pastel-color pastel-purple"
+              data-color="#eadcff"
+              onclick="setBackgroundColor('#eadcff', this)">
+            </button>
+
+            <button
+              class="pastel-color pastel-lavender"
+              data-color="#f0ddff"
+              onclick="setBackgroundColor('#f0ddff', this)">
+            </button>
+
+            <button
+              class="pastel-color pastel-cream"
+              data-color="#fff7df"
+              onclick="setBackgroundColor('#fff7df', this)">
+            </button>
+
+          </div>
+
+          <button
+            id="defaultBackgroundButton"
+            class="default-background-button"
+            onclick="resetBackgroundColor()">
+            기본색으로 초기화
+          </button>
+
+        </div>
+
+
+        <div class="setting-section">
+
+          <h2 id="languageTitle">
+            언어
+          </h2>
+
+          <p
+            id="languageDescription"
+            class="setting-description">
+            사용할 언어를 선택하세요.
+          </p>
+
+          <select
+            id="languageSelect"
+            class="language-select"
+            onchange="changeLanguage()">
+
+            <option value="ko">한국어</option>
+            <option value="en">English</option>
+            <option value="ja">日本語</option>
+            <option value="zh">中文</option>
+            <option value="es">Español</option>
+            <option value="fr">Français</option>
+            <option value="de">Deutsch</option>
+            <option value="it">Italiano</option>
+            <option value="pt">Português</option>
+            <option value="ru">Русский</option>
+
+          </select>
+
+        </div>
+
+      </section>
+
+    </main>
 
   </div>
 
 
-  <button
-    id="clockButton"
-    class="menu-button active"
-    onclick="showScreen('clock')">
-
-    현재시간
-
-  </button>
-
-
-  <button
-    id="timerButton"
-    class="menu-button"
-    onclick="showScreen('timer')">
-
-    타이머
-
-  </button>
-
-
-  <button
-    id="stopwatchButton"
-    class="menu-button"
-    onclick="showScreen('stopwatch')">
-
-    초시계
-
-  </button>
-
-
-  <button
-    id="settingsButton"
-    class="menu-button"
-    onclick="showScreen('settings')">
-
-    설정
-
-  </button>
-
-
-</aside>
-
-
-
-<main class="main">
-
-
-<!-- ==================================================
-     현재시간
-================================================== -->
-
-<section
-  id="clock"
-  class="screen active">
-
-
-  <button
-    id="clockFullscreenButton"
-    class="fullscreen-button"
-    onclick="toggleFullscreen('clock')">
-
-    ⛶ 전체화면
-
-  </button>
-
-
-  <h1 id="clockTitle">
-    현재시간
-  </h1>
-
-
-  <div class="timezone-box">
-
-    <label
-      id="timezoneLabel"
-      for="timezone">
-
-      시간대
-
-    </label>
-
-
-    <select
-      id="timezone"
-      onchange="updateClock()">
-
-
-      <option value="Asia/Seoul">
-        대한민국 (서울)
-      </option>
-
-
-      <option value="Asia/Tokyo">
-        일본 (도쿄)
-      </option>
-
-
-      <option value="Asia/Shanghai">
-        중국 (상하이)
-      </option>
-
-
-      <option value="Asia/Hong_Kong">
-        홍콩
-      </option>
-
-
-      <option value="Asia/Singapore">
-        싱가포르
-      </option>
-
-
-      <option value="Asia/Bangkok">
-        태국 (방콕)
-      </option>
-
-
-      <option value="Asia/Jakarta">
-        인도네시아 (자카르타)
-      </option>
-
-
-      <option value="Asia/Kolkata">
-        인도 (뉴델리)
-      </option>
-
-
-      <option value="Asia/Dubai">
-        아랍에미리트 (두바이)
-      </option>
-
-
-      <option value="Australia/Perth">
-        호주 (퍼스)
-      </option>
-
-
-      <option value="Australia/Sydney">
-        호주 (시드니)
-      </option>
-
-
-      <option value="Pacific/Auckland">
-        뉴질랜드 (오클랜드)
-      </option>
-
-
-      <option value="Europe/London">
-        영국 (런던)
-      </option>
-
-
-      <option value="Europe/Paris">
-        프랑스 (파리)
-      </option>
-
-
-      <option value="Europe/Berlin">
-        독일 (베를린)
-      </option>
-
-
-      <option value="Europe/Rome">
-        이탈리아 (로마)
-      </option>
-
-
-      <option value="Europe/Moscow">
-        러시아 (모스크바)
-      </option>
-
-
-      <option value="America/New_York">
-        미국 (뉴욕)
-      </option>
-
-
-      <option value="America/Chicago">
-        미국 (시카고)
-      </option>
-
-
-      <option value="America/Denver">
-        미국 (덴버)
-      </option>
-
-
-      <option value="America/Los_Angeles">
-        미국 (로스앤젤레스)
-      </option>
-
-
-      <option value="America/Toronto">
-        캐나다 (토론토)
-      </option>
-
-
-      <option value="America/Vancouver">
-        캐나다 (밴쿠버)
-      </option>
-
-
-      <option value="America/Mexico_City">
-        멕시코 (멕시코시티)
-      </option>
-
-
-      <option value="America/Sao_Paulo">
-        브라질 (상파울루)
-      </option>
-
-
-    </select>
-
-  </div>
-
-
-  <div class="clock-content">
-
-
-    <div
-      id="clockDisplay"
-      class="display">
-
-      00:00:00
-
-    </div>
-
-
-    <div
-      id="dateDisplay"
-      class="date">
-
-      날짜
-
-    </div>
-
-
-  </div>
-
-
-</section>
-
-
-
-<!-- ==================================================
-     타이머
-================================================== -->
-
-<section
-  id="timer"
-  class="screen">
-
-
-  <button
-    id="timerFullscreenButton"
-    class="fullscreen-button"
-    onclick="toggleFullscreen('timer')">
-
-    ⛶ 전체화면
-
-  </button>
-
-
-  <h1 id="timerTitle">
-    타이머
-  </h1>
-
-
-  <div
-    id="timerDisplay"
-    class="display">
-
-    00:00:00
-
-  </div>
-
-
-  <div class="timer-inputs">
-
-
-    <div class="timer-input-box">
-
-      <label
-        id="hoursLabel"
-        for="timerHours">
-
-        시간
-
-      </label>
-
-
-      <input
-        type="number"
-        id="timerHours"
-        min="0"
-        max="23"
-        value="0">
-
-    </div>
-
-
-    <div class="colon">
-      :
-    </div>
-
-
-    <div class="timer-input-box">
-
-      <label
-        id="minutesLabel"
-        for="timerMinutes">
-
-        분
-
-      </label>
-
-
-      <input
-        type="number"
-        id="timerMinutes"
-        min="0"
-        max="59"
-        value="0">
-
-    </div>
-
-
-    <div class="colon">
-      :
-    </div>
-
-
-    <div class="timer-input-box">
-
-      <label
-        id="secondsLabel"
-        for="timerSeconds">
-
-        초
-
-      </label>
-
-
-      <input
-        type="number"
-        id="timerSeconds"
-        min="0"
-        max="59"
-        value="0">
-
-    </div>
-
-
-  </div>
-
-
-  <div class="buttons">
-
-
-    <button
-      id="timerStartButton"
-      class="start-button"
-      onclick="toggleTimer()">
-
-      시작
-
-    </button>
-
-
-    <button
-      id="timerResetButton"
-      class="reset-button"
-      onclick="resetTimer()">
-
-      초기화
-
-    </button>
-
-
-  </div>
-
-
-</section>
-
-
-
-<!-- ==================================================
-     초시계
-================================================== -->
-
-<section
-  id="stopwatch"
-  class="screen">
-
-
-  <button
-    id="stopwatchFullscreenButton"
-    class="fullscreen-button"
-    onclick="toggleFullscreen('stopwatch')">
-
-    ⛶ 전체화면
-
-  </button>
-
-
-  <h1 id="stopwatchTitle">
-    초시계
-  </h1>
-
-
-  <div
-    id="stopwatchDisplay"
-    class="display">
-
-    00:00:00
-
-  </div>
-
-
-  <div class="buttons">
-
-
-    <button
-      id="stopwatchStartButton"
-      class="start-button"
-      onclick="toggleStopwatch()">
-
-      시작
-
-    </button>
-
-
-    <button
-      id="stopwatchResetButton"
-      class="reset-button"
-      onclick="resetStopwatch()">
-
-      초기화
-
-    </button>
-
-
-  </div>
-
-
-</section>
-
-
-
-<!-- ==================================================
-     설정
-================================================== -->
-
-<section
-  id="settings"
-  class="screen settings-screen">
-
-
-  <button
-    id="settingsFullscreenButton"
-    class="fullscreen-button"
-    onclick="toggleFullscreen('settings')">
-
-    ⛶ 전체화면
-
-  </button>
-
-
-  <h1
-    id="settingsTitle"
-    class="settings-title">
-
-    설정
-
-  </h1>
-
-
-  <!-- 배경색 -->
-
-  <div class="setting-section">
-
-
-    <h2 id="backgroundTitle">
-      배경색
-    </h2>
-
-
-    <p
-      id="backgroundDescription"
-      class="setting-description">
-
-      파스텔톤 색상 중에서 원하는 배경색을 선택하세요.
-
-    </p>
-
-
-    <div class="pastel-colors">
-
-
-      <button
-        class="pastel-color pastel-pink"
-        data-color="#ffd6e0"
-        onclick="setBackgroundColor('#ffd6e0',this)">
-      </button>
-
-
-      <button
-        class="pastel-color pastel-peach"
-        data-color="#ffe0c2"
-        onclick="setBackgroundColor('#ffe0c2',this)">
-      </button>
-
-
-      <button
-        class="pastel-color pastel-yellow"
-        data-color="#fff1b8"
-        onclick="setBackgroundColor('#fff1b8',this)">
-      </button>
-
-
-      <button
-        class="pastel-color pastel-green"
-        data-color="#d8f3dc"
-        onclick="setBackgroundColor('#d8f3dc',this)">
-      </button>
-
-
-      <button
-        class="pastel-color pastel-mint"
-        data-color="#c7f9e9"
-        onclick="setBackgroundColor('#c7f9e9',this)">
-      </button>
-
-
-      <button
-        class="pastel-color pastel-sky"
-        data-color="#cfe8ff"
-        onclick="setBackgroundColor('#cfe8ff',this)">
-      </button>
-
-
-      <button
-        class="pastel-color pastel-blue"
-        data-color="#d9dcff"
-        onclick="setBackgroundColor('#d9dcff',this)">
-      </button>
-
-
-      <button
-        class="pastel-color pastel-purple"
-        data-color="#eadcff"
-        onclick="setBackgroundColor('#eadcff',this)">
-      </button>
-
-
-      <button
-        class="pastel-color pastel-lavender"
-        data-color="#f0ddff"
-        onclick="setBackgroundColor('#f0ddff',this)">
-      </button>
-
-
-      <button
-        class="pastel-color pastel-cream"
-        data-color="#fff7df"
-        onclick="setBackgroundColor('#fff7df',this)">
-      </button>
-
-
-    </div>
-
-
-    <button
-      id="defaultBackgroundButton"
-      class="default-background-button"
-      onclick="resetBackgroundColor()">
-
-      기본색으로 초기화
-
-    </button>
-
-
-  </div>
-
-
-
-  <!-- 언어 -->
-
-  <div class="setting-section">
-
-
-    <h2 id="languageTitle">
-      언어
-    </h2>
-
-
-    <p
-      id="languageDescription"
-      class="setting-description">
-
-      사용할 언어를 선택하세요.
-
-    </p>
-
-
-    <select
-      id="languageSelect"
-      class="language-select"
-      onchange="changeLanguage()">
-
-
-      <option value="ko">
-        한국어
-      </option>
-
-
-      <option value="en">
-        English
-      </option>
-
-
-      <option value="ja">
-        日本語
-      </option>
-
-
-      <option value="zh">
-        中文
-      </option>
-
-
-      <option value="es">
-        Español
-      </option>
-
-
-      <option value="fr">
-        Français
-      </option>
-
-
-      <option value="de">
-        Deutsch
-      </option>
-
-
-      <option value="it">
-        Italiano
-      </option>
-
-
-      <option value="pt">
-        Português
-      </option>
-
-
-      <option value="ru">
-        Русский
-      </option>
-
-
-    </select>
-
-
-  </div>
-
-
-</section>
-
-
-</main>
-
-
-</div>
-
-
-<!-- 투명 태스크바 -->
-
-<div class="taskbar"></div>
-
-
-
-<script>
-
-
-/* ==================================================
-   번역
-================================================== */
-
-const translations = {
-
-
-  ko: {
-
-    title: "ChronoSpace",
-
-    clock: "현재시간",
-
-    timer: "타이머",
-
-    stopwatch: "초시계",
-
-    settings: "설정",
-
-    timezone: "시간대",
-
-    hours: "시간",
-
-    minutes: "분",
-
-    seconds: "초",
-
-    start: "시작",
-
-    stop: "정지",
-
-    reset: "초기화",
-
-    fullscreen: "⛶ 전체화면",
-
-    exitFullscreen: "✕ 나가기",
-
-    background: "배경색",
-
-    backgroundDescription:
-      "파스텔톤 색상 중에서 원하는 배경색을 선택하세요.",
-
-    defaultBackground:
-      "기본색으로 초기화",
-
-    language: "언어",
-
-    languageDescription:
-      "사용할 언어를 선택하세요.",
-
-    timerAlert:
-      "타이머 시간을 설정해주세요.",
-
-    timerRangeAlert:
-      "시간은 0~23, 분과 초는 0~59 사이로 입력해주세요.",
-
-    timerFinished:
-      "타이머가 끝났습니다!"
-
-  },
-
-
-  en: {
-
-    title: "ChronoSpace",
-
-    clock: "Current Time",
-
-    timer: "Timer",
-
-    stopwatch: "Stopwatch",
-
-    settings: "Settings",
-
-    timezone: "Time Zone",
-
-    hours: "Hours",
-
-    minutes: "Minutes",
-
-    seconds: "Seconds",
-
-    start: "Start",
-
-    stop: "Stop",
-
-    reset: "Reset",
-
-    fullscreen: "⛶ Fullscreen",
-
-    exitFullscreen: "✕ Exit",
-
-    background: "Background",
-
-    backgroundDescription:
-      "Choose a pastel background color.",
-
-    defaultBackground:
-      "Reset to Default",
-
-    language: "Language",
-
-    languageDescription:
-      "Choose your language.",
-
-    timerAlert:
-      "Please set a timer.",
-
-    timerRangeAlert:
-      "Hours must be 0–23 and minutes and seconds must be 0–59.",
-
-    timerFinished:
-      "The timer is finished!"
-
-  },
-
-
-  ja: {
-
-    title: "ChronoSpace",
-
-    clock: "現在時刻",
-
-    timer: "タイマー",
-
-    stopwatch: "ストップウォッチ",
-
-    settings: "設定",
-
-    timezone: "タイムゾーン",
-
-    hours: "時間",
-
-    minutes: "分",
-
-    seconds: "秒",
-
-    start: "開始",
-
-    stop: "停止",
-
-    reset: "リセット",
-
-    fullscreen: "⛶ 全画面",
-
-    exitFullscreen: "✕ 終了",
-
-    background: "背景色",
-
-    backgroundDescription:
-      "パステルカラーから背景色を選択してください。",
-
-    defaultBackground:
-      "デフォルトに戻す",
-
-    language: "言語",
-
-    languageDescription:
-      "使用する言語を選択してください。",
-
-    timerAlert:
-      "タイマー時間を設定してください。",
-
-    timerRangeAlert:
-      "時間は0～23、分と秒は0～59の範囲で入力してください。",
-
-    timerFinished:
-      "タイマーが終了しました！"
-
-  },
-
-
-  zh: {
-
-    title: "ChronoSpace",
-
-    clock: "当前时间",
-
-    timer: "计时器",
-
-    stopwatch: "秒表",
-
-    settings: "设置",
-
-    timezone: "时区",
-
-    hours: "小时",
-
-    minutes: "分钟",
-
-    seconds: "秒",
-
-    start: "开始",
-
-    stop: "停止",
-
-    reset: "重置",
-
-    fullscreen: "⛶ 全屏",
-
-    exitFullscreen: "✕ 退出",
-
-    background: "背景颜色",
-
-    backgroundDescription:
-      "选择您喜欢的柔和背景颜色。",
-
-    defaultBackground:
-      "恢复默认颜色",
-
-    language: "语言",
-
-    languageDescription:
-      "选择使用的语言。",
-
-    timerAlert:
-      "请设置计时器时间。",
-
-    timerRangeAlert:
-      "小时必须为0到23，分钟和秒必须为0到59。",
-
-    timerFinished:
-      "计时结束！"
-
-  },
-
-
-  es: {
-
-    title: "ChronoSpace",
-
-    clock: "Hora actual",
-
-    timer: "Temporizador",
-
-    stopwatch: "Cronómetro",
-
-    settings: "Ajustes",
-
-    timezone: "Zona horaria",
-
-    hours: "Horas",
-
-    minutes: "Minutos",
-
-    seconds: "Segundos",
-
-    start: "Iniciar",
-
-    stop: "Detener",
-
-    reset: "Reiniciar",
-
-    fullscreen: "⛶ Pantalla completa",
-
-    exitFullscreen: "✕ Salir",
-
-    background: "Fondo",
-
-    backgroundDescription:
-      "Elige un color pastel para el fondo.",
-
-    defaultBackground:
-      "Restablecer",
-
-    language: "Idioma",
-
-    languageDescription:
-      "Selecciona tu idioma.",
-
-    timerAlert:
-      "Configura el temporizador.",
-
-    timerRangeAlert:
-      "Las horas deben estar entre 0 y 23.",
-
-    timerFinished:
-      "¡El temporizador ha terminado!"
-
-  },
-
-
-  fr: {
-
-    title: "ChronoSpace",
-
-    clock: "Heure actuelle",
-
-    timer: "Minuteur",
-
-    stopwatch: "Chronomètre",
-
-    settings: "Paramètres",
-
-    timezone: "Fuseau horaire",
-
-    hours: "Heures",
-
-    minutes: "Minutes",
-
-    seconds: "Secondes",
-
-    start: "Démarrer",
-
-    stop: "Arrêter",
-
-    reset: "Réinitialiser",
-
-    fullscreen: "⛶ Plein écran",
-
-    exitFullscreen: "✕ Quitter",
-
-    background: "Arrière-plan",
-
-    backgroundDescription:
-      "Choisissez une couleur pastel.",
-
-    defaultBackground:
-      "Réinitialiser",
-
-    language: "Langue",
-
-    languageDescription:
-      "Choisissez votre langue.",
-
-    timerAlert:
-      "Veuillez régler le minuteur.",
-
-    timerRangeAlert:
-      "Les heures doivent être comprises entre 0 et 23.",
-
-    timerFinished:
-      "Le minuteur est terminé !"
-
-  },
-
-
-  de: {
-
-    title: "ChronoSpace",
-
-    clock: "Aktuelle Zeit",
-
-    timer: "Timer",
-
-    stopwatch: "Stoppuhr",
-
-    settings: "Einstellungen",
-
-    timezone: "Zeitzone",
-
-    hours: "Stunden",
-
-    minutes: "Minuten",
-
-    seconds: "Sekunden",
-
-    start: "Start",
-
-    stop: "Stopp",
-
-    reset: "Zurücksetzen",
-
-    fullscreen: "⛶ Vollbild",
-
-    exitFullscreen: "✕ Beenden",
-
-    background: "Hintergrund",
-
-    backgroundDescription:
-      "Wählen Sie eine Pastellfarbe.",
-
-    defaultBackground:
-      "Zurücksetzen",
-
-    language: "Sprache",
-
-    languageDescription:
-      "Wählen Sie Ihre Sprache.",
-
-    timerAlert:
-      "Bitte stellen Sie einen Timer ein.",
-
-    timerRangeAlert:
-      "Stunden müssen zwischen 0 und 23 liegen.",
-
-    timerFinished:
-      "Der Timer ist beendet!"
-
-  },
-
-
-  it: {
-
-    title: "ChronoSpace",
-
-    clock: "Ora attuale",
-
-    timer: "Timer",
-
-    stopwatch: "Cronometro",
-
-    settings: "Impostazioni",
-
-    timezone: "Fuso orario",
-
-    hours: "Ore",
-
-    minutes: "Minuti",
-
-    seconds: "Secondi",
-
-    start: "Avvia",
-
-    stop: "Ferma",
-
-    reset: "Ripristina",
-
-    fullscreen: "⛶ Schermo intero",
-
-    exitFullscreen: "✕ Esci",
-
-    background: "Sfondo",
-
-    backgroundDescription:
-      "Scegli un colore pastello.",
-
-    defaultBackground:
-      "Ripristina",
-
-    language: "Lingua",
-
-    languageDescription:
-      "Scegli la lingua.",
-
-    timerAlert:
-      "Imposta il timer.",
-
-    timerRangeAlert:
-      "Le ore devono essere comprese tra 0 e 23.",
-
-    timerFinished:
-      "Il timer è terminato!"
-
-  },
-
-
-  pt: {
-
-    title: "ChronoSpace",
-
-    clock: "Hora atual",
-
-    timer: "Temporizador",
-
-    stopwatch: "Cronômetro",
-
-    settings: "Configurações",
-
-    timezone: "Fuso horário",
-
-    hours: "Horas",
-
-    minutes: "Minutos",
-
-    seconds: "Segundos",
-
-    start: "Iniciar",
-
-    stop: "Parar",
-
-    reset: "Redefinir",
-
-    fullscreen: "⛶ Tela cheia",
-
-    exitFullscreen: "✕ Sair",
-
-    background: "Fundo",
-
-    backgroundDescription:
-      "Escolha uma cor pastel.",
-
-    defaultBackground:
-      "Restaurar padrão",
-
-    language: "Idioma",
-
-    languageDescription:
-      "Escolha seu idioma.",
-
-    timerAlert:
-      "Defina um temporizador.",
-
-    timerRangeAlert:
-      "As horas devem estar entre 0 e 23.",
-
-    timerFinished:
-      "O temporizador terminou!"
-
-  },
-
-
-  ru: {
-
-    title: "ChronoSpace",
-
-    clock: "Текущее время",
-
-    timer: "Таймер",
-
-    stopwatch: "Секундомер",
-
-    settings: "Настройки",
-
-    timezone: "Часовой пояс",
-
-    hours: "Часы",
-
-    minutes: "Минуты",
-
-    seconds: "Секунды",
-
-    start: "Старт",
-
-    stop: "Стоп",
-
-    reset: "Сбросить",
-
-    fullscreen: "⛶ Полный экран",
-
-    exitFullscreen: "✕ Выйти",
-
-    background: "Фон",
-
-    backgroundDescription:
-      "Выберите пастельный цвет фона.",
-
-    defaultBackground:
-      "Сбросить",
-
-    language: "Язык",
-
-    languageDescription:
-      "Выберите язык.",
-
-    timerAlert:
-      "Установите время таймера.",
-
-    timerRangeAlert:
-      "Часы должны быть от 0 до 23.",
-
-    timerFinished:
-      "Таймер завершён!"
-
-  }
-
-};
-
-
-/* ==================================================
-   상태
-================================================== */
-
-let currentLanguage =
-  localStorage.getItem("language") || "ko";
-
-
-/* ==================================================
-   배경색
-================================================== */
-
-const defaultBackgroundColor =
-  "#eef2ff";
-
-
-const buttonColors = {
-
-  "#ffd6e0": "#e89aaa",
-
-  "#ffe0c2": "#e6a978",
-
-  "#fff1b8": "#d8bd58",
-
-  "#d8f3dc": "#82b58d",
-
-  "#c7f9e9": "#65bda5",
-
-  "#cfe8ff": "#79a9d6",
-
-  "#d9dcff": "#7c83d9",
-
-  "#eadcff": "#a17cc7",
-
-  "#f0ddff": "#b18acb",
-
-  "#fff7df": "#d5bd78",
-
-  "#eef2ff": "#7c83d9"
-
-};
-
-
-/* ==================================================
-   배경색 변경
-================================================== */
-
-function setBackgroundColor(
-  color,
-  selectedButton
-) {
-
-  document.documentElement.style.setProperty(
-    "--bg-color",
-    color
-  );
-
-
-  const buttonColor =
-    buttonColors[color] ||
-    "#7c83d9";
-
-
-  document.documentElement.style.setProperty(
-    "--button-bg",
-    color
-  );
-
-
-  document.documentElement.style.setProperty(
-    "--active-bg",
-    buttonColor
-  );
-
-
-  document
-    .querySelectorAll(".pastel-color")
-    .forEach(function(button) {
-
-      button.classList.remove(
-        "selected"
-      );
-
-    });
-
-
-  if (selectedButton) {
-
-    selectedButton.classList.add(
-      "selected"
-    );
-
-  }
-
-
-  localStorage.setItem(
-    "backgroundColor",
-    color
-  );
-
-}
-
-
-/* ==================================================
-   기본 배경
-================================================== */
-
-function resetBackgroundColor() {
-
-  setBackgroundColor(
-    defaultBackgroundColor,
-    null
-  );
-
-}
-
-
-/* ==================================================
-   저장된 배경
-================================================== */
-
-const savedColor =
-  localStorage.getItem(
-    "backgroundColor"
-  );
-
-
-if (savedColor) {
-
-  const savedButton =
-    document.querySelector(
-      '.pastel-color[data-color="' +
-      savedColor +
-      '"]'
-    );
-
-
-  setBackgroundColor(
-    savedColor,
-    savedButton
-  );
-
-}
-
-else {
-
-  setBackgroundColor(
-    defaultBackgroundColor,
-    null
-  );
-
-}
-
-
-/* ==================================================
-   화면 전환
-================================================== */
-
-function showScreen(
-  screenName
-) {
-
-  document
-    .querySelectorAll(".screen")
-    .forEach(function(screen) {
-
-      screen.classList.remove(
-        "active"
-      );
-
-    });
-
-
-  document
-    .querySelectorAll(".menu-button")
-    .forEach(function(button) {
-
-      button.classList.remove(
-        "active"
-      );
-
-    });
-
-
-  document
-    .getElementById(screenName)
-    .classList.add("active");
-
-
-  document
-    .getElementById(
-      screenName + "Button"
-    )
-    .classList.add("active");
-
-}
-
-
-/* ==================================================
-   현재시간
-================================================== */
-
-function updateClock() {
-
-  const timezone =
-    document
-      .getElementById("timezone")
-      .value;
-
-
-  const now =
-    new Date();
-
-
-  let locale;
-
-
-  switch (currentLanguage) {
-
-    case "en":
-      locale = "en-US";
-      break;
-
-    case "ja":
-      locale = "ja-JP";
-      break;
-
-    case "zh":
-      locale = "zh-CN";
-      break;
-
-    case "es":
-      locale = "es-ES";
-      break;
-
-    case "fr":
-      locale = "fr-FR";
-      break;
-
-    case "de":
-      locale = "de-DE";
-      break;
-
-    case "it":
-      locale = "it-IT";
-      break;
-
-    case "pt":
-      locale = "pt-PT";
-      break;
-
-    case "ru":
-      locale = "ru-RU";
-      break;
-
-    default:
-      locale = "ko-KR";
-
-  }
-
-
-  const timeText =
-    new Intl.DateTimeFormat(
-      locale,
-      {
-
-        timeZone:
-          timezone,
-
-        hour:
-          "2-digit",
-
-        minute:
-          "2-digit",
-
-        second:
-          "2-digit",
-
-        hour12:
-          currentLanguage === "en"
-
+  <!-- Transparent taskbar area -->
+  <div class="taskbar"></div>
+
+
+  <script>
+    /* =====================================================
+       Translations
+    ===================================================== */
+
+    const translations = {
+
+      ko: {
+        title: "ChronoSpace",
+        clock: "현재시간",
+        timer: "타이머",
+        stopwatch: "초시계",
+        settings: "설정",
+        timezone: "시간대",
+        hours: "시간",
+        minutes: "분",
+        seconds: "초",
+        start: "시작",
+        stop: "정지",
+        reset: "초기화",
+        fullscreen: "⛶ 전체화면",
+        exitFullscreen: "✕ 나가기",
+        background: "배경색",
+        backgroundDescription:
+          "파스텔톤 색상 중에서 원하는 배경색을 선택하세요.",
+        defaultBackground: "기본색으로 초기화",
+        language: "언어",
+        languageDescription:
+          "사용할 언어를 선택하세요.",
+        timerAlert:
+          "타이머 시간을 설정해주세요.",
+        timerRangeAlert:
+          "시간은 0~23, 분과 초는 0~59 사이로 입력해주세요.",
+        timerFinished:
+          "타이머가 끝났습니다!"
+      },
+
+      en: {
+        title: "ChronoSpace",
+        clock: "Current Time",
+        timer: "Timer",
+        stopwatch: "Stopwatch",
+        settings: "Settings",
+        timezone: "Time Zone",
+        hours: "Hours",
+        minutes: "Minutes",
+        seconds: "Seconds",
+        start: "Start",
+        stop: "Stop",
+        reset: "Reset",
+        fullscreen: "⛶ Fullscreen",
+        exitFullscreen: "✕ Exit",
+        background: "Background",
+        backgroundDescription:
+          "Choose a pastel background color.",
+        defaultBackground:
+          "Reset to Default",
+        language: "Language",
+        languageDescription:
+          "Choose your language.",
+        timerAlert:
+          "Please set a timer.",
+        timerRangeAlert:
+          "Hours must be 0–23 and minutes and seconds must be 0–59.",
+        timerFinished:
+          "The timer is finished!"
+      },
+
+      ja: {
+        title: "ChronoSpace",
+        clock: "現在時刻",
+        timer: "タイマー",
+        stopwatch: "ストップウォッチ",
+        settings: "設定",
+        timezone: "タイムゾーン",
+        hours: "時間",
+        minutes: "分",
+        seconds: "秒",
+        start: "開始",
+        stop: "停止",
+        reset: "リセット",
+        fullscreen: "⛶ 全画面",
+        exitFullscreen: "✕ 終了",
+        background: "背景色",
+        backgroundDescription:
+          "パステルカラーから背景色を選択してください。",
+        defaultBackground:
+          "デフォルトに戻す",
+        language: "言語",
+        languageDescription:
+          "使用する言語を選択してください。",
+        timerAlert:
+          "タイマー時間を設定してください。",
+        timerRangeAlert:
+          "時間は0～23、分と秒は0～59の範囲で入力してください。",
+        timerFinished:
+          "タイマーが終了しました！"
+      },
+
+      zh: {
+        title: "ChronoSpace",
+        clock: "当前时间",
+        timer: "计时器",
+        stopwatch: "秒表",
+        settings: "设置",
+        timezone: "时区",
+        hours: "小时",
+        minutes: "分钟",
+        seconds: "秒",
+        start: "开始",
+        stop: "停止",
+        reset: "重置",
+        fullscreen: "⛶ 全屏",
+        exitFullscreen: "✕ 退出",
+        background: "背景颜色",
+        backgroundDescription:
+          "选择您喜欢的柔和背景颜色。",
+        defaultBackground:
+          "恢复默认颜色",
+        language: "语言",
+        languageDescription:
+          "选择使用的语言。",
+        timerAlert:
+          "请设置计时器时间。",
+        timerRangeAlert:
+          "小时必须为0到23，分钟和秒必须为0到59。",
+        timerFinished:
+          "计时结束！"
+      },
+
+      es: {
+        title: "ChronoSpace",
+        clock: "Hora actual",
+        timer: "Temporizador",
+        stopwatch: "Cronómetro",
+        settings: "Ajustes",
+        timezone: "Zona horaria",
+        hours: "Horas",
+        minutes: "Minutos",
+        seconds: "Segundos",
+        start: "Iniciar",
+        stop: "Detener",
+        reset: "Reiniciar",
+        fullscreen: "⛶ Pantalla completa",
+        exitFullscreen: "✕ Salir",
+        background: "Fondo",
+        backgroundDescription:
+          "Elige un color pastel para el fondo.",
+        defaultBackground:
+          "Restablecer",
+        language: "Idioma",
+        languageDescription:
+          "Selecciona tu idioma.",
+        timerAlert:
+          "Configura el temporizador.",
+        timerRangeAlert:
+          "Las horas deben estar entre 0 y 23.",
+        timerFinished:
+          "¡El temporizador ha terminado!"
+      },
+
+      fr: {
+        title: "ChronoSpace",
+        clock: "Heure actuelle",
+        timer: "Minuteur",
+        stopwatch: "Chronomètre",
+        settings: "Paramètres",
+        timezone: "Fuseau horaire",
+        hours: "Heures",
+        minutes: "Minutes",
+        seconds: "Secondes",
+        start: "Démarrer",
+        stop: "Arrêter",
+        reset: "Réinitialiser",
+        fullscreen: "⛶ Plein écran",
+        exitFullscreen: "✕ Quitter",
+        background: "Arrière-plan",
+        backgroundDescription:
+          "Choisissez une couleur pastel.",
+        defaultBackground:
+          "Réinitialiser",
+        language: "Langue",
+        languageDescription:
+          "Choisissez votre langue.",
+        timerAlert:
+          "Veuillez régler le minuteur.",
+        timerRangeAlert:
+          "Les heures doivent être comprises entre 0 et 23.",
+        timerFinished:
+          "Le minuteur est terminé !"
+      },
+
+      de: {
+        title: "ChronoSpace",
+        clock: "Aktuelle Zeit",
+        timer: "Timer",
+        stopwatch: "Stoppuhr",
+        settings: "Einstellungen",
+        timezone: "Zeitzone",
+        hours: "Stunden",
+        minutes: "Minuten",
+        seconds: "Sekunden",
+        start: "Start",
+        stop: "Stopp",
+        reset: "Zurücksetzen",
+        fullscreen: "⛶ Vollbild",
+        exitFullscreen: "✕ Beenden",
+        background: "Hintergrund",
+        backgroundDescription:
+          "Wählen Sie eine Pastellfarbe.",
+        defaultBackground:
+          "Zurücksetzen",
+        language: "Sprache",
+        languageDescription:
+          "Wählen Sie Ihre Sprache.",
+        timerAlert:
+          "Bitte stellen Sie einen Timer ein.",
+        timerRangeAlert:
+          "Stunden müssen zwischen 0 und 23 liegen.",
+        timerFinished:
+          "Der Timer ist beendet!"
+      },
+
+      it: {
+        title: "ChronoSpace",
+        clock: "Ora attuale",
+        timer: "Timer",
+        stopwatch: "Cronometro",
+        settings: "Impostazioni",
+        timezone: "Fuso orario",
+        hours: "Ore",
+        minutes: "Minuti",
+        seconds: "Secondi",
+        start: "Avvia",
+        stop: "Ferma",
+        reset: "Ripristina",
+        fullscreen: "⛶ Schermo intero",
+        exitFullscreen: "✕ Esci",
+        background: "Sfondo",
+        backgroundDescription:
+          "Scegli un colore pastello.",
+        defaultBackground:
+          "Ripristina",
+        language: "Lingua",
+        languageDescription:
+          "Scegli la lingua.",
+        timerAlert:
+          "Imposta il timer.",
+        timerRangeAlert:
+          "Le ore devono essere comprese tra 0 e 23.",
+        timerFinished:
+          "Il timer è terminato!"
+      },
+
+      pt: {
+        title: "ChronoSpace",
+        clock: "Hora atual",
+        timer: "Temporizador",
+        stopwatch: "Cronômetro",
+        settings: "Configurações",
+        timezone: "Fuso horário",
+        hours: "Horas",
+        minutes: "Minutos",
+        seconds: "Segundos",
+        start: "Iniciar",
+        stop: "Parar",
+        reset: "Redefinir",
+        fullscreen: "⛶ Tela cheia",
+        exitFullscreen: "✕ Sair",
+        background: "Fundo",
+        backgroundDescription:
+          "Escolha uma cor pastel.",
+        defaultBackground:
+          "Restaurar padrão",
+        language: "Idioma",
+        languageDescription:
+          "Escolha seu idioma.",
+        timerAlert:
+          "Defina um temporizador.",
+        timerRangeAlert:
+          "As horas devem estar entre 0 e 23.",
+        timerFinished:
+          "O temporizador terminou!"
+      },
+
+      ru: {
+        title: "ChronoSpace",
+        clock: "Текущее время",
+        timer: "Таймер",
+        stopwatch: "Секундомер",
+        settings: "Настройки",
+        timezone: "Часовой пояс",
+        hours: "Часы",
+        minutes: "Минуты",
+        seconds: "Секунды",
+        start: "Старт",
+        stop: "Стоп",
+        reset: "Сбросить",
+        fullscreen: "⛶ Полный экран",
+        exitFullscreen: "✕ Выйти",
+        background: "Фон",
+        backgroundDescription:
+          "Выберите пастельный цвет фона.",
+        defaultBackground:
+          "Сбросить",
+        language: "Язык",
+        languageDescription:
+          "Выберите язык.",
+        timerAlert:
+          "Установите время таймера.",
+        timerRangeAlert:
+          "Часы должны быть от 0 до 23.",
+        timerFinished:
+          "Таймер завершён!"
       }
-    ).format(now);
+    };
 
 
-  document
-    .getElementById(
-      "clockDisplay"
-    )
-    .textContent =
-    timeText;
+    /* =====================================================
+       State
+    ===================================================== */
+
+    let currentLanguage =
+      localStorage.getItem("language") || "ko";
 
 
-  const dateText =
-    new Intl.DateTimeFormat(
-      locale,
-      {
+    const buttonColors = {
+      "#ffd6e0": "#e89aaa",
+      "#ffe0c2": "#e6a978",
+      "#fff1b8": "#d8bd58",
+      "#d8f3dc": "#82b58d",
+      "#c7f9e9": "#65bda5",
+      "#cfe8ff": "#79a9d6",
+      "#d9dcff": "#7c83d9",
+      "#eadcff": "#a17cc7",
+      "#f0ddff": "#b18acb",
+      "#fff7df": "#d5bd78",
+      "#eef2ff": "#7c83d9"
+    };
 
-        timeZone:
-          timezone,
 
-        year:
-          "numeric",
+    /* =====================================================
+       Screen Navigation
+    ===================================================== */
 
-        month:
-          "long",
+    function showScreen(screenName) {
 
-        day:
-          "numeric",
+      document
+        .querySelectorAll(".screen")
+        .forEach(screen => {
+          screen.classList.remove("active");
+        });
 
-        weekday:
-          "long"
 
+      document
+        .querySelectorAll(".menu-button")
+        .forEach(button => {
+          button.classList.remove("active");
+        });
+
+
+      const screen =
+        document.getElementById(screenName);
+
+      const menuButton =
+        document.getElementById(
+          screenName + "Button"
+        );
+
+
+      if (screen) {
+        screen.classList.add("active");
       }
-    ).format(now);
 
 
-  document
-    .getElementById(
-      "dateDisplay"
-    )
-    .textContent =
-    dateText;
-
-}
-
-
-updateClock();
-
-
-setInterval(
-  updateClock,
-  1000
-);
-
-
-/* ==================================================
-   타이머
-================================================== */
-
-let timerTime = 0;
-
-let timerInterval = null;
-
-let timerRunning = false;
-
-
-/* ==================================================
-   타이머 표시
-================================================== */
-
-function updateTimer() {
-
-  const hours =
-    Math.floor(
-      timerTime / 3600
-    );
-
-
-  const minutes =
-    Math.floor(
-      (timerTime % 3600) / 60
-    );
-
-
-  const seconds =
-    timerTime % 60;
-
-
-  document
-    .getElementById(
-      "timerDisplay"
-    )
-    .textContent =
-
-    String(hours)
-      .padStart(2,"0")
-
-    + ":" +
-
-    String(minutes)
-      .padStart(2,"0")
-
-    + ":" +
-
-    String(seconds)
-      .padStart(2,"0");
-
-}
-
-
-updateTimer();
-
-
-/* ==================================================
-   타이머 시작 / 정지
-================================================== */
-
-function toggleTimer() {
-
-  const button =
-    document
-      .getElementById(
-        "timerStartButton"
-      );
-
-
-  const t =
-    translations[
-      currentLanguage
-    ];
-
-
-  if (timerRunning) {
-
-    clearInterval(
-      timerInterval
-    );
-
-
-    timerInterval = null;
-
-    timerRunning = false;
-
-
-    button.textContent =
-      t.start;
-
-
-    return;
-  }
-
-
-  if (timerTime === 0) {
-
-    const hours =
-      Number(
-        document
-          .getElementById(
-            "timerHours"
-          )
-          .value
-      );
-
-
-    const minutes =
-      Number(
-        document
-          .getElementById(
-            "timerMinutes"
-          )
-          .value
-      );
-
-
-    const seconds =
-      Number(
-        document
-          .getElementById(
-            "timerSeconds"
-          )
-          .value
-      );
-
-
-    if (
-
-      hours < 0 ||
-      hours > 23 ||
-
-      minutes < 0 ||
-      minutes > 59 ||
-
-      seconds < 0 ||
-      seconds > 59
-
-    ) {
-
-      alert(
-        t.timerRangeAlert
-      );
-
-
-      return;
+      if (menuButton) {
+        menuButton.classList.add("active");
+      }
     }
 
 
-    if (
+    /* =====================================================
+       Clock
+    ===================================================== */
 
-      hours === 0 &&
-      minutes === 0 &&
-      seconds === 0
+    function updateClock() {
 
-    ) {
+      const timezone =
+        document.getElementById("timezone").value;
 
-      alert(
-        t.timerAlert
-      );
+      const now = new Date();
 
 
-      return;
+      const localeMap = {
+        ko: "ko-KR",
+        en: "en-US",
+        ja: "ja-JP",
+        zh: "zh-CN",
+        es: "es-ES",
+        fr: "fr-FR",
+        de: "de-DE",
+        it: "it-IT",
+        pt: "pt-PT",
+        ru: "ru-RU"
+      };
+
+
+      const locale =
+        localeMap[currentLanguage] || "ko-KR";
+
+
+      const timeText =
+        new Intl.DateTimeFormat(
+          locale,
+          {
+            timeZone: timezone,
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+            hour12: currentLanguage === "en"
+          }
+        ).format(now);
+
+
+      const dateText =
+        new Intl.DateTimeFormat(
+          locale,
+          {
+            timeZone: timezone,
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+            weekday: "long"
+          }
+        ).format(now);
+
+
+      document.getElementById(
+        "clockDisplay"
+      ).textContent = timeText;
+
+
+      document.getElementById(
+        "dateDisplay"
+      ).textContent = dateText;
     }
 
 
-    timerTime =
+    updateClock();
 
-      hours * 3600 +
+    setInterval(updateClock, 1000);
 
-      minutes * 60 +
 
-      seconds;
+    /* =====================================================
+       Timer
+    ===================================================== */
+
+    let timerTime = 0;
+    let timerInterval = null;
+    let timerRunning = false;
+
+
+    function updateTimer() {
+
+      const hours =
+        Math.floor(timerTime / 3600);
+
+      const minutes =
+        Math.floor(
+          (timerTime % 3600) / 60
+        );
+
+      const seconds =
+        timerTime % 60;
+
+
+      document.getElementById(
+        "timerDisplay"
+      ).textContent =
+        String(hours).padStart(2, "0") +
+        ":" +
+        String(minutes).padStart(2, "0") +
+        ":" +
+        String(seconds).padStart(2, "0");
+    }
 
 
     updateTimer();
 
-  }
 
+    function toggleTimer() {
 
-  timerRunning = true;
-
-
-  button.textContent =
-    t.stop;
-
-
-  timerInterval =
-    setInterval(function() {
-
-      timerTime--;
-
-      updateTimer();
-
-
-      if (
-        timerTime <= 0
-      ) {
-
-        clearInterval(
-          timerInterval
+      const button =
+        document.getElementById(
+          "timerStartButton"
         );
 
+      const t =
+        translations[currentLanguage];
+
+
+      /* Stop */
+      if (timerRunning) {
+
+        clearInterval(timerInterval);
 
         timerInterval = null;
-
         timerRunning = false;
 
-        timerTime = 0;
+        button.textContent = t.start;
+
+        return;
+      }
 
 
-        button.textContent =
-          translations[
-            currentLanguage
-          ].start;
+      /* Read input only when timer is at zero */
+      if (timerTime === 0) {
+
+        const hours =
+          Number(
+            document.getElementById(
+              "timerHours"
+            ).value
+          );
+
+        const minutes =
+          Number(
+            document.getElementById(
+              "timerMinutes"
+            ).value
+          );
+
+        const seconds =
+          Number(
+            document.getElementById(
+              "timerSeconds"
+            ).value
+          );
+
+
+        if (
+          hours < 0 ||
+          hours > 23 ||
+          minutes < 0 ||
+          minutes > 59 ||
+          seconds < 0 ||
+          seconds > 59
+        ) {
+
+          alert(t.timerRangeAlert);
+          return;
+        }
+
+
+        if (
+          hours === 0 &&
+          minutes === 0 &&
+          seconds === 0
+        ) {
+
+          alert(t.timerAlert);
+          return;
+        }
+
+
+        timerTime =
+          hours * 3600 +
+          minutes * 60 +
+          seconds;
 
 
         updateTimer();
-
-
-        alert(
-          translations[
-            currentLanguage
-          ].timerFinished
-        );
-
       }
 
-    },1000);
 
-}
+      timerRunning = true;
 
+      button.textContent = t.stop;
 
-/* ==================================================
-   타이머 초기화
-================================================== */
 
-function resetTimer() {
+      timerInterval =
+        setInterval(() => {
 
-  clearInterval(
-    timerInterval
-  );
+          timerTime--;
 
+          updateTimer();
 
-  timerInterval = null;
 
-  timerRunning = false;
+          if (timerTime <= 0) {
 
-  timerTime = 0;
+            clearInterval(timerInterval);
 
+            timerInterval = null;
+            timerRunning = false;
+            timerTime = 0;
 
-  document
-    .getElementById(
-      "timerHours"
-    )
-    .value = 0;
+            updateTimer();
 
+            button.textContent =
+              translations[currentLanguage].start;
 
-  document
-    .getElementById(
-      "timerMinutes"
-    )
-    .value = 0;
+            alert(
+              translations[currentLanguage]
+                .timerFinished
+            );
+          }
 
-
-  document
-    .getElementById(
-      "timerSeconds"
-    )
-    .value = 0;
-
-
-  document
-    .getElementById(
-      "timerStartButton"
-    )
-    .textContent =
-    translations[
-      currentLanguage
-    ].start;
-
-
-  updateTimer();
-
-}
-
-
-/* ==================================================
-   초시계
-================================================== */
-
-let stopwatchRunning =
-  false;
-
-let stopwatchStartTime =
-  0;
-
-let stopwatchElapsed =
-  0;
-
-let stopwatchAnimation =
-  null;
-
-
-/* ==================================================
-   초시계 표시
-================================================== */
-
-function updateStopwatch() {
-
-  let totalMilliseconds;
-
-
-  if (
-    stopwatchRunning
-  ) {
-
-    totalMilliseconds =
-
-      stopwatchElapsed +
-
-      (
-        performance.now() -
-        stopwatchStartTime
-      );
-
-  }
-
-  else {
-
-    totalMilliseconds =
-      stopwatchElapsed;
-
-  }
-
-
-  const oneHour =
-    60 * 60 * 1000;
-
-
-  let displayText;
-
-
-  /*
-     1시간 미만:
-     분 : 초 : 밀리초
-  */
-
-  if (
-    totalMilliseconds <
-    oneHour
-  ) {
-
-    const minutes =
-      Math.floor(
-        totalMilliseconds /
-        60000
-      );
-
-
-    const seconds =
-      Math.floor(
-        (
-          totalMilliseconds %
-          60000
-        ) / 1000
-      );
-
-
-    const milliseconds =
-      Math.floor(
-        (
-          totalMilliseconds %
-          1000
-        ) / 10
-      );
-
-
-    displayText =
-
-      String(minutes)
-        .padStart(2,"0")
-
-      + ":" +
-
-      String(seconds)
-        .padStart(2,"0")
-
-      + ":" +
-
-      String(milliseconds)
-        .padStart(2,"0");
-
-  }
-
-  /*
-     1시간 이상:
-     시간 : 분 : 초
-  */
-
-  else {
-
-    const hours =
-      Math.floor(
-        totalMilliseconds /
-        3600000
-      );
-
-
-    const minutes =
-      Math.floor(
-        (
-          totalMilliseconds %
-          3600000
-        ) / 60000
-      );
-
-
-    const seconds =
-      Math.floor(
-        (
-          totalMilliseconds %
-          60000
-        ) / 1000
-      );
-
-
-    displayText =
-
-      String(hours)
-        .padStart(2,"0")
-
-      + ":" +
-
-      String(minutes)
-        .padStart(2,"0")
-
-      + ":" +
-
-      String(seconds)
-        .padStart(2,"0");
-
-  }
-
-
-  document
-    .getElementById(
-      "stopwatchDisplay"
-    )
-    .textContent =
-    displayText;
-
-
-  if (
-    stopwatchRunning
-  ) {
-
-    stopwatchAnimation =
-      requestAnimationFrame(
-        updateStopwatch
-      );
-
-  }
-
-}
-
-
-/* ==================================================
-   초시계 시작 / 정지
-================================================== */
-
-function toggleStopwatch() {
-
-  const button =
-    document
-      .getElementById(
-        "stopwatchStartButton"
-      );
-
-
-  const t =
-    translations[
-      currentLanguage
-    ];
-
-
-  if (
-    stopwatchRunning
-  ) {
-
-    stopwatchElapsed +=
-
-      performance.now() -
-      stopwatchStartTime;
-
-
-    stopwatchRunning =
-      false;
-
-
-    stopwatchStartTime =
-      0;
-
-
-    if (
-      stopwatchAnimation !== null
-    ) {
-
-      cancelAnimationFrame(
-        stopwatchAnimation
-      );
-
-
-      stopwatchAnimation =
-        null;
-
+        }, 1000);
     }
 
 
-    button.textContent =
-      t.start;
+    function resetTimer() {
+
+      clearInterval(timerInterval);
+
+      timerInterval = null;
+      timerRunning = false;
+      timerTime = 0;
 
 
-    updateStopwatch();
+      document.getElementById(
+        "timerHours"
+      ).value = 0;
 
 
-    return;
-  }
+      document.getElementById(
+        "timerMinutes"
+      ).value = 0;
 
 
-  stopwatchRunning =
-    true;
+      document.getElementById(
+        "timerSeconds"
+      ).value = 0;
 
 
-  stopwatchStartTime =
-    performance.now();
+      document.getElementById(
+        "timerStartButton"
+      ).textContent =
+        translations[currentLanguage].start;
 
 
-  button.textContent =
-    t.stop;
+      updateTimer();
+    }
 
 
-  updateStopwatch();
+    /* =====================================================
+       Stopwatch
+    ===================================================== */
 
-}
-
-
-/* ==================================================
-   초시계 초기화
-================================================== */
-
-function resetStopwatch() {
-
-  if (
-    stopwatchAnimation !== null
-  ) {
-
-    cancelAnimationFrame(
-      stopwatchAnimation
-    );
+    let stopwatchRunning = false;
+    let stopwatchStartTime = 0;
+    let stopwatchElapsed = 0;
+    let stopwatchAnimation = null;
 
 
-    stopwatchAnimation =
-      null;
+    function updateStopwatch() {
 
-  }
-
-
-  stopwatchRunning =
-    false;
+      let totalMilliseconds;
 
 
-  stopwatchStartTime =
-    0;
+      if (stopwatchRunning) {
 
-
-  stopwatchElapsed =
-    0;
-
-
-  document
-    .getElementById(
-      "stopwatchStartButton"
-    )
-    .textContent =
-    translations[
-      currentLanguage
-    ].start;
-
-
-  document
-    .getElementById(
-      "stopwatchDisplay"
-    )
-    .textContent =
-    "00:00:00";
-
-}
-
-
-/* ==================================================
-   전체화면
-================================================== */
-
-function toggleFullscreen(
-  screenId
-) {
-
-  const screen =
-    document.getElementById(
-      screenId
-    );
-
-
-  if (
-    !document.fullscreenElement
-  ) {
-
-    if (
-      screen.requestFullscreen
-    ) {
-
-      screen
-        .requestFullscreen()
-        .catch(function(error) {
-
-          console.log(
-            "전체화면 오류:",
-            error
+        totalMilliseconds =
+          stopwatchElapsed +
+          (
+            performance.now() -
+            stopwatchStartTime
           );
 
-        });
+      } else {
 
-    }
-
-  }
-
-  else {
-
-    if (
-      document.exitFullscreen
-    ) {
-
-      document.exitFullscreen();
-
-    }
-
-  }
-
-}
+        totalMilliseconds =
+          stopwatchElapsed;
+      }
 
 
-/* ==================================================
-   전체화면 버튼
-================================================== */
-
-document.addEventListener(
-  "fullscreenchange",
-  updateFullscreenButtons
-);
+      const oneHour =
+        60 * 60 * 1000;
 
 
-function updateFullscreenButtons() {
-
-  const t =
-    translations[
-      currentLanguage
-    ];
+      let displayText;
 
 
-  const buttons =
-    document.querySelectorAll(
-      ".fullscreen-button"
-    );
+      /*
+        Under one hour:
+        MM:SS:MS
+      */
+
+      if (totalMilliseconds < oneHour) {
+
+        const minutes =
+          Math.floor(
+            totalMilliseconds / 60000
+          );
+
+        const seconds =
+          Math.floor(
+            (totalMilliseconds % 60000) / 1000
+          );
+
+        const milliseconds =
+          Math.floor(
+            (totalMilliseconds % 1000) / 10
+          );
 
 
-  buttons.forEach(
-    function(button) {
-
-      if (
-        document.fullscreenElement
-      ) {
-
-        button.textContent =
-          t.exitFullscreen;
+        displayText =
+          String(minutes).padStart(2, "0") +
+          ":" +
+          String(seconds).padStart(2, "0") +
+          ":" +
+          String(milliseconds).padStart(2, "0");
 
       }
+
+      /*
+        One hour or more:
+        HH:MM:SS
+      */
 
       else {
 
-        button.textContent =
-          t.fullscreen;
+        const hours =
+          Math.floor(
+            totalMilliseconds / 3600000
+          );
 
+        const minutes =
+          Math.floor(
+            (totalMilliseconds % 3600000) / 60000
+          );
+
+        const seconds =
+          Math.floor(
+            (totalMilliseconds % 60000) / 1000
+          );
+
+
+        displayText =
+          String(hours).padStart(2, "0") +
+          ":" +
+          String(minutes).padStart(2, "0") +
+          ":" +
+          String(seconds).padStart(2, "0");
       }
 
+
+      document.getElementById(
+        "stopwatchDisplay"
+      ).textContent = displayText;
+
+
+      if (stopwatchRunning) {
+
+        stopwatchAnimation =
+          requestAnimationFrame(
+            updateStopwatch
+          );
+      }
     }
-  );
 
-}
 
+    function toggleStopwatch() {
 
-/* ==================================================
-   언어 변경
-================================================== */
+      const button =
+        document.getElementById(
+          "stopwatchStartButton"
+        );
 
-function changeLanguage() {
+      const t =
+        translations[currentLanguage];
 
-  currentLanguage =
-    document
-      .getElementById(
-        "languageSelect"
-      )
-      .value;
 
+      if (stopwatchRunning) {
 
-  localStorage.setItem(
-    "language",
-    currentLanguage
-  );
+        stopwatchElapsed +=
+          performance.now() -
+          stopwatchStartTime;
 
 
-  applyLanguage();
+        stopwatchRunning = false;
+        stopwatchStartTime = 0;
 
-}
 
+        if (stopwatchAnimation !== null) {
 
-/* ==================================================
-   언어 적용
-================================================== */
+          cancelAnimationFrame(
+            stopwatchAnimation
+          );
 
-function applyLanguage() {
+          stopwatchAnimation = null;
+        }
 
-  const t =
-    translations[
-      currentLanguage
-    ];
 
+        button.textContent = t.start;
 
-  document.documentElement.lang =
-    currentLanguage;
+        updateStopwatch();
 
+        return;
+      }
 
-  document
-    .getElementById("logo")
-    .textContent =
-    t.title;
 
+      stopwatchRunning = true;
 
-  document
-    .getElementById("clockButton")
-    .textContent =
-    t.clock;
+      stopwatchStartTime =
+        performance.now();
 
+      button.textContent = t.stop;
 
-  document
-    .getElementById("timerButton")
-    .textContent =
-    t.timer;
+      updateStopwatch();
+    }
 
 
-  document
-    .getElementById("stopwatchButton")
-    .textContent =
-    t.stopwatch;
+    function resetStopwatch() {
 
+      if (stopwatchAnimation !== null) {
 
-  document
-    .getElementById("settingsButton")
-    .textContent =
-    t.settings;
+        cancelAnimationFrame(
+          stopwatchAnimation
+        );
 
+        stopwatchAnimation = null;
+      }
 
-  document
-    .getElementById("clockTitle")
-    .textContent =
-    t.clock;
 
+      stopwatchRunning = false;
+      stopwatchStartTime = 0;
+      stopwatchElapsed = 0;
 
-  document
-    .getElementById("timezoneLabel")
-    .textContent =
-    t.timezone;
 
+      document.getElementById(
+        "stopwatchStartButton"
+      ).textContent =
+        translations[currentLanguage].start;
 
-  document
-    .getElementById("timerTitle")
-    .textContent =
-    t.timer;
 
+      document.getElementById(
+        "stopwatchDisplay"
+      ).textContent = "00:00:00";
+    }
 
-  document
-    .getElementById("hoursLabel")
-    .textContent =
-    t.hours;
 
+    /* =====================================================
+       Fullscreen
+    ===================================================== */
 
-  document
-    .getElementById("minutesLabel")
-    .textContent =
-    t.minutes;
+    async function toggleFullscreen(screenId) {
 
+      const screen =
+        document.getElementById(screenId);
 
-  document
-    .getElementById("secondsLabel")
-    .textContent =
-    t.seconds;
 
+      if (!screen) {
+        return;
+      }
 
-  document
-    .getElementById("timerResetButton")
-    .textContent =
-    t.reset;
 
+      /*
+        If fullscreen is already active,
+        exit fullscreen.
+      */
 
-  document
-    .getElementById("timerStartButton")
-    .textContent =
+      if (document.fullscreenElement) {
 
-    timerRunning
-      ? t.stop
-      : t.start;
+        try {
 
+          await document.exitFullscreen();
 
-  document
-    .getElementById("stopwatchTitle")
-    .textContent =
-    t.stopwatch;
+        } catch (error) {
 
+          console.error(
+            "Unable to exit fullscreen:",
+            error
+          );
+        }
 
-  document
-    .getElementById("stopwatchResetButton")
-    .textContent =
-    t.reset;
+        return;
+      }
 
 
-  document
-    .getElementById(
-      "stopwatchStartButton"
-    )
-    .textContent =
+      /*
+        Try standard Fullscreen API.
+      */
 
-    stopwatchRunning
-      ? t.stop
-      : t.start;
+      if (screen.requestFullscreen) {
 
+        try {
 
-  document
-    .getElementById("settingsTitle")
-    .textContent =
-    t.settings;
+          await screen.requestFullscreen();
 
+        } catch (error) {
 
-  document
-    .getElementById("backgroundTitle")
-    .textContent =
-    t.background;
+          console.error(
+            "Fullscreen request failed:",
+            error
+          );
 
+          /*
+            Some browsers may support a
+            vendor-prefixed version.
+          */
 
-  document
-    .getElementById(
-      "backgroundDescription"
-    )
-    .textContent =
-    t.backgroundDescription;
+          if (screen.webkitRequestFullscreen) {
 
+            try {
 
-  document
-    .getElementById(
-      "defaultBackgroundButton"
-    )
-    .textContent =
-    t.defaultBackground;
+              screen.webkitRequestFullscreen();
 
+            } catch (webkitError) {
 
-  document
-    .getElementById("languageTitle")
-    .textContent =
-    t.language;
+              console.error(
+                webkitError
+              );
 
+              alert(
+                "이 브라우저에서는 전체화면을 사용할 수 없습니다."
+              );
+            }
 
-  document
-    .getElementById(
-      "languageDescription"
-    )
-    .textContent =
-    t.languageDescription;
+          } else {
 
+            alert(
+              "이 브라우저에서는 전체화면을 사용할 수 없습니다."
+            );
+          }
+        }
 
-  updateFullscreenButtons();
+        return;
+      }
 
 
-  updateClock();
+      /*
+        Safari fallback.
+      */
 
-}
+      if (screen.webkitRequestFullscreen) {
 
+        try {
 
-/* ==================================================
-   초기 설정
-================================================== */
+          screen.webkitRequestFullscreen();
 
-document
-  .getElementById("languageSelect")
-  .value =
-  currentLanguage;
+        } catch (error) {
 
+          console.error(error);
 
-applyLanguage();
+          alert(
+            "이 브라우저에서는 전체화면을 사용할 수 없습니다."
+          );
+        }
 
+        return;
+      }
 
-</script>
 
+      alert(
+        "이 브라우저에서는 전체화면을 지원하지 않습니다."
+      );
+    }
+
+
+    /* =====================================================
+       Fullscreen button text
+    ===================================================== */
+
+    document.addEventListener(
+      "fullscreenchange",
+      updateFullscreenButtons
+    );
+
+
+    document.addEventListener(
+      "webkitfullscreenchange",
+      updateFullscreenButtons
+    );
+
+
+    function updateFullscreenButtons() {
+
+      const t =
+        translations[currentLanguage];
+
+
+      const buttons =
+        document.querySelectorAll(
+          ".fullscreen-button"
+        );
+
+
+      const isFullscreen =
+        !!document.fullscreenElement ||
+        !!document.webkitFullscreenElement;
+
+
+      buttons.forEach(button => {
+
+        button.textContent =
+          isFullscreen
+            ? t.exitFullscreen
+            : t.fullscreen;
+
+      });
+    }
+
+
+    /* =====================================================
+       Background
+    ===================================================== */
+
+    function setBackgroundColor(
+      color,
+      selectedButton = null
+    ) {
+
+      document.documentElement.style
+        .setProperty(
+          "--bg-color",
+          color
+        );
+
+
+      const buttonColor =
+        buttonColors[color] ||
+        "#7c83d9";
+
+
+      /*
+        Button colors change with
+        the selected background.
+      */
+
+      document.documentElement.style
+        .setProperty(
+          "--button-bg",
+          color
+        );
+
+
+      document.documentElement.style
+        .setProperty(
+          "--active-bg",
+          buttonColor
+        );
+
+
+      document
+        .querySelectorAll(
+          ".pastel-color"
+        )
+        .forEach(button => {
+          button.classList.remove(
+            "selected"
+          );
+        });
+
+
+      if (selectedButton) {
+
+        selectedButton.classList.add(
+          "selected"
+        );
+
+      } else {
+
+        const matchingButton =
+          document.querySelector(
+            '.pastel-color[data-color="' +
+            color +
+            '"]'
+          );
+
+        if (matchingButton) {
+
+          matchingButton.classList.add(
+            "selected"
+          );
+        }
+      }
+
+
+      localStorage.setItem(
+        "backgroundColor",
+        color
+      );
+    }
+
+
+    function resetBackgroundColor() {
+
+      setBackgroundColor(
+        "#eef2ff"
+      );
+    }
+
+
+    /* =====================================================
+       Language
+    ===================================================== */
+
+    function changeLanguage() {
+
+      currentLanguage =
+        document.getElementById(
+          "languageSelect"
+        ).value;
+
+
+      localStorage.setItem(
+        "language",
+        currentLanguage
+      );
+
+
+      applyLanguage();
+    }
+
+
+    function applyLanguage() {
+
+      const t =
+        translations[currentLanguage];
+
+
+      document.documentElement.lang =
+        currentLanguage;
+
+
+      document.getElementById(
+        "logo"
+      ).textContent = t.title;
+
+
+      document.getElementById(
+        "clockButton"
+      ).textContent = t.clock;
+
+
+      document.getElementById(
+        "timerButton"
+      ).textContent = t.timer;
+
+
+      document.getElementById(
+        "stopwatchButton"
+      ).textContent = t.stopwatch;
+
+
+      document.getElementById(
+        "settingsButton"
+      ).textContent = t.settings;
+
+
+      document.getElementById(
+        "clockTitle"
+      ).textContent = t.clock;
+
+
+      document.getElementById(
+        "timezoneLabel"
+      ).textContent = t.timezone;
+
+
+      document.getElementById(
+        "timerTitle"
+      ).textContent = t.timer;
+
+
+      document.getElementById(
+        "hoursLabel"
+      ).textContent = t.hours;
+
+
+      document.getElementById(
+        "minutesLabel"
+      ).textContent = t.minutes;
+
+
+      document.getElementById(
+        "secondsLabel"
+      ).textContent = t.seconds;
+
+
+      document.getElementById(
+        "timerResetButton"
+      ).textContent = t.reset;
+
+
+      document.getElementById(
+        "timerStartButton"
+      ).textContent =
+        timerRunning
+          ? t.stop
+          : t.start;
+
+
+      document.getElementById(
+        "stopwatchTitle"
+      ).textContent = t.stopwatch;
+
+
+      document.getElementById(
+        "stopwatchResetButton"
+      ).textContent = t.reset;
+
+
+      document.getElementById(
+        "stopwatchStartButton"
+      ).textContent =
+        stopwatchRunning
+          ? t.stop
+          : t.start;
+
+
+      document.getElementById(
+        "settingsTitle"
+      ).textContent = t.settings;
+
+
+      document.getElementById(
+        "backgroundTitle"
+      ).textContent = t.background;
+
+
+      document.getElementById(
+        "backgroundDescription"
+      ).textContent =
+        t.backgroundDescription;
+
+
+      document.getElementById(
+        "defaultBackgroundButton"
+      ).textContent =
+        t.defaultBackground;
+
+
+      document.getElementById(
+        "languageTitle"
+      ).textContent = t.language;
+
+
+      document.getElementById(
+        "languageDescription"
+      ).textContent =
+        t.languageDescription;
+
+
+      updateFullscreenButtons();
+
+      updateClock();
+    }
+
+
+    /* =====================================================
+       Load saved settings
+    ===================================================== */
+
+    const savedColor =
+      localStorage.getItem(
+        "backgroundColor"
+      );
+
+
+    if (savedColor) {
+
+      setBackgroundColor(
+        savedColor
+      );
+
+    } else {
+
+      setBackgroundColor(
+        "#eef2ff"
+      );
+    }
+
+
+    document.getElementById(
+      "languageSelect"
+    ).value = currentLanguage;
+
+
+    /* =====================================================
+       Start
+    ===================================================== */
+
+    applyLanguage();
+
+    updateTimer();
+
+    updateStopwatch();
+
+  </script>
 
 </body>
-
 </html>
