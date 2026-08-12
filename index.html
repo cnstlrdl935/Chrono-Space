@@ -11,13 +11,11 @@
 
   <title>시간 도구</title>
 
-
   <style>
 
     * {
       box-sizing: border-box;
     }
-
 
     body {
 
@@ -34,12 +32,15 @@
 
       min-height: 100vh;
 
+      transition:
+        background 0.25s ease;
+
     }
 
 
-    /* =========================
+    /* =================================
        전체 레이아웃
-    ========================= */
+    ================================= */
 
     .layout {
 
@@ -50,9 +51,9 @@
     }
 
 
-    /* =========================
+    /* =================================
        왼쪽 메뉴
-    ========================= */
+    ================================= */
 
     .sidebar {
 
@@ -89,6 +90,10 @@
 
     }
 
+
+    /* =================================
+       메뉴 버튼
+    ================================= */
 
     .menu-button {
 
@@ -137,83 +142,20 @@
     }
 
 
-    /* =========================
-       배경색 설정
-    ========================= */
+    /* =================================
+       설정 메뉴
+    ================================= */
 
-    .color-settings {
+    .settings-button {
 
-      margin-top: auto;
-
-      padding-top: 20px;
-
-      border-top:
-        1px solid #e2e8f0;
+      margin-top: 0;
 
     }
 
 
-    .color-settings-title {
-
-      font-size: 14px;
-
-      color: #64748b;
-
-      margin-bottom: 10px;
-
-    }
-
-
-    .color-picker {
-
-      width: 100%;
-
-      height: 45px;
-
-      border: none;
-
-      padding: 0;
-
-      border-radius: 10px;
-
-      cursor: pointer;
-
-      background: none;
-
-    }
-
-
-    .default-color-button {
-
-      width: 100%;
-
-      margin-top: 8px;
-
-      padding: 9px;
-
-      border: none;
-
-      border-radius: 9px;
-
-      background: #e2e8f0;
-
-      color: #475569;
-
-      cursor: pointer;
-
-    }
-
-
-    .default-color-button:hover {
-
-      background: #cbd5e1;
-
-    }
-
-
-    /* =========================
+    /* =================================
        메인 영역
-    ========================= */
+    ================================= */
 
     .main {
 
@@ -232,9 +174,9 @@
     }
 
 
-    /* =========================
+    /* =================================
        화면
-    ========================= */
+    ================================= */
 
     .screen {
 
@@ -283,9 +225,9 @@
     }
 
 
-    /* =========================
+    /* =================================
        날짜
-    ========================= */
+    ================================= */
 
     .date {
 
@@ -306,9 +248,9 @@
     }
 
 
-    /* =========================
+    /* =================================
        시간대
-    ========================= */
+    ================================= */
 
     .timezone-box {
 
@@ -360,9 +302,9 @@
     }
 
 
-    /* =========================
-       숫자
-    ========================= */
+    /* =================================
+       숫자 표시
+    ================================= */
 
     .display {
 
@@ -381,9 +323,9 @@
     }
 
 
-    /* =========================
+    /* =================================
        타이머 입력
-    ========================= */
+    ================================= */
 
     .timer-inputs {
 
@@ -467,9 +409,9 @@
     }
 
 
-    /* =========================
+    /* =================================
        버튼
-    ========================= */
+    ================================= */
 
     .buttons {
 
@@ -535,9 +477,196 @@
     }
 
 
-    /* =========================
+    /* =================================
+       설정 화면
+    ================================= */
+
+    .settings-screen {
+
+      text-align: left;
+
+    }
+
+
+    .settings-title {
+
+      text-align: center;
+
+      margin-bottom: 35px;
+
+    }
+
+
+    .setting-section {
+
+      background: #f8fafc;
+
+      border-radius: 16px;
+
+      padding: 25px;
+
+      margin-bottom: 20px;
+
+    }
+
+
+    .setting-section h2 {
+
+      margin: 0 0 8px 0;
+
+      font-size: 20px;
+
+      color: #334155;
+
+    }
+
+
+    .setting-description {
+
+      margin: 0 0 20px 0;
+
+      font-size: 14px;
+
+      color: #64748b;
+
+    }
+
+
+    /* =================================
+       파스텔 색상 팔레트
+    ================================= */
+
+    .pastel-colors {
+
+      display: grid;
+
+      grid-template-columns:
+        repeat(5, 1fr);
+
+      gap: 12px;
+
+    }
+
+
+    .pastel-color {
+
+      width: 100%;
+
+      aspect-ratio: 1 / 1;
+
+      border-radius: 14px;
+
+      border: 3px solid transparent;
+
+      cursor: pointer;
+
+      transition:
+        transform 0.15s,
+        border-color 0.15s;
+
+      box-shadow:
+        0 3px 8px
+        rgba(0, 0, 0, 0.08);
+
+    }
+
+
+    .pastel-color:hover {
+
+      transform: scale(1.06);
+
+    }
+
+
+    .pastel-color.selected {
+
+      border-color: #334155;
+
+      box-shadow:
+        0 0 0 2px white,
+        0 0 0 4px #334155;
+
+    }
+
+
+    /* 파스텔 색상 */
+
+    .pastel-pink {
+      background: #ffd6e0;
+    }
+
+    .pastel-peach {
+      background: #ffe0c2;
+    }
+
+    .pastel-yellow {
+      background: #fff1b8;
+    }
+
+    .pastel-green {
+      background: #d8f3dc;
+    }
+
+    .pastel-mint {
+      background: #c7f9e9;
+    }
+
+    .pastel-sky {
+      background: #cfe8ff;
+    }
+
+    .pastel-blue {
+      background: #d9dcff;
+    }
+
+    .pastel-purple {
+      background: #eadcff;
+    }
+
+    .pastel-lavender {
+      background: #f0ddff;
+    }
+
+    .pastel-cream {
+      background: #fff7df;
+    }
+
+
+    /* =================================
+       기본색 버튼
+    ================================= */
+
+    .default-background-button {
+
+      margin-top: 20px;
+
+      border: none;
+
+      background: #e2e8f0;
+
+      color: #475569;
+
+      padding: 11px 18px;
+
+      border-radius: 10px;
+
+      font-size: 14px;
+
+      cursor: pointer;
+
+    }
+
+
+    .default-background-button:hover {
+
+      background: #cbd5e1;
+
+    }
+
+
+    /* =================================
        모바일
-    ========================= */
+    ================================= */
 
     @media (max-width: 700px) {
 
@@ -590,46 +719,9 @@
       }
 
 
-      .color-settings {
+      .settings-button {
 
-        margin-top: 0;
-
-        padding-top: 0;
-
-        border-top: none;
-
-        display: flex;
-
-        align-items: center;
-
-        gap: 5px;
-
-      }
-
-
-      .color-settings-title {
-
-        display: none;
-
-      }
-
-
-      .color-picker {
-
-        width: 42px;
-
-        height: 42px;
-
-      }
-
-
-      .default-color-button {
-
-        margin-top: 0;
-
-        width: auto;
-
-        padding: 9px 10px;
+        flex: 1;
 
       }
 
@@ -692,6 +784,17 @@
 
       }
 
+
+      .pastel-colors {
+
+        grid-template-columns:
+          repeat(5, 1fr);
+
+        gap: 8px;
+
+      }
+
+
     }
 
 
@@ -715,6 +818,13 @@
       .display {
 
         font-size: 34px;
+
+      }
+
+
+      .pastel-colors {
+
+        gap: 6px;
 
       }
 
@@ -745,6 +855,8 @@
       </div>
 
 
+      <!-- 현재시간 -->
+
       <button
         id="clockButton"
         class="menu-button active"
@@ -754,6 +866,8 @@
 
       </button>
 
+
+      <!-- 타이머 -->
 
       <button
         id="timerButton"
@@ -765,6 +879,8 @@
       </button>
 
 
+      <!-- 초시계 -->
+
       <button
         id="stopwatchButton"
         class="menu-button"
@@ -775,39 +891,16 @@
       </button>
 
 
+      <!-- 설정 -->
 
-      <!-- =================================
-           배경색 설정
-      ================================== -->
+      <button
+        id="settingsButton"
+        class="menu-button settings-button"
+        onclick="showScreen('settings')">
 
-      <div class="color-settings">
+        설정
 
-
-        <div class="color-settings-title">
-
-          배경색
-
-        </div>
-
-
-        <input
-          type="color"
-          id="backgroundColor"
-          class="color-picker"
-          value="#eef2ff"
-          onchange="changeBackgroundColor()">
-
-
-        <button
-          class="default-color-button"
-          onclick="resetBackgroundColor()">
-
-          기본색
-
-        </button>
-
-
-      </div>
+      </button>
 
 
     </aside>
@@ -815,7 +908,7 @@
 
 
     <!-- =================================
-         메인
+         메인 영역
     ================================== -->
 
     <main class="main">
@@ -830,6 +923,8 @@
         class="screen active">
 
 
+        <!-- 날짜 -->
+
         <div
           id="dateDisplay"
           class="date">
@@ -841,6 +936,8 @@
 
         <h1>현재시간</h1>
 
+
+        <!-- 시간대 -->
 
         <div class="timezone-box">
 
@@ -903,6 +1000,8 @@
         </div>
 
 
+        <!-- 현재 시간 -->
+
         <div
           id="clockDisplay"
           class="display">
@@ -936,6 +1035,8 @@
 
         </div>
 
+
+        <!-- 시간 / 분 / 초 -->
 
         <div class="timer-inputs">
 
@@ -1079,6 +1180,141 @@
       </div>
 
 
+
+      <!-- =================================
+           설정
+      ================================== -->
+
+      <div
+        id="settings"
+        class="screen settings-screen">
+
+
+        <h1 class="settings-title">
+          설정
+        </h1>
+
+
+        <div class="setting-section">
+
+
+          <h2>
+            배경색
+          </h2>
+
+
+          <p class="setting-description">
+
+            파스텔톤 색상 중에서 원하는 배경색을 선택하세요.
+
+          </p>
+
+
+          <!-- 파스텔 색상 -->
+
+          <div class="pastel-colors">
+
+
+            <button
+              class="pastel-color pastel-pink"
+              data-color="#ffd6e0"
+              onclick="setBackgroundColor('#ffd6e0', this)"
+              aria-label="파스텔 핑크">
+            </button>
+
+
+            <button
+              class="pastel-color pastel-peach"
+              data-color="#ffe0c2"
+              onclick="setBackgroundColor('#ffe0c2', this)"
+              aria-label="파스텔 피치">
+            </button>
+
+
+            <button
+              class="pastel-color pastel-yellow"
+              data-color="#fff1b8"
+              onclick="setBackgroundColor('#fff1b8', this)"
+              aria-label="파스텔 노랑">
+            </button>
+
+
+            <button
+              class="pastel-color pastel-green"
+              data-color="#d8f3dc"
+              onclick="setBackgroundColor('#d8f3dc', this)"
+              aria-label="파스텔 그린">
+            </button>
+
+
+            <button
+              class="pastel-color pastel-mint"
+              data-color="#c7f9e9"
+              onclick="setBackgroundColor('#c7f9e9', this)"
+              aria-label="파스텔 민트">
+            </button>
+
+
+            <button
+              class="pastel-color pastel-sky"
+              data-color="#cfe8ff"
+              onclick="setBackgroundColor('#cfe8ff', this)"
+              aria-label="파스텔 하늘색">
+            </button>
+
+
+            <button
+              class="pastel-color pastel-blue"
+              data-color="#d9dcff"
+              onclick="setBackgroundColor('#d9dcff', this)"
+              aria-label="파스텔 블루">
+            </button>
+
+
+            <button
+              class="pastel-color pastel-purple"
+              data-color="#eadcff"
+              onclick="setBackgroundColor('#eadcff', this)"
+              aria-label="파스텔 보라">
+            </button>
+
+
+            <button
+              class="pastel-color pastel-lavender"
+              data-color="#f0ddff"
+              onclick="setBackgroundColor('#f0ddff', this)"
+              aria-label="파스텔 라벤더">
+            </button>
+
+
+            <button
+              class="pastel-color pastel-cream"
+              data-color="#fff7df"
+              onclick="setBackgroundColor('#fff7df', this)"
+              aria-label="파스텔 크림">
+            </button>
+
+
+          </div>
+
+
+          <!-- 기본색 -->
+
+          <button
+            class="default-background-button"
+            onclick="resetBackgroundColor()">
+
+            기본색으로 초기화
+
+          </button>
+
+
+        </div>
+
+
+      </div>
+
+
     </main>
 
 
@@ -1096,6 +1332,8 @@
     function showScreen(screenName) {
 
 
+      // 모든 화면 숨기기
+
       document
         .querySelectorAll(".screen")
         .forEach(function(screen) {
@@ -1104,6 +1342,8 @@
 
         });
 
+
+      // 모든 메뉴 버튼 비활성화
 
       document
         .querySelectorAll(".menu-button")
@@ -1114,10 +1354,14 @@
         });
 
 
+      // 선택한 화면 표시
+
       document
         .getElementById(screenName)
         .classList.add("active");
 
+
+      // 선택한 메뉴 활성화
 
       document
         .getElementById(screenName + "Button")
@@ -1131,27 +1375,54 @@
        배경색
     ===================================== */
 
-    function changeBackgroundColor() {
+    const defaultBackgroundColor =
+      "#eef2ff";
 
 
-      const color =
-        document
-          .getElementById(
-            "backgroundColor"
-          )
-          .value;
+    function setBackgroundColor(
+      color,
+      selectedButton
+    ) {
 
+
+      // 배경 변경
 
       document.body.style.background =
         color;
 
 
-      // 브라우저에 저장
+      // 저장
 
       localStorage.setItem(
         "backgroundColor",
         color
       );
+
+
+      // 기존 선택 제거
+
+      document
+        .querySelectorAll(
+          ".pastel-color"
+        )
+        .forEach(function(button) {
+
+          button.classList.remove(
+            "selected"
+          );
+
+        });
+
+
+      // 현재 선택 표시
+
+      if (selectedButton) {
+
+        selectedButton.classList.add(
+          "selected"
+        );
+
+      }
 
     }
 
@@ -1164,26 +1435,27 @@
     function resetBackgroundColor() {
 
 
-      const defaultColor =
-        "#eef2ff";
-
-
       document.body.style.background =
-        defaultColor;
-
-
-      document
-        .getElementById(
-          "backgroundColor"
-        )
-        .value =
-        defaultColor;
+        defaultBackgroundColor;
 
 
       localStorage.setItem(
         "backgroundColor",
-        defaultColor
+        defaultBackgroundColor
       );
+
+
+      document
+        .querySelectorAll(
+          ".pastel-color"
+        )
+        .forEach(function(button) {
+
+          button.classList.remove(
+            "selected"
+          );
+
+        });
 
     }
 
@@ -1206,12 +1478,42 @@
         savedColor;
 
 
-      document
-        .getElementById(
-          "backgroundColor"
-        )
-        .value =
-        savedColor;
+      const matchingButton =
+        document.querySelector(
+          '.pastel-color[data-color="' +
+          savedColor +
+          '"]'
+        );
+
+
+      if (matchingButton) {
+
+        matchingButton.classList.add(
+          "selected"
+        );
+
+      }
+
+    }
+
+    else {
+
+
+      const defaultButton =
+        document.querySelector(
+          '.pastel-color[data-color="' +
+          defaultBackgroundColor +
+          '"]'
+        );
+
+
+      if (defaultButton) {
+
+        defaultButton.classList.add(
+          "selected"
+        );
+
+      }
 
     }
 
@@ -1234,6 +1536,8 @@
 
       const now = new Date();
 
+
+      // 시간
 
       const timeText =
         new Intl.DateTimeFormat(
@@ -1262,6 +1566,8 @@
         timeText;
 
 
+
+      // 날짜
 
       const dateText =
         new Intl.DateTimeFormat(
@@ -1359,6 +1665,10 @@
 
 
 
+    /* =====================================
+       타이머 시작 / 정지
+    ===================================== */
+
     function toggleTimer() {
 
 
@@ -1368,6 +1678,8 @@
             "timerStartButton"
           );
 
+
+      // 실행 중이면 정지
 
       if (timerRunning) {
 
@@ -1390,6 +1702,8 @@
 
       }
 
+
+      // 처음 시작
 
       if (timerTime === 0) {
 
@@ -1424,6 +1738,8 @@
           );
 
 
+        // 범위 검사
+
         if (
           hours < 0 ||
           hours > 23 ||
@@ -1433,14 +1749,18 @@
           seconds > 59
         ) {
 
+
           alert(
             "시간은 0~23, 분과 초는 0~59 사이로 입력해주세요."
           );
+
 
           return;
 
         }
 
+
+        // 0이면 실행하지 않음
 
         if (
           hours === 0 &&
@@ -1448,9 +1768,11 @@
           seconds === 0
         ) {
 
+
           alert(
             "타이머 시간을 설정해주세요."
           );
+
 
           return;
 
@@ -1488,6 +1810,8 @@
           updateTimer();
 
 
+          // 타이머 종료
+
           if (timerTime <= 0) {
 
 
@@ -1524,6 +1848,10 @@
     }
 
 
+
+    /* =====================================
+       타이머 초기화
+    ===================================== */
 
     function resetTimer() {
 
@@ -1628,6 +1956,8 @@
 
 
 
+      // 1시간 미만
+
       if (
         totalMilliseconds < oneHour
       ) {
@@ -1669,6 +1999,9 @@
             .padStart(2, "0");
 
       }
+
+
+      // 1시간 이상
 
       else {
 
@@ -1719,6 +2052,8 @@
         displayText;
 
 
+      // 계속 실행
+
       if (stopwatchRunning) {
 
 
@@ -1733,6 +2068,10 @@
 
 
 
+    /* =====================================
+       초시계 시작 / 정지
+    ===================================== */
+
     function toggleStopwatch() {
 
 
@@ -1742,6 +2081,8 @@
             "stopwatchStartButton"
           );
 
+
+      // 실행 중이면 정지
 
       if (stopwatchRunning) {
 
@@ -1785,6 +2126,8 @@
       }
 
 
+      // 시작
+
       stopwatchRunning = true;
 
 
@@ -1801,6 +2144,10 @@
     }
 
 
+
+    /* =====================================
+       초시계 초기화
+    ===================================== */
 
     function resetStopwatch() {
 
@@ -1847,7 +2194,6 @@
     }
 
   </script>
-
 
 </body>
 
