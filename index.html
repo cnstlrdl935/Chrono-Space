@@ -28,15 +28,15 @@
         "Noto Sans KR",
         sans-serif;
 
-      background: #f3f4f6;
+      background: #eef2ff;
 
-      color: #111;
+      color: #1e293b;
 
     }
 
 
     /* =========================
-       위쪽 메뉴
+       상단 메뉴
     ========================= */
 
     .menu {
@@ -47,13 +47,13 @@
 
       gap: 10px;
 
-      padding: 20px;
+      padding: 18px;
 
-      background: white;
+      background: #ffffff;
 
       box-shadow:
-        0 2px 10px
-        rgba(0, 0, 0, 0.08);
+        0 3px 15px
+        rgba(30, 41, 59, 0.08);
 
     }
 
@@ -62,13 +62,17 @@
 
       border: none;
 
-      background: #eeeeee;
+      background: #e2e8f0;
 
-      padding: 12px 25px;
+      color: #475569;
 
-      border-radius: 10px;
+      padding: 12px 24px;
+
+      border-radius: 12px;
 
       font-size: 16px;
+
+      font-weight: 600;
 
       cursor: pointer;
 
@@ -79,28 +83,32 @@
 
     .menu button:hover {
 
-      background: #dddddd;
+      background: #cbd5e1;
 
     }
 
 
     .menu button.active {
 
-      background: #111111;
+      background: #4f46e5;
 
       color: white;
+
+      box-shadow:
+        0 4px 10px
+        rgba(79, 70, 229, 0.25);
 
     }
 
 
     /* =========================
-       화면 영역
+       전체 내용
     ========================= */
 
     .content {
 
       min-height:
-        calc(100vh - 85px);
+        calc(100vh - 80px);
 
       display: flex;
 
@@ -117,21 +125,25 @@
 
       display: none;
 
+      position: relative;
+
       background: white;
 
       width: 100%;
 
-      max-width: 700px;
+      max-width: 760px;
 
-      padding: 60px 30px;
+      min-height: 430px;
 
-      border-radius: 20px;
+      padding: 55px 35px;
+
+      border-radius: 24px;
 
       text-align: center;
 
       box-shadow:
-        0 10px 30px
-        rgba(0, 0, 0, 0.08);
+        0 15px 40px
+        rgba(30, 41, 59, 0.10);
 
     }
 
@@ -145,9 +157,90 @@
 
     h1 {
 
-      margin-top: 0;
+      margin-top: 20px;
+
+      margin-bottom: 10px;
 
       font-size: 30px;
+
+      color: #1e293b;
+
+    }
+
+
+    /* =========================
+       현재시간 날짜
+    ========================= */
+
+    .date {
+
+      position: absolute;
+
+      top: 25px;
+
+      left: 30px;
+
+      font-size: 15px;
+
+      color: #64748b;
+
+      font-weight: 500;
+
+      text-align: left;
+
+    }
+
+
+    /* =========================
+       시간대 선택
+    ========================= */
+
+    .timezone-box {
+
+      margin-top: 20px;
+
+      margin-bottom: 20px;
+
+    }
+
+
+    .timezone-box label {
+
+      display: block;
+
+      margin-bottom: 8px;
+
+      color: #64748b;
+
+      font-size: 14px;
+
+    }
+
+
+    .timezone-box select {
+
+      padding: 11px 15px;
+
+      border: 1px solid #cbd5e1;
+
+      border-radius: 10px;
+
+      background: white;
+
+      color: #334155;
+
+      font-size: 15px;
+
+      cursor: pointer;
+
+      outline: none;
+
+    }
+
+
+    .timezone-box select:focus {
+
+      border-color: #6366f1;
 
     }
 
@@ -160,9 +253,11 @@
 
       font-family: monospace;
 
-      font-size: 60px;
+      font-size: 62px;
 
       font-weight: bold;
+
+      color: #312e81;
 
       margin: 40px 0;
 
@@ -205,9 +300,9 @@
 
       font-size: 14px;
 
-      margin-bottom: 6px;
+      margin-bottom: 7px;
 
-      color: #555;
+      color: #64748b;
 
     }
 
@@ -222,18 +317,24 @@
 
       text-align: center;
 
-      border: 1px solid #cccccc;
+      border: 1px solid #cbd5e1;
 
       border-radius: 10px;
 
       outline: none;
+
+      color: #1e293b;
 
     }
 
 
     .timer-input-box input:focus {
 
-      border-color: #555;
+      border-color: #6366f1;
+
+      box-shadow:
+        0 0 0 3px
+        rgba(99, 102, 241, 0.12);
 
     }
 
@@ -244,7 +345,9 @@
 
       font-weight: bold;
 
-      margin-top: 22px;
+      margin-top: 23px;
+
+      color: #64748b;
 
     }
 
@@ -253,30 +356,66 @@
        버튼
     ========================= */
 
+    .buttons {
+
+      display: flex;
+
+      justify-content: center;
+
+      gap: 8px;
+
+      flex-wrap: wrap;
+
+    }
+
+
     .buttons button {
 
       border: none;
 
-      padding: 12px 20px;
+      padding: 12px 25px;
 
-      margin: 5px;
-
-      border-radius: 10px;
+      border-radius: 11px;
 
       font-size: 16px;
 
-      cursor: pointer;
+      font-weight: 600;
 
-      background: #eeeeee;
+      cursor: pointer;
 
       transition: 0.2s;
 
     }
 
 
-    .buttons button:hover {
+    .start-button {
 
-      background: #dddddd;
+      background: #4f46e5;
+
+      color: white;
+
+    }
+
+
+    .start-button:hover {
+
+      background: #4338ca;
+
+    }
+
+
+    .reset-button {
+
+      background: #e2e8f0;
+
+      color: #475569;
+
+    }
+
+
+    .reset-button:hover {
+
+      background: #cbd5e1;
 
     }
 
@@ -286,6 +425,7 @@
     ========================= */
 
     @media (max-width: 600px) {
+
 
       .menu {
 
@@ -305,9 +445,29 @@
       }
 
 
+      .content {
+
+        padding: 15px;
+
+      }
+
+
       .screen {
 
-        padding: 45px 15px;
+        min-height: 420px;
+
+        padding: 55px 15px 40px;
+
+      }
+
+
+      .date {
+
+        top: 20px;
+
+        left: 20px;
+
+        font-size: 13px;
 
       }
 
@@ -315,6 +475,8 @@
       .display {
 
         font-size: 42px;
+
+        margin: 35px 0;
 
       }
 
@@ -345,6 +507,7 @@
 
 
     @media (max-width: 400px) {
+
 
       .timer-input-box input {
 
@@ -377,7 +540,7 @@
 
 
   <!-- =================================
-       위쪽 선택 메뉴
+       상단 메뉴
   ================================== -->
 
   <div class="menu">
@@ -416,7 +579,7 @@
 
 
   <!-- =================================
-       아래쪽 화면
+       화면 영역
   ================================== -->
 
   <div class="content">
@@ -431,8 +594,106 @@
       class="screen active">
 
 
+      <!-- 날짜 -->
+
+      <div
+        id="dateDisplay"
+        class="date">
+
+        2026년 1월 1일
+
+      </div>
+
+
       <h1>현재시간</h1>
 
+
+      <!-- 시간대 -->
+
+      <div class="timezone-box">
+
+        <label for="timezone">
+
+          시간대
+
+        </label>
+
+
+        <select
+          id="timezone"
+          onchange="updateClock()">
+
+
+          <option
+            value="Asia/Seoul">
+
+            대한민국 (서울)
+
+          </option>
+
+
+          <option
+            value="Asia/Tokyo">
+
+            일본 (도쿄)
+
+          </option>
+
+
+          <option
+            value="America/New_York">
+
+            미국 (뉴욕)
+
+          </option>
+
+
+          <option
+            value="America/Los_Angeles">
+
+            미국 (로스앤젤레스)
+
+          </option>
+
+
+          <option
+            value="Europe/London">
+
+            영국 (런던)
+
+          </option>
+
+
+          <option
+            value="Europe/Paris">
+
+            프랑스 (파리)
+
+          </option>
+
+
+          <option
+            value="Asia/Shanghai">
+
+            중국 (상하이)
+
+          </option>
+
+
+          <option
+            value="Australia/Sydney">
+
+            호주 (시드니)
+
+          </option>
+
+
+        </select>
+
+      </div>
+
+
+      <!-- 현재 시간 -->
 
       <div
         id="clockDisplay"
@@ -470,12 +731,10 @@
       </div>
 
 
-      <!-- 시간 / 분 / 초 입력 -->
+      <!-- 시간 / 분 / 초 -->
 
       <div class="timer-inputs">
 
-
-        <!-- 시간 -->
 
         <div class="timer-input-box">
 
@@ -483,13 +742,13 @@
             시간
           </label>
 
+
           <input
             type="number"
             id="timerHours"
             min="0"
             max="23"
-            value="0"
-            placeholder="0">
+            value="0">
 
         </div>
 
@@ -498,8 +757,6 @@
           :
         </div>
 
-
-        <!-- 분 -->
 
         <div class="timer-input-box">
 
@@ -507,13 +764,13 @@
             분
           </label>
 
+
           <input
             type="number"
             id="timerMinutes"
             min="0"
             max="59"
-            value="0"
-            placeholder="0">
+            value="0">
 
         </div>
 
@@ -523,21 +780,19 @@
         </div>
 
 
-        <!-- 초 -->
-
         <div class="timer-input-box">
 
           <label for="timerSeconds">
             초
           </label>
 
+
           <input
             type="number"
             id="timerSeconds"
             min="0"
             max="59"
-            value="0"
-            placeholder="0">
+            value="0">
 
         </div>
 
@@ -545,24 +800,27 @@
       </div>
 
 
-
-      <!-- 타이머 버튼 -->
+      <!-- 버튼 -->
 
       <div class="buttons">
 
 
-        <button onclick="startTimer()">
+        <button
+          id="timerStartButton"
+          class="start-button"
+          onclick="toggleTimer()">
+
           시작
+
         </button>
 
 
-        <button onclick="pauseTimer()">
-          정지
-        </button>
+        <button
+          class="reset-button"
+          onclick="resetTimer()">
 
-
-        <button onclick="resetTimer()">
           초기화
+
         </button>
 
 
@@ -597,18 +855,22 @@
       <div class="buttons">
 
 
-        <button onclick="startStopwatch()">
+        <button
+          id="stopwatchStartButton"
+          class="start-button"
+          onclick="toggleStopwatch()">
+
           시작
+
         </button>
 
 
-        <button onclick="pauseStopwatch()">
-          정지
-        </button>
+        <button
+          class="reset-button"
+          onclick="resetStopwatch()">
 
-
-        <button onclick="resetStopwatch()">
           초기화
+
         </button>
 
 
@@ -632,8 +894,6 @@
     function showScreen(screenName) {
 
 
-      // 모든 화면 숨기기
-
       document
         .querySelectorAll(".screen")
         .forEach(function(screen) {
@@ -642,8 +902,6 @@
 
         });
 
-
-      // 모든 메뉴 버튼 비활성화
 
       document
         .querySelectorAll(".menu button")
@@ -654,14 +912,10 @@
         });
 
 
-      // 선택한 화면 표시
-
       document
         .getElementById(screenName)
         .classList.add("active");
 
-
-      // 선택한 버튼 활성화
 
       document
         .getElementById(screenName + "Button")
@@ -672,36 +926,69 @@
 
 
     /* =====================================
-       현재시간
+       현재시간 + 날짜 + 시간대
     ===================================== */
 
     function updateClock() {
 
+
+      const timezone =
+        document
+          .getElementById("timezone")
+          .value;
+
+
       const now = new Date();
 
 
-      const hours =
-        String(now.getHours())
-          .padStart(2, "0");
+      // 시간
 
+      const timeText =
+        new Intl.DateTimeFormat(
+          "ko-KR",
+          {
+            timeZone: timezone,
 
-      const minutes =
-        String(now.getMinutes())
-          .padStart(2, "0");
+            hour: "2-digit",
 
+            minute: "2-digit",
 
-      const seconds =
-        String(now.getSeconds())
-          .padStart(2, "0");
+            second: "2-digit",
+
+            hour12: false
+          }
+        ).format(now);
 
 
       document
         .getElementById("clockDisplay")
         .textContent =
+        timeText;
 
-        hours + ":" +
-        minutes + ":" +
-        seconds;
+
+      // 날짜
+
+      const dateText =
+        new Intl.DateTimeFormat(
+          "ko-KR",
+          {
+            timeZone: timezone,
+
+            year: "numeric",
+
+            month: "long",
+
+            day: "numeric",
+
+            weekday: "long"
+          }
+        ).format(now);
+
+
+      document
+        .getElementById("dateDisplay")
+        .textContent =
+        dateText;
 
     }
 
@@ -724,9 +1011,9 @@
 
     let timerInterval = null;
 
+    let timerRunning = false;
 
 
-    // 타이머 화면 업데이트
 
     function updateTimer() {
 
@@ -771,21 +1058,45 @@
 
 
 
-    // 타이머 시작
+    /* =========================
+       타이머 시작 / 정지
+    ========================= */
 
-    function startTimer() {
+    function toggleTimer() {
 
 
-      // 이미 실행 중이면 중복 실행 방지
+      const button =
+        document
+          .getElementById(
+            "timerStartButton"
+          );
 
-      if (timerInterval !== null) {
+
+      // 실행 중 → 정지
+
+      if (timerRunning) {
+
+
+        clearInterval(
+          timerInterval
+        );
+
+
+        timerInterval = null;
+
+        timerRunning = false;
+
+
+        button.textContent =
+          "시작";
+
 
         return;
 
       }
 
 
-      // 시간이 0이면 입력값 가져오기
+      // 처음 시작하는 경우
 
       if (timerTime === 0) {
 
@@ -793,7 +1104,9 @@
         const hours =
           Number(
             document
-              .getElementById("timerHours")
+              .getElementById(
+                "timerHours"
+              )
               .value
           );
 
@@ -801,7 +1114,9 @@
         const minutes =
           Number(
             document
-              .getElementById("timerMinutes")
+              .getElementById(
+                "timerMinutes"
+              )
               .value
           );
 
@@ -809,12 +1124,12 @@
         const seconds =
           Number(
             document
-              .getElementById("timerSeconds")
+              .getElementById(
+                "timerSeconds"
+              )
               .value
           );
 
-
-        // 입력값 검사
 
         if (
           hours < 0 ||
@@ -834,8 +1149,6 @@
         }
 
 
-        // 모두 0이면 실행하지 않음
-
         if (
           hours === 0 &&
           minutes === 0 &&
@@ -851,8 +1164,6 @@
         }
 
 
-        // 모든 값을 초로 변환
-
         timerTime =
 
           hours * 3600 +
@@ -867,7 +1178,14 @@
       }
 
 
-      // 1초마다 감소
+      // 시작
+
+      timerRunning = true;
+
+
+      button.textContent =
+        "정지";
+
 
       timerInterval =
         setInterval(function() {
@@ -878,8 +1196,6 @@
 
           updateTimer();
 
-
-          // 종료
 
           if (timerTime <= 0) {
 
@@ -892,7 +1208,14 @@
             timerInterval = null;
 
 
+            timerRunning = false;
+
+
             timerTime = 0;
+
+
+            button.textContent =
+              "시작";
 
 
             updateTimer();
@@ -911,23 +1234,9 @@
 
 
 
-    // 타이머 정지
-
-    function pauseTimer() {
-
-
-      clearInterval(
-        timerInterval
-      );
-
-
-      timerInterval = null;
-
-    }
-
-
-
-    // 타이머 초기화
+    /* =========================
+       타이머 초기화
+    ========================= */
 
     function resetTimer() {
 
@@ -940,21 +1249,37 @@
       timerInterval = null;
 
 
+      timerRunning = false;
+
+
       timerTime = 0;
 
 
       document
-        .getElementById("timerHours")
+        .getElementById(
+          "timerStartButton"
+        )
+        .textContent = "시작";
+
+
+      document
+        .getElementById(
+          "timerHours"
+        )
         .value = 0;
 
 
       document
-        .getElementById("timerMinutes")
+        .getElementById(
+          "timerMinutes"
+        )
         .value = 0;
 
 
       document
-        .getElementById("timerSeconds")
+        .getElementById(
+          "timerSeconds"
+        )
         .value = 0;
 
 
@@ -978,17 +1303,14 @@
 
 
 
-    // 초시계 화면 업데이트
-
     function updateStopwatch() {
 
 
       let totalMilliseconds;
 
 
-      // 실행 중
-
       if (stopwatchRunning) {
+
 
         totalMilliseconds =
 
@@ -1001,24 +1323,13 @@
 
       }
 
-      // 정지 상태
-
       else {
+
 
         totalMilliseconds =
           stopwatchElapsed;
 
       }
-
-
-
-      /*
-        1시간 미만:
-        분 : 초 : 밀리초
-
-        1시간 이상:
-        시간 : 분 : 초
-      */
 
 
       const oneHour =
@@ -1029,9 +1340,11 @@
 
 
 
-      // =========================
-      // 1시간 미만
-      // =========================
+      /* =========================
+         1시간 미만
+
+         분 : 초 : 밀리초
+      ========================= */
 
       if (
         totalMilliseconds < oneHour
@@ -1050,8 +1363,6 @@
             / 1000
           );
 
-
-        // 1/100초 단위
 
         const milliseconds =
           Math.floor(
@@ -1079,9 +1390,11 @@
 
 
 
-      // =========================
-      // 1시간 이상
-      // =========================
+      /* =========================
+         1시간 이상
+
+         시간 : 분 : 초
+      ========================= */
 
       else {
 
@@ -1124,18 +1437,13 @@
       }
 
 
-
-      // 화면에 표시
-
       document
         .getElementById(
           "stopwatchDisplay"
         )
-        .textContent = displayText;
+        .textContent =
+        displayText;
 
-
-
-      // 실행 중이면 계속 업데이트
 
       if (stopwatchRunning) {
 
@@ -1151,19 +1459,65 @@
 
 
 
-    // 초시계 시작
+    /* =========================
+       초시계 시작 / 정지
+    ========================= */
 
-    function startStopwatch() {
+    function toggleStopwatch() {
 
 
-      // 이미 실행 중이면 중복 실행 방지
+      const button =
+        document
+          .getElementById(
+            "stopwatchStartButton"
+          );
+
+
+      // 실행 중 → 정지
 
       if (stopwatchRunning) {
+
+
+        stopwatchElapsed +=
+
+          performance.now() -
+          stopwatchStartTime;
+
+
+        stopwatchRunning = false;
+
+
+        stopwatchStartTime = 0;
+
+
+        if (
+          stopwatchAnimation !== null
+        ) {
+
+
+          cancelAnimationFrame(
+            stopwatchAnimation
+          );
+
+
+          stopwatchAnimation = null;
+
+        }
+
+
+        button.textContent =
+          "시작";
+
+
+        updateStopwatch();
+
 
         return;
 
       }
 
+
+      // 시작
 
       stopwatchRunning = true;
 
@@ -1172,53 +1526,8 @@
         performance.now();
 
 
-      updateStopwatch();
-
-    }
-
-
-
-    // 초시계 정지
-
-    function pauseStopwatch() {
-
-
-      if (!stopwatchRunning) {
-
-        return;
-
-      }
-
-
-      // 현재까지의 시간을 저장
-
-      stopwatchElapsed +=
-
-        performance.now() -
-        stopwatchStartTime;
-
-
-      stopwatchRunning = false;
-
-
-      stopwatchStartTime = 0;
-
-
-      // 애니메이션 중지
-
-      if (
-        stopwatchAnimation !== null
-      ) {
-
-
-        cancelAnimationFrame(
-          stopwatchAnimation
-        );
-
-
-        stopwatchAnimation = null;
-
-      }
+      button.textContent =
+        "정지";
 
 
       updateStopwatch();
@@ -1227,12 +1536,12 @@
 
 
 
-    // 초시계 초기화
+    /* =========================
+       초시계 초기화
+    ========================= */
 
     function resetStopwatch() {
 
-
-      // 실행 중인 업데이트 중지
 
       if (
         stopwatchAnimation !== null
@@ -1260,9 +1569,18 @@
 
       document
         .getElementById(
+          "stopwatchStartButton"
+        )
+        .textContent =
+        "시작";
+
+
+      document
+        .getElementById(
           "stopwatchDisplay"
         )
-        .textContent = "00:00:00";
+        .textContent =
+        "00:00:00";
 
     }
 
