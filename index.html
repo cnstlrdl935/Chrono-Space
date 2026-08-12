@@ -11,58 +11,114 @@
 
   <title>시간 도구</title>
 
+
   <style>
 
+    /* =========================================
+       기본 색상 변수
+    ========================================= */
+
+    :root {
+
+      --bg-color: #eef2ff;
+
+      --text-color: #334155;
+
+      --title-color: #334155;
+
+      --display-color: #334155;
+
+      --sidebar-bg: rgba(255, 255, 255, 0.42);
+
+      --sidebar-border: rgba(255, 255, 255, 0.35);
+
+      --button-bg: rgba(255, 255, 255, 0.48);
+
+      --button-text: #334155;
+
+      --active-bg: rgba(79, 70, 229, 0.78);
+
+      --active-text: #ffffff;
+
+      --screen-bg: rgba(255, 255, 255, 0.48);
+
+      --input-bg: rgba(255, 255, 255, 0.55);
+
+      --input-border: rgba(51, 65, 85, 0.25);
+
+      --setting-bg: rgba(255, 255, 255, 0.35);
+
+      --shadow: rgba(30, 41, 59, 0.12);
+
+    }
+
+
+    /* =========================================
+       전체 기본 설정
+    ========================================= */
+
     * {
+
       box-sizing: border-box;
+
     }
 
 
-    html,
-    body {
-      margin: 0;
+    html {
+
+      width: 100%;
+
       min-height: 100%;
+
     }
 
 
     body {
+
+      margin: 0;
+
+      width: 100%;
+
+      min-height: 100vh;
 
       font-family:
         Arial,
         "Noto Sans KR",
         sans-serif;
 
-      background: #eef2ff;
+      background:
+        var(--bg-color);
 
-      color: #334155;
-
-      min-height: 100vh;
+      color:
+        var(--text-color);
 
       transition:
-        background 0.25s ease,
-        color 0.25s ease;
+        background 0.3s ease,
+        color 0.3s ease;
+
+      overflow-x: hidden;
 
     }
 
 
-    /* =================================
+    /* =========================================
        전체 레이아웃
-    ================================= */
+    ========================================= */
 
     .layout {
 
       display: flex;
 
-      min-height: 100vh;
+      width: 100%;
 
-      align-items: stretch;
+      min-height: 100vh;
 
     }
 
 
-    /* =================================
-       왼쪽 메뉴
-    ================================= */
+    /* =========================================
+       왼쪽 작업 표시줄
+    ========================================= */
 
     .sidebar {
 
@@ -70,13 +126,24 @@
 
       flex-shrink: 0;
 
-      background: #ffffff;
+      min-height: 100vh;
 
       padding: 25px 15px;
 
+      background:
+        var(--sidebar-bg);
+
+      backdrop-filter:
+        blur(15px);
+
+      -webkit-backdrop-filter:
+        blur(15px);
+
+      border-right:
+        1px solid var(--sidebar-border);
+
       box-shadow:
-        3px 0 15px
-        rgba(30, 41, 59, 0.08);
+        3px 0 20px var(--shadow);
 
       display: flex;
 
@@ -84,10 +151,15 @@
 
       gap: 10px;
 
-      min-height: 100vh;
+      transition:
+        background 0.3s ease;
 
     }
 
+
+    /* =========================================
+       로고
+    ========================================= */
 
     .logo {
 
@@ -97,16 +169,20 @@
 
       text-align: center;
 
-      color: #4f46e5;
+      color:
+        var(--title-color);
 
       margin-bottom: 20px;
+
+      transition:
+        color 0.3s ease;
 
     }
 
 
-    /* =================================
-       메뉴 버튼
-    ================================= */
+    /* =========================================
+       왼쪽 메뉴 버튼
+    ========================================= */
 
     .menu-button {
 
@@ -114,9 +190,11 @@
 
       border: none;
 
-      background: #e2e8f0;
+      background:
+        var(--button-bg);
 
-      color: #475569;
+      color:
+        var(--button-text);
 
       padding: 14px 15px;
 
@@ -131,34 +209,35 @@
       text-align: center;
 
       transition:
-        0.2s;
+        background 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease;
 
     }
 
 
     .menu-button:hover {
 
-      background: #cbd5e1;
+      transform:
+        translateY(-1px);
 
     }
 
 
     .menu-button.active {
 
-      background: #4f46e5;
+      background:
+        var(--active-bg);
 
-      color: white;
-
-      box-shadow:
-        0 4px 10px
-        rgba(79, 70, 229, 0.25);
+      color:
+        var(--active-text);
 
     }
 
 
-    /* =================================
+    /* =========================================
        메인 영역
-    ================================= */
+    ========================================= */
 
     .main {
 
@@ -168,20 +247,20 @@
 
       min-height: 100vh;
 
+      padding: 30px;
+
       display: flex;
 
       justify-content: center;
 
-      align-items: flex-start;
-
-      padding: 35px;
+      align-items: center;
 
     }
 
 
-    /* =================================
-       화면
-    ================================= */
+    /* =========================================
+       각 화면
+    ========================================= */
 
     .screen {
 
@@ -189,50 +268,76 @@
 
       position: relative;
 
-      background: white;
-
       width: 100%;
 
       max-width: 760px;
 
-      min-height: 450px;
+      min-height: 500px;
 
       padding: 55px 35px;
 
       border-radius: 24px;
 
-      text-align: center;
+      background:
+        var(--screen-bg);
+
+      backdrop-filter:
+        blur(15px);
+
+      -webkit-backdrop-filter:
+        blur(15px);
 
       box-shadow:
-        0 15px 40px
-        rgba(30, 41, 59, 0.10);
+        0 15px 40px var(--shadow);
+
+      text-align: center;
+
+      color:
+        var(--text-color);
+
+      transition:
+        background 0.3s ease,
+        color 0.3s ease;
 
     }
 
 
     .screen.active {
 
-      display: block;
+      display: flex;
+
+      flex-direction: column;
+
+      justify-content: center;
+
+      align-items: center;
 
     }
 
 
-    h1 {
+    /* =========================================
+       제목
+    ========================================= */
 
-      margin-top: 20px;
+    .screen h1 {
 
-      margin-bottom: 10px;
+      margin:
+        0 0 20px 0;
 
       font-size: 30px;
 
-      color: #1e293b;
+      color:
+        var(--title-color);
+
+      transition:
+        color 0.3s ease;
 
     }
 
 
-    /* =================================
+    /* =========================================
        날짜
-    ================================= */
+    ========================================= */
 
     .date {
 
@@ -244,35 +349,43 @@
 
       font-size: 15px;
 
-      color: #64748b;
+      color:
+        var(--text-color);
 
       font-weight: 500;
 
       text-align: left;
 
+      transition:
+        color 0.3s ease;
+
     }
 
 
-    /* =================================
+    /* =========================================
        시간대
-    ================================= */
+    ========================================= */
 
     .timezone-box {
 
-      margin-top: 20px;
+      margin:
+        0 0 10px 0;
 
-      margin-bottom: 20px;
+      display: flex;
+
+      flex-direction: column;
+
+      align-items: center;
 
     }
 
 
     .timezone-box label {
 
-      display: block;
-
       margin-bottom: 8px;
 
-      color: #64748b;
+      color:
+        var(--text-color);
 
       font-size: 14px;
 
@@ -283,13 +396,16 @@
 
       padding: 11px 15px;
 
-      border: 1px solid #cbd5e1;
+      border:
+        1px solid var(--input-border);
 
       border-radius: 10px;
 
-      background: white;
+      background:
+        var(--input-bg);
 
-      color: #334155;
+      color:
+        var(--text-color);
 
       font-size: 15px;
 
@@ -300,30 +416,38 @@
     }
 
 
-    /* =================================
-       숫자 표시
-    ================================= */
+    /* =========================================
+       시간 표시
+    ========================================= */
 
     .display {
 
-      font-family: monospace;
+      font-family:
+        monospace;
 
       font-size: 62px;
 
       font-weight: bold;
 
-      color: #312e81;
+      color:
+        var(--display-color);
 
-      margin: 40px 0;
+      margin:
+        30px 0;
 
       white-space: nowrap;
+
+      text-align: center;
+
+      transition:
+        color 0.3s ease;
 
     }
 
 
-    /* =================================
-       타이머 입력
-    ================================= */
+    /* =========================================
+       타이머 입력 영역
+    ========================================= */
 
     .timer-inputs {
 
@@ -335,7 +459,8 @@
 
       gap: 12px;
 
-      margin-bottom: 30px;
+      margin:
+        5px 0 25px;
 
     }
 
@@ -357,7 +482,8 @@
 
       margin-bottom: 7px;
 
-      color: #64748b;
+      color:
+        var(--text-color);
 
     }
 
@@ -372,27 +498,33 @@
 
       text-align: center;
 
-      border: 1px solid #cbd5e1;
+      border:
+        1px solid var(--input-border);
 
       border-radius: 10px;
 
       outline: none;
 
-      color: #1e293b;
+      background:
+        var(--input-bg);
+
+      color:
+        var(--text-color);
 
     }
 
 
     .timer-input-box input:focus {
 
-      border-color: #6366f1;
-
-      box-shadow:
-        0 0 0 3px
-        rgba(99, 102, 241, 0.12);
+      border-color:
+        var(--active-bg);
 
     }
 
+
+    /* =========================================
+       타이머 콜론
+    ========================================= */
 
     .colon {
 
@@ -402,16 +534,19 @@
 
       margin-top: 23px;
 
-      color: #64748b;
+      color:
+        var(--text-color);
 
     }
 
 
-    /* =================================
-       버튼
-    ================================= */
+    /* =========================================
+       버튼 영역
+    ========================================= */
 
     .buttons {
+
+      width: 100%;
 
       display: flex;
 
@@ -419,14 +554,22 @@
 
       align-items: center;
 
-      gap: 8px;
+      gap: 10px;
 
       flex-wrap: wrap;
+
+      margin-top: 5px;
 
     }
 
 
+    /* =========================================
+       버튼
+    ========================================= */
+
     .buttons button {
+
+      min-width: 110px;
 
       border: none;
 
@@ -441,46 +584,55 @@
       cursor: pointer;
 
       transition:
-        0.2s;
+        0.2s ease;
 
     }
 
 
+    /* =========================================
+       시작 / 정지 버튼
+    ========================================= */
+
     .start-button {
 
-      background: #4f46e5;
+      background:
+        var(--active-bg);
 
-      color: white;
+      color:
+        var(--active-text);
 
     }
 
 
     .start-button:hover {
 
-      background: #4338ca;
+      filter:
+        brightness(0.95);
 
     }
 
+
+    /* =========================================
+       초기화 버튼
+    ========================================= */
 
     .reset-button {
 
-      background: #e2e8f0;
+      background:
+        var(--button-bg);
 
-      color: #475569;
+      color:
+        var(--button-text);
 
-    }
-
-
-    .reset-button:hover {
-
-      background: #cbd5e1;
+      border:
+        1px solid var(--input-border) !important;
 
     }
 
 
-    /* =================================
+    /* =========================================
        설정 화면
-    ================================= */
+    ========================================= */
 
     .settings-screen {
 
@@ -493,14 +645,18 @@
 
       text-align: center;
 
-      margin-bottom: 35px;
+      margin-bottom:
+        25px !important;
 
     }
 
 
     .setting-section {
 
-      background: #f8fafc;
+      width: 100%;
+
+      background:
+        var(--setting-bg);
 
       border-radius: 16px;
 
@@ -518,7 +674,8 @@
 
       font-size: 20px;
 
-      color: #334155;
+      color:
+        var(--title-color);
 
     }
 
@@ -530,14 +687,15 @@
 
       font-size: 14px;
 
-      color: #64748b;
+      color:
+        var(--text-color);
 
     }
 
 
-    /* =================================
-       파스텔 색상
-    ================================= */
+    /* =========================================
+       파스텔 색상 선택
+    ========================================= */
 
     .pastel-colors {
 
@@ -559,13 +717,14 @@
 
       border-radius: 14px;
 
-      border: 3px solid transparent;
+      border:
+        3px solid transparent;
 
       cursor: pointer;
 
       transition:
-        transform 0.15s,
-        border-color 0.15s;
+        transform 0.15s ease,
+        border-color 0.15s ease;
 
       box-shadow:
         0 3px 8px
@@ -585,59 +744,102 @@
     .pastel-color.selected {
 
       border-color:
-        #334155;
+        var(--title-color);
 
       box-shadow:
         0 0 0 2px white,
-        0 0 0 4px #334155;
+        0 0 0 4px var(--title-color);
 
     }
 
+
+    /* =========================================
+       파스텔 색상
+    ========================================= */
 
     .pastel-pink {
-      background: #ffd6e0;
+
+      background:
+        #ffd6e0;
+
     }
+
 
     .pastel-peach {
-      background: #ffe0c2;
+
+      background:
+        #ffe0c2;
+
     }
+
 
     .pastel-yellow {
-      background: #fff1b8;
+
+      background:
+        #fff1b8;
+
     }
+
 
     .pastel-green {
-      background: #d8f3dc;
+
+      background:
+        #d8f3dc;
+
     }
+
 
     .pastel-mint {
-      background: #c7f9e9;
+
+      background:
+        #c7f9e9;
+
     }
+
 
     .pastel-sky {
-      background: #cfe8ff;
+
+      background:
+        #cfe8ff;
+
     }
+
 
     .pastel-blue {
-      background: #d9dcff;
+
+      background:
+        #d9dcff;
+
     }
+
 
     .pastel-purple {
-      background: #eadcff;
+
+      background:
+        #eadcff;
+
     }
+
 
     .pastel-lavender {
-      background: #f0ddff;
+
+      background:
+        #f0ddff;
+
     }
+
 
     .pastel-cream {
-      background: #fff7df;
+
+      background:
+        #fff7df;
+
     }
 
 
-    /* =================================
+    /* =========================================
        기본색 버튼
-    ================================= */
+    ========================================= */
 
     .default-background-button {
 
@@ -648,127 +850,147 @@
 
       border: none;
 
-      background: #e2e8f0;
+      background:
+        var(--button-bg);
 
-      color: #475569;
+      color:
+        var(--button-text);
 
-      padding: 11px 18px;
+      padding:
+        11px 18px;
 
-      border-radius: 10px;
+      border-radius:
+        10px;
 
-      font-size: 14px;
+      font-size:
+        14px;
 
-      cursor: pointer;
+      cursor:
+        pointer;
 
     }
 
 
-    /* =================================
-       언어 설정
-    ================================= */
+    /* =========================================
+       언어 선택
+    ========================================= */
 
     .language-select {
 
-      width: 100%;
+      width:
+        100%;
 
-      padding: 13px 15px;
+      padding:
+        13px 15px;
 
       border:
-        1px solid #cbd5e1;
+        1px solid var(--input-border);
 
-      border-radius: 10px;
+      border-radius:
+        10px;
 
-      background: white;
+      background:
+        var(--input-bg);
 
-      color: #334155;
+      color:
+        var(--text-color);
 
-      font-size: 15px;
+      font-size:
+        15px;
 
-      cursor: pointer;
+      cursor:
+        pointer;
 
-      outline: none;
-
-    }
-
-
-    .language-select:focus {
-
-      border-color:
-        #6366f1;
+      outline:
+        none;
 
     }
 
 
-    /* =================================
+    /* =========================================
        모바일
-    ================================= */
+    ========================================= */
 
     @media (max-width: 700px) {
 
 
       .layout {
 
-        flex-direction: column;
+        flex-direction:
+          column;
 
       }
 
 
       .sidebar {
 
-        width: 100%;
+        width:
+          100%;
 
-        min-height: auto;
+        min-height:
+          auto;
 
-        padding: 12px;
+        padding:
+          12px;
 
-        flex-direction: row;
+        flex-direction:
+          row;
 
-        flex-wrap: wrap;
+        flex-wrap:
+          wrap;
 
-        align-items: center;
-
-        gap: 6px;
+        align-items:
+          center;
 
       }
 
 
       .logo {
 
-        width: 100%;
+        width:
+          100%;
 
-        margin-bottom: 5px;
+        margin-bottom:
+          5px;
 
       }
 
 
       .menu-button {
 
-        width: auto;
+        flex:
+          1;
 
-        flex: 1;
+        min-width:
+          70px;
 
-        text-align: center;
+        text-align:
+          center;
 
         padding:
           10px 8px;
 
-        font-size: 14px;
+        font-size:
+          14px;
 
       }
 
 
       .main {
 
-        min-height: calc(100vh - 100px);
+        min-height:
+          calc(100vh - 100px);
 
-        padding: 15px;
+        padding:
+          15px;
 
       }
 
 
       .screen {
 
-        min-height: 420px;
+        min-height:
+          450px;
 
         padding:
           55px 15px 40px;
@@ -776,89 +998,70 @@
       }
 
 
-      .date {
-
-        top: 20px;
-
-        left: 20px;
-
-        font-size: 13px;
-
-      }
-
-
       .display {
 
-        font-size: 42px;
-
-        margin:
-          35px 0;
+        font-size:
+          42px;
 
       }
 
 
       .timer-inputs {
 
-        gap: 5px;
+        gap:
+          5px;
 
       }
 
 
       .timer-input-box input {
 
-        width: 80px;
+        width:
+          80px;
 
-        font-size: 20px;
-
-      }
-
-
-      .colon {
-
-        font-size: 22px;
+        font-size:
+          20px;
 
       }
 
 
       .pastel-colors {
 
-        grid-template-columns:
-          repeat(5, 1fr);
-
-        gap: 8px;
+        gap:
+          8px;
 
       }
 
     }
 
 
+    /* =========================================
+       아주 작은 화면
+    ========================================= */
+
     @media (max-width: 400px) {
+
+
+      .display {
+
+        font-size:
+          34px;
+
+      }
 
 
       .timer-input-box input {
 
-        width: 65px;
+        width:
+          65px;
 
       }
 
 
       .timer-inputs {
 
-        gap: 2px;
-
-      }
-
-
-      .display {
-
-        font-size: 34px;
-
-      }
-
-
-      .pastel-colors {
-
-        gap: 6px;
+        gap:
+          2px;
 
       }
 
@@ -875,9 +1078,9 @@
   <div class="layout">
 
 
-    <!-- =================================
+    <!-- =====================================
          왼쪽 메뉴
-    ================================== -->
+    ====================================== -->
 
     <aside class="sidebar">
 
@@ -935,9 +1138,9 @@
 
 
 
-    <!-- =================================
+    <!-- =====================================
          메인
-    ================================== -->
+    ====================================== -->
 
     <main class="main">
 
@@ -946,7 +1149,7 @@
            현재시간
       ================================== -->
 
-      <div
+      <section
         id="clock"
         class="screen active">
 
@@ -961,7 +1164,9 @@
 
 
         <h1 id="clockTitle">
+
           현재시간
+
         </h1>
 
 
@@ -983,36 +1188,60 @@
 
 
             <option value="Asia/Seoul">
+
               대한민국 (서울)
+
             </option>
+
 
             <option value="Asia/Tokyo">
+
               일본 (도쿄)
+
             </option>
+
 
             <option value="America/New_York">
+
               미국 (뉴욕)
+
             </option>
+
 
             <option value="America/Los_Angeles">
+
               미국 (로스앤젤레스)
+
             </option>
+
 
             <option value="Europe/London">
+
               영국 (런던)
+
             </option>
+
 
             <option value="Europe/Paris">
+
               프랑스 (파리)
+
             </option>
+
 
             <option value="Asia/Shanghai">
+
               중국 (상하이)
+
             </option>
 
+
             <option value="Australia/Sydney">
+
               호주 (시드니)
+
             </option>
+
 
           </select>
 
@@ -1029,7 +1258,7 @@
         </div>
 
 
-      </div>
+      </section>
 
 
 
@@ -1037,13 +1266,15 @@
            타이머
       ================================== -->
 
-      <div
+      <section
         id="timer"
         class="screen">
 
 
         <h1 id="timerTitle">
+
           타이머
+
         </h1>
 
 
@@ -1061,6 +1292,7 @@
 
           <div class="timer-input-box">
 
+
             <label
               id="hoursLabel"
               for="timerHours">
@@ -1069,6 +1301,7 @@
 
             </label>
 
+
             <input
               type="number"
               id="timerHours"
@@ -1076,15 +1309,19 @@
               max="23"
               value="0">
 
+
           </div>
 
 
           <div class="colon">
+
             :
+
           </div>
 
 
           <div class="timer-input-box">
+
 
             <label
               id="minutesLabel"
@@ -1094,6 +1331,7 @@
 
             </label>
 
+
             <input
               type="number"
               id="timerMinutes"
@@ -1101,15 +1339,19 @@
               max="59"
               value="0">
 
+
           </div>
 
 
           <div class="colon">
+
             :
+
           </div>
 
 
           <div class="timer-input-box">
+
 
             <label
               id="secondsLabel"
@@ -1119,12 +1361,14 @@
 
             </label>
 
+
             <input
               type="number"
               id="timerSeconds"
               min="0"
               max="59"
               value="0">
+
 
           </div>
 
@@ -1158,7 +1402,7 @@
         </div>
 
 
-      </div>
+      </section>
 
 
 
@@ -1166,13 +1410,15 @@
            초시계
       ================================== -->
 
-      <div
+      <section
         id="stopwatch"
         class="screen">
 
 
         <h1 id="stopwatchTitle">
+
           초시계
+
         </h1>
 
 
@@ -1211,7 +1457,7 @@
         </div>
 
 
-      </div>
+      </section>
 
 
 
@@ -1219,7 +1465,7 @@
            설정
       ================================== -->
 
-      <div
+      <section
         id="settings"
         class="screen settings-screen">
 
@@ -1239,7 +1485,9 @@
 
 
           <h2 id="backgroundTitle">
+
             배경색
+
           </h2>
 
 
@@ -1358,7 +1606,9 @@
 
 
           <h2 id="languageTitle">
+
             언어
+
           </h2>
 
 
@@ -1378,17 +1628,23 @@
 
 
             <option value="ko">
+
               한국어
+
             </option>
 
 
             <option value="en">
+
               English
+
             </option>
 
 
             <option value="ja">
+
               日本語
+
             </option>
 
 
@@ -1398,7 +1654,7 @@
         </div>
 
 
-      </div>
+      </section>
 
 
     </main>
@@ -1410,11 +1666,12 @@
   <script>
 
 
-    /* =====================================
-       언어 데이터
-    ===================================== */
+    /* =========================================
+       언어
+    ========================================= */
 
     const translations = {
+
 
       ko: {
 
@@ -1571,19 +1828,218 @@
     };
 
 
-
     let currentLanguage =
+      localStorage.getItem("language") || "ko";
+
+
+    /* =========================================
+       배경색
+    ========================================= */
+
+    const defaultBackgroundColor =
+      "#eef2ff";
+
+
+    const backgroundTextColors = {
+
+
+      "#ffd6e0":
+        "#6b3a47",
+
+
+      "#ffe0c2":
+        "#6b4935",
+
+
+      "#fff1b8":
+        "#665a25",
+
+
+      "#d8f3dc":
+        "#31543a",
+
+
+      "#c7f9e9":
+        "#285449",
+
+
+      "#cfe8ff":
+        "#31506b",
+
+
+      "#d9dcff":
+        "#41446b",
+
+
+      "#eadcff":
+        "#57416b",
+
+
+      "#f0ddff":
+        "#5d4770",
+
+
+      "#fff7df":
+        "#665d42",
+
+
+      "#eef2ff":
+        "#334155"
+
+    };
+
+
+    /* =========================================
+       배경색 변경
+    ========================================= */
+
+    function setBackgroundColor(
+      color,
+      selectedButton
+    ) {
+
+
+      const textColor =
+        backgroundTextColors[color]
+        || "#334155";
+
+
+      document.documentElement.style.setProperty(
+        "--bg-color",
+        color
+      );
+
+
+      document.documentElement.style.setProperty(
+        "--text-color",
+        textColor
+      );
+
+
+      document.documentElement.style.setProperty(
+        "--title-color",
+        textColor
+      );
+
+
+      document.documentElement.style.setProperty(
+        "--display-color",
+        textColor
+      );
+
+
+      document.documentElement.style.setProperty(
+        "--button-text",
+        textColor
+      );
+
+
+      /*
+        활성 버튼도 배경에 어울리도록
+        약간 진하게 설정
+      */
+
+      document.documentElement.style.setProperty(
+        "--active-bg",
+        textColor
+      );
+
+
+      document.documentElement.style.setProperty(
+        "--active-text",
+        "#ffffff"
+      );
+
+
+      document
+        .querySelectorAll(".pastel-color")
+        .forEach(function(button) {
+
+          button.classList.remove(
+            "selected"
+          );
+
+        });
+
+
+      if (selectedButton) {
+
+        selectedButton.classList.add(
+          "selected"
+        );
+
+      }
+
+
+      localStorage.setItem(
+        "backgroundColor",
+        color
+      );
+
+    }
+
+
+    /* =========================================
+       기본 배경
+    ========================================= */
+
+    function resetBackgroundColor() {
+
+
+      setBackgroundColor(
+        defaultBackgroundColor,
+        null
+      );
+
+    }
+
+
+    /* =========================================
+       저장된 배경 불러오기
+    ========================================= */
+
+    const savedColor =
       localStorage.getItem(
-        "language"
-      ) || "ko";
+        "backgroundColor"
+      );
 
 
+    if (savedColor) {
 
-    /* =====================================
+
+      const savedButton =
+        document.querySelector(
+          '.pastel-color[data-color="' +
+          savedColor +
+          '"]'
+        );
+
+
+      setBackgroundColor(
+        savedColor,
+        savedButton
+      );
+
+    }
+
+    else {
+
+
+      setBackgroundColor(
+        defaultBackgroundColor,
+        null
+      );
+
+    }
+
+
+    /* =========================================
        화면 전환
-    ===================================== */
+    ========================================= */
 
-    function showScreen(screenName) {
+    function showScreen(
+      screenName
+    ) {
 
 
       document
@@ -1622,203 +2078,16 @@
     }
 
 
-
-    /* =====================================
-       배경색 + 글자색
-    ===================================== */
-
-    const defaultBackgroundColor =
-      "#eef2ff";
-
-
-    /*
-       각 파스텔 배경에 어울리는
-       글자색을 지정합니다.
-    */
-
-    const backgroundTextColors = {
-
-      "#ffd6e0": "#6b3a47",
-
-      "#ffe0c2": "#6b4935",
-
-      "#fff1b8": "#665a25",
-
-      "#d8f3dc": "#31543a",
-
-      "#c7f9e9": "#285449",
-
-      "#cfe8ff": "#31506b",
-
-      "#d9dcff": "#41446b",
-
-      "#eadcff": "#57416b",
-
-      "#f0ddff": "#5d4770",
-
-      "#fff7df": "#665d42",
-
-      "#eef2ff": "#334155"
-
-    };
-
-
-
-    function setBackgroundColor(
-      color,
-      selectedButton
-    ) {
-
-
-      document.body.style.background =
-        color;
-
-
-      const textColor =
-        backgroundTextColors[color]
-        || "#334155";
-
-
-      document.body.style.color =
-        textColor;
-
-
-      /*
-         화면 안의 기본 글자들도
-         배경에 맞게 변경
-      */
-
-      document
-        .querySelectorAll(
-          ".screen h1"
-        )
-        .forEach(function(element) {
-
-          element.style.color =
-            textColor;
-
-        });
-
-
-      document
-        .querySelectorAll(
-          ".display"
-        )
-        .forEach(function(element) {
-
-          element.style.color =
-            textColor;
-
-        });
-
-
-      document
-        .querySelectorAll(
-          ".date, .timezone-box label, .timer-input-box label, .colon"
-        )
-        .forEach(function(element) {
-
-          element.style.color =
-            textColor;
-
-        });
-
-
-      localStorage.setItem(
-        "backgroundColor",
-        color
-      );
-
-
-      document
-        .querySelectorAll(
-          ".pastel-color"
-        )
-        .forEach(function(button) {
-
-          button.classList.remove(
-            "selected"
-          );
-
-        });
-
-
-      if (selectedButton) {
-
-        selectedButton.classList.add(
-          "selected"
-        );
-
-      }
-
-    }
-
-
-
-    /* =====================================
-       기본색
-    ===================================== */
-
-    function resetBackgroundColor() {
-
-
-      setBackgroundColor(
-        defaultBackgroundColor,
-        null
-      );
-
-    }
-
-
-
-    /* =====================================
-       저장된 배경색
-    ===================================== */
-
-    const savedColor =
-      localStorage.getItem(
-        "backgroundColor"
-      );
-
-
-    if (savedColor) {
-
-
-      setBackgroundColor(
-        savedColor,
-        document.querySelector(
-          '.pastel-color[data-color="' +
-          savedColor +
-          '"]'
-        )
-      );
-
-    }
-
-    else {
-
-
-      setBackgroundColor(
-        defaultBackgroundColor,
-        null
-      );
-
-    }
-
-
-
-    /* =====================================
+    /* =========================================
        현재시간
-    ===================================== */
+    ========================================= */
 
     function updateClock() {
 
 
       const timezone =
         document
-          .getElementById(
-            "timezone"
-          )
+          .getElementById("timezone")
           .value;
 
 
@@ -1826,13 +2095,33 @@
         new Date();
 
 
+      let locale;
+
+
+      if (currentLanguage === "ko") {
+
+        locale = "ko-KR";
+
+      }
+
+      else if (
+        currentLanguage === "ja"
+      ) {
+
+        locale = "ja-JP";
+
+      }
+
+      else {
+
+        locale = "en-US";
+
+      }
+
+
       const timeText =
         new Intl.DateTimeFormat(
-          currentLanguage === "ko"
-            ? "ko-KR"
-            : currentLanguage === "ja"
-              ? "ja-JP"
-              : "en-US",
+          locale,
           {
 
             timeZone:
@@ -1862,14 +2151,9 @@
         timeText;
 
 
-
       const dateText =
         new Intl.DateTimeFormat(
-          currentLanguage === "ko"
-            ? "ko-KR"
-            : currentLanguage === "ja"
-              ? "ja-JP"
-              : "en-US",
+          locale,
           {
 
             timeZone:
@@ -1910,17 +2194,15 @@
     );
 
 
-
-    /* =====================================
+    /* =========================================
        타이머
-    ===================================== */
+    ========================================= */
 
     let timerTime = 0;
 
     let timerInterval = null;
 
     let timerRunning = false;
-
 
 
     function updateTimer() {
@@ -1949,14 +2231,14 @@
         .textContent =
 
         String(hours)
-          .padStart(2, "0") +
+          .padStart(2, "0")
 
-        ":" +
+        + ":" +
 
         String(minutes)
-          .padStart(2, "0") +
+          .padStart(2, "0")
 
-        ":" +
+        + ":" +
 
         String(seconds)
           .padStart(2, "0");
@@ -1967,6 +2249,9 @@
     updateTimer();
 
 
+    /* =========================================
+       타이머 시작 / 정지
+    ========================================= */
 
     function toggleTimer() {
 
@@ -2004,7 +2289,7 @@
       }
 
 
-      /* 새로 시작 */
+      /* 새로운 타이머 시작 */
 
       if (timerTime === 0) {
 
@@ -2153,10 +2438,9 @@
     }
 
 
-
-    /* =====================================
+    /* =========================================
        타이머 초기화
-    ===================================== */
+    ========================================= */
 
     function resetTimer() {
 
@@ -2173,16 +2457,6 @@
 
 
       timerTime = 0;
-
-
-      document
-        .getElementById(
-          "timerStartButton"
-        )
-        .textContent =
-        translations[
-          currentLanguage
-        ].start;
 
 
       document
@@ -2206,15 +2480,24 @@
         .value = 0;
 
 
+      document
+        .getElementById(
+          "timerStartButton"
+        )
+        .textContent =
+        translations[
+          currentLanguage
+        ].start;
+
+
       updateTimer();
 
     }
 
 
-
-    /* =====================================
+    /* =========================================
        초시계
-    ===================================== */
+    ========================================= */
 
     let stopwatchRunning =
       false;
@@ -2229,6 +2512,9 @@
       null;
 
 
+    /* =========================================
+       초시계 표시
+    ========================================= */
 
     function updateStopwatch() {
 
@@ -2266,7 +2552,9 @@
       let displayText;
 
 
-      /* 1시간 미만 */
+      /* 1시간 미만
+         분 : 초 : 밀리초
+      */
 
       if (
         totalMilliseconds <
@@ -2300,14 +2588,14 @@
         displayText =
 
           String(minutes)
-            .padStart(2, "0") +
+            .padStart(2, "0")
 
-          ":" +
+          + ":" +
 
           String(seconds)
-            .padStart(2, "0") +
+            .padStart(2, "0")
 
-          ":" +
+          + ":" +
 
           String(milliseconds)
             .padStart(2, "0");
@@ -2315,7 +2603,9 @@
       }
 
 
-      /* 1시간 이상 */
+      /* 1시간 이상
+         시간 : 분 : 초
+      */
 
       else {
 
@@ -2346,14 +2636,14 @@
         displayText =
 
           String(hours)
-            .padStart(2, "0") +
+            .padStart(2, "0")
 
-          ":" +
+          + ":" +
 
           String(minutes)
-            .padStart(2, "0") +
+            .padStart(2, "0")
 
-          ":" +
+          + ":" +
 
           String(seconds)
             .padStart(2, "0");
@@ -2382,10 +2672,9 @@
     }
 
 
-
-    /* =====================================
+    /* =========================================
        초시계 시작 / 정지
-    ===================================== */
+    ========================================= */
 
     function toggleStopwatch() {
 
@@ -2467,10 +2756,9 @@
     }
 
 
-
-    /* =====================================
+    /* =========================================
        초시계 초기화
-    ===================================== */
+    ========================================= */
 
     function resetStopwatch() {
 
@@ -2523,10 +2811,9 @@
     }
 
 
-
-    /* =====================================
+    /* =========================================
        언어 변경
-    ===================================== */
+    ========================================= */
 
     function changeLanguage() {
 
@@ -2550,10 +2837,9 @@
     }
 
 
-
-    /* =====================================
+    /* =========================================
        언어 적용
-    ===================================== */
+    ========================================= */
 
     function applyLanguage() {
 
@@ -2670,9 +2956,8 @@
         t.reset;
 
 
-      /* 타이머 버튼 */
-
       if (timerRunning) {
+
 
         document
           .getElementById(
@@ -2684,6 +2969,7 @@
       }
 
       else {
+
 
         document
           .getElementById(
@@ -2715,6 +3001,7 @@
 
       if (stopwatchRunning) {
 
+
         document
           .getElementById(
             "stopwatchStartButton"
@@ -2725,6 +3012,7 @@
       }
 
       else {
+
 
         document
           .getElementById(
@@ -2791,10 +3079,9 @@
     }
 
 
-
-    /* =====================================
-       저장된 언어 적용
-    ===================================== */
+    /* =========================================
+       저장된 언어 불러오기
+    ========================================= */
 
     document
       .getElementById(
@@ -2807,6 +3094,7 @@
     applyLanguage();
 
   </script>
+
 
 </body>
 
