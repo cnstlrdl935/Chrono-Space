@@ -11,6 +11,7 @@
 
   <title>시간 도구</title>
 
+
   <style>
 
     * {
@@ -19,6 +20,7 @@
 
 
     body {
+
       margin: 0;
 
       font-family:
@@ -29,6 +31,7 @@
       background: #f3f4f6;
 
       color: #111;
+
     }
 
 
@@ -51,6 +54,7 @@
       box-shadow:
         0 2px 10px
         rgba(0, 0, 0, 0.08);
+
     }
 
 
@@ -69,12 +73,14 @@
       cursor: pointer;
 
       transition: 0.2s;
+
     }
 
 
     .menu button:hover {
 
       background: #dddddd;
+
     }
 
 
@@ -83,8 +89,8 @@
       background: #111111;
 
       color: white;
-    }
 
+    }
 
 
     /* =========================
@@ -103,6 +109,7 @@
       align-items: center;
 
       padding: 30px;
+
     }
 
 
@@ -125,12 +132,14 @@
       box-shadow:
         0 10px 30px
         rgba(0, 0, 0, 0.08);
+
     }
 
 
     .screen.active {
 
       display: block;
+
     }
 
 
@@ -139,6 +148,7 @@
       margin-top: 0;
 
       font-size: 30px;
+
     }
 
 
@@ -155,8 +165,10 @@
       font-weight: bold;
 
       margin: 40px 0;
-    }
 
+      white-space: nowrap;
+
+    }
 
 
     /* =========================
@@ -174,6 +186,7 @@
       gap: 12px;
 
       margin-bottom: 30px;
+
     }
 
 
@@ -184,6 +197,7 @@
       flex-direction: column;
 
       align-items: center;
+
     }
 
 
@@ -194,6 +208,7 @@
       margin-bottom: 6px;
 
       color: #555;
+
     }
 
 
@@ -212,12 +227,14 @@
       border-radius: 10px;
 
       outline: none;
+
     }
 
 
     .timer-input-box input:focus {
 
       border-color: #555;
+
     }
 
 
@@ -228,8 +245,8 @@
       font-weight: bold;
 
       margin-top: 22px;
-    }
 
+    }
 
 
     /* =========================
@@ -253,14 +270,15 @@
       background: #eeeeee;
 
       transition: 0.2s;
+
     }
 
 
     .buttons button:hover {
 
       background: #dddddd;
-    }
 
+    }
 
 
     /* =========================
@@ -269,12 +287,12 @@
 
     @media (max-width: 600px) {
 
-
       .menu {
 
         gap: 5px;
 
         padding: 12px;
+
       }
 
 
@@ -283,24 +301,28 @@
         padding: 10px 12px;
 
         font-size: 14px;
+
       }
 
 
       .screen {
 
         padding: 45px 15px;
+
       }
 
 
       .display {
 
         font-size: 42px;
+
       }
 
 
       .timer-inputs {
 
         gap: 5px;
+
       }
 
 
@@ -309,12 +331,39 @@
         width: 80px;
 
         font-size: 20px;
+
       }
 
 
       .colon {
 
         font-size: 22px;
+
+      }
+
+    }
+
+
+    @media (max-width: 400px) {
+
+      .timer-input-box input {
+
+        width: 65px;
+
+      }
+
+
+      .timer-inputs {
+
+        gap: 2px;
+
+      }
+
+
+      .display {
+
+        font-size: 34px;
+
       }
 
     }
@@ -628,7 +677,6 @@
 
     function updateClock() {
 
-
       const now = new Date();
 
 
@@ -671,7 +719,6 @@
     /* =====================================
        타이머
     ===================================== */
-
 
     let timerTime = 0;
 
@@ -720,13 +767,16 @@
     }
 
 
+    updateTimer();
+
+
 
     // 타이머 시작
 
     function startTimer() {
 
 
-      // 이미 실행 중이면 아무것도 하지 않음
+      // 이미 실행 중이면 중복 실행 방지
 
       if (timerInterval !== null) {
 
@@ -735,12 +785,12 @@
       }
 
 
-      // 시간이 0이라면 입력값 가져오기
+      // 시간이 0이면 입력값 가져오기
 
       if (timerTime === 0) {
 
 
-        let hours =
+        const hours =
           Number(
             document
               .getElementById("timerHours")
@@ -748,7 +798,7 @@
           );
 
 
-        let minutes =
+        const minutes =
           Number(
             document
               .getElementById("timerMinutes")
@@ -756,7 +806,7 @@
           );
 
 
-        let seconds =
+        const seconds =
           Number(
             document
               .getElementById("timerSeconds")
@@ -764,7 +814,7 @@
           );
 
 
-        // 입력값 검증
+        // 입력값 검사
 
         if (
           hours < 0 ||
@@ -784,7 +834,7 @@
         }
 
 
-        // 전부 0이면 실행하지 않음
+        // 모두 0이면 실행하지 않음
 
         if (
           hours === 0 &&
@@ -801,7 +851,7 @@
         }
 
 
-        // 전체 시간을 초로 변환
+        // 모든 값을 초로 변환
 
         timerTime =
 
@@ -810,6 +860,9 @@
           minutes * 60 +
 
           seconds;
+
+
+        updateTimer();
 
       }
 
@@ -826,7 +879,7 @@
           updateTimer();
 
 
-          // 0이 되면 종료
+          // 종료
 
           if (timerTime <= 0) {
 
@@ -915,10 +968,13 @@
        초시계
     ===================================== */
 
+    let stopwatchRunning = false;
 
-    let stopwatchTime = 0;
+    let stopwatchStartTime = 0;
 
-    let stopwatchInterval = null;
+    let stopwatchElapsed = 0;
+
+    let stopwatchAnimation = null;
 
 
 
@@ -927,243 +983,289 @@
     function updateStopwatch() {
 
 
-      const hours =
-        Math.floor(
-          stopwatchTime / 3600
-        );
+      let totalMilliseconds;
 
 
-      const minutes =
-        Math.floor(
-          (stopwatchTime % 3600) / 60
-        );
+      // 실행 중
+
+      if (stopwatchRunning) {
+
+        totalMilliseconds =
+
+          stopwatchElapsed +
+
+          (
+            performance.now() -
+            stopwatchStartTime
+          );
+
+      }
+
+      // 정지 상태
+
+      else {
+
+        totalMilliseconds =
+          stopwatchElapsed;
+
+      }
 
 
-      const seconds =
-        stopwatchTime % 60;
 
+      /*
+        1시간 미만:
+        분 : 초 : 밀리초
+
+        1시간 이상:
+        시간 : 분 : 초
+      */
+
+
+      const oneHour =
+        60 * 60 * 1000;
+
+
+      let displayText;
+
+
+
+      // =========================
+      // 1시간 미만
+      // =========================
+
+      if (
+        totalMilliseconds < oneHour
+      ) {
+
+
+        const minutes =
+          Math.floor(
+            totalMilliseconds / 60000
+          );
+
+
+        const seconds =
+          Math.floor(
+            (totalMilliseconds % 60000)
+            / 1000
+          );
+
+
+        // 1/100초 단위
+
+        const milliseconds =
+          Math.floor(
+            (totalMilliseconds % 1000)
+            / 10
+          );
+
+
+        displayText =
+
+          String(minutes)
+            .padStart(2, "0") +
+
+          ":" +
+
+          String(seconds)
+            .padStart(2, "0") +
+
+          ":" +
+
+          String(milliseconds)
+            .padStart(2, "0");
+
+      }
+
+
+
+      // =========================
+      // 1시간 이상
+      // =========================
+
+      else {
+
+
+        const hours =
+          Math.floor(
+            totalMilliseconds / 3600000
+          );
+
+
+        const minutes =
+          Math.floor(
+            (totalMilliseconds % 3600000)
+            / 60000
+          );
+
+
+        const seconds =
+          Math.floor(
+            (totalMilliseconds % 60000)
+            / 1000
+          );
+
+
+        displayText =
+
+          String(hours)
+            .padStart(2, "0") +
+
+          ":" +
+
+          String(minutes)
+            .padStart(2, "0") +
+
+          ":" +
+
+          String(seconds)
+            .padStart(2, "0");
+
+      }
+
+
+
+      // 화면에 표시
 
       document
-        .getElementById("stopwatchDisplay")
-        .textContent =
+        .getElementById(
+          "stopwatchDisplay"
+        )
+        .textContent = displayText;
 
-        String(hours)
-          .padStart(2, "0") +
 
-        ":" +
 
-        String(minutes)
-          .padStart(2, "0") +
+      // 실행 중이면 계속 업데이트
 
-        ":" +
+      if (stopwatchRunning) {
 
-        String(seconds)
-          .padStart(2, "0");
+
+        stopwatchAnimation =
+          requestAnimationFrame(
+            updateStopwatch
+          );
+
+      }
 
     }
 
 
-/* =====================================
-   초시계
-===================================== */
 
-let stopwatchTime = 0;
+    // 초시계 시작
 
-// 실제 시작 시각
-let stopwatchStartTime = 0;
+    function startStopwatch() {
 
-// 정지했을 때까지의 누적 시간
-let stopwatchElapsed = 0;
 
-let stopwatchAnimation = null;
+      // 이미 실행 중이면 중복 실행 방지
 
+      if (stopwatchRunning) {
 
-// 초시계 화면 업데이트
-function updateStopwatch() {
+        return;
 
-  const totalMilliseconds =
-    stopwatchElapsed +
-    (stopwatchTime
-      ? performance.now() - stopwatchStartTime
-      : 0);
+      }
 
 
-  // 1시간 = 3,600,000밀리초
-  const oneHour = 60 * 60 * 1000;
+      stopwatchRunning = true;
 
 
-  let displayText;
+      stopwatchStartTime =
+        performance.now();
 
 
-  // ==============================
-  // 1시간 미만
-  // 분 : 초 : 밀리초
-  // ==============================
+      updateStopwatch();
 
-  if (totalMilliseconds < oneHour) {
+    }
 
-    const minutes =
-      Math.floor(
-        totalMilliseconds / 60000
-      );
 
-    const seconds =
-      Math.floor(
-        (totalMilliseconds % 60000) / 1000
-      );
 
-    const milliseconds =
-      Math.floor(
-        (totalMilliseconds % 1000) / 10
-      );
+    // 초시계 정지
 
+    function pauseStopwatch() {
 
-    displayText =
 
-      String(minutes).padStart(2, "0") +
-      ":" +
+      if (!stopwatchRunning) {
 
-      String(seconds).padStart(2, "0") +
-      ":" +
+        return;
 
-      String(milliseconds).padStart(2, "0");
+      }
 
-  }
 
+      // 현재까지의 시간을 저장
 
-  // ==============================
-  // 1시간 이상
-  // 시간 : 분 : 초
-  // ==============================
+      stopwatchElapsed +=
 
-  else {
+        performance.now() -
+        stopwatchStartTime;
 
-    const hours =
-      Math.floor(
-        totalMilliseconds / 3600000
-      );
 
-    const minutes =
-      Math.floor(
-        (totalMilliseconds % 3600000) / 60000
-      );
+      stopwatchRunning = false;
 
-    const seconds =
-      Math.floor(
-        (totalMilliseconds % 60000) / 1000
-      );
 
+      stopwatchStartTime = 0;
 
-    displayText =
 
-      String(hours).padStart(2, "0") +
-      ":" +
+      // 애니메이션 중지
 
-      String(minutes).padStart(2, "0") +
-      ":" +
+      if (
+        stopwatchAnimation !== null
+      ) {
 
-      String(seconds).padStart(2, "0");
 
-  }
+        cancelAnimationFrame(
+          stopwatchAnimation
+        );
 
 
-  document
-    .getElementById("stopwatchDisplay")
-    .textContent = displayText;
+        stopwatchAnimation = null;
 
+      }
 
-  // 실행 중이면 계속 업데이트
-  if (stopwatchTime) {
 
-    stopwatchAnimation =
-      requestAnimationFrame(updateStopwatch);
+      updateStopwatch();
 
-  }
+    }
 
-}
 
 
+    // 초시계 초기화
 
-// 초시계 시작
-function startStopwatch() {
+    function resetStopwatch() {
 
-  if (stopwatchTime) {
-    return;
-  }
 
+      // 실행 중인 업데이트 중지
 
-  stopwatchStartTime =
-    performance.now();
+      if (
+        stopwatchAnimation !== null
+      ) {
 
 
-  stopwatchTime = 1;
+        cancelAnimationFrame(
+          stopwatchAnimation
+        );
 
 
-  updateStopwatch();
+        stopwatchAnimation = null;
 
-}
+      }
 
 
+      stopwatchRunning = false;
 
-// 초시계 정지
-function pauseStopwatch() {
 
-  if (!stopwatchTime) {
-    return;
-  }
+      stopwatchStartTime = 0;
 
 
-  stopwatchElapsed +=
-    performance.now() -
-    stopwatchStartTime;
+      stopwatchElapsed = 0;
 
 
-  stopwatchTime = 0;
+      document
+        .getElementById(
+          "stopwatchDisplay"
+        )
+        .textContent = "00:00:00";
 
+    }
 
-  if (stopwatchAnimation) {
-
-    cancelAnimationFrame(
-      stopwatchAnimation
-    );
-
-    stopwatchAnimation = null;
-
-  }
-
-
-  updateStopwatch();
-
-}
-
-
-
-// 초시계 초기화
-function resetStopwatch() {
-
-  if (stopwatchAnimation) {
-
-    cancelAnimationFrame(
-      stopwatchAnimation
-    );
-
-    stopwatchAnimation = null;
-
-  }
-
-
-  stopwatchTime = 0;
-
-  stopwatchStartTime = 0;
-
-  stopwatchElapsed = 0;
-
-
-  document
-    .getElementById("stopwatchDisplay")
-    .textContent = "00:00:00";
-
-}
 
   </script>
 
