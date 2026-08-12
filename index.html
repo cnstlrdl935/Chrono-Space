@@ -2167,6 +2167,15 @@ function showScreen(screenName) {
   }
 
 
+  /* 현재시간 화면에서는 전체화면이 아니어도 화면 꺼짐 방지 */
+  if (screenName === "clock") {
+    requestScreenWakeLock();
+  }
+  else if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+    releaseScreenWakeLock();
+  }
+
+
   if (menuButton) {
     menuButton.classList.add("active");
   }
@@ -2794,9 +2803,17 @@ async function releaseScreenWakeLock() {
 
 async function restoreScreenWakeLock() {
 
+  const clockScreen =
+    document.getElementById("clock");
+
+  const isClockActive =
+    !!clockScreen &&
+    clockScreen.classList.contains("active");
+
   if (
     document.fullscreenElement ||
-    document.webkitFullscreenElement
+    document.webkitFullscreenElement ||
+    isClockActive
   ) {
     await requestScreenWakeLock();
   }
@@ -2953,6 +2970,12 @@ document.addEventListener(
 );
 
 
+/* 페이지를 처음 열었을 때도 현재시간 화면의 화면 꺼짐 방지를 시도 */
+window.addEventListener("load", () => {
+  restoreScreenWakeLock();
+});
+
+
 function updateFullscreenButtons() {
 
   const isFullscreenNow =
@@ -2960,7 +2983,7 @@ function updateFullscreenButtons() {
     !!document.webkitFullscreenElement;
 
   if (!isFullscreenNow) {
-    releaseScreenWakeLock();
+    restoreScreenWakeLock();
   }
 
   const t =
