@@ -966,6 +966,7 @@ select {
 }
 
 .screen#clock:fullscreen .timezone-box {
+  display: none;
   position: absolute;
   top: 28%;
   left: 50%;
@@ -1021,9 +1022,17 @@ select {
 
 .screen#clock:fullscreen .fullscreen-button {
   top: 5%;
-  right: 8%;
-  padding: 7px 11px;
-  font-size: clamp(10px, 1.5vmin, 14px);
+  right: 7%;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  border-radius: 50%;
+  font-size: 28px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
 }
 
 @media (max-width: 500px) {
@@ -1037,8 +1046,7 @@ select {
   }
 
   .screen#clock:fullscreen .timezone-box {
-    top: 27%;
-    width: 72%;
+    display: none;
   }
 
   .screen#clock:fullscreen .display {
@@ -2754,6 +2762,47 @@ function resetStopwatch() {
 
 
 /* =========================================
+   화면 꺼짐 방지
+========================================= */
+
+let screenWakeLock = null;
+
+async function requestScreenWakeLock() {
+
+  if (!('wakeLock' in navigator)) {
+    return;
+  }
+
+  try {
+    screenWakeLock = await navigator.wakeLock.request('screen');
+  } catch (error) {
+    console.log('Wake Lock을 사용할 수 없습니다:', error);
+  }
+}
+
+async function releaseScreenWakeLock() {
+
+  if (screenWakeLock) {
+    try {
+      await screenWakeLock.release();
+    } catch (error) {
+      console.log(error);
+    }
+    screenWakeLock = null;
+  }
+}
+
+async function restoreScreenWakeLock() {
+
+  if (
+    document.fullscreenElement ||
+    document.webkitFullscreenElement
+  ) {
+    await requestScreenWakeLock();
+  }
+}
+
+/* =========================================
    전체화면
 ========================================= */
 
@@ -2782,6 +2831,8 @@ async function toggleFullscreen(
   ) {
 
     try {
+
+      await releaseScreenWakeLock();
 
       if (
         document.exitFullscreen
@@ -2825,6 +2876,8 @@ async function toggleFullscreen(
 
       await screen.requestFullscreen();
 
+      await requestScreenWakeLock();
+
     }
 
     catch(error) {
@@ -2851,6 +2904,8 @@ async function toggleFullscreen(
     try {
 
       screen.webkitRequestFullscreen();
+
+      await requestScreenWakeLock();
 
     }
 
@@ -2888,8 +2943,25 @@ document.addEventListener(
   updateFullscreenButtons
 );
 
+document.addEventListener(
+  "visibilitychange",
+  async () => {
+    if (document.visibilityState === "visible") {
+      await restoreScreenWakeLock();
+    }
+  }
+);
+
 
 function updateFullscreenButtons() {
+
+  const isFullscreenNow =
+    !!document.fullscreenElement ||
+    !!document.webkitFullscreenElement;
+
+  if (!isFullscreenNow) {
+    releaseScreenWakeLock();
+  }
 
   const t =
     translations[
@@ -2910,7 +2982,7 @@ function updateFullscreenButtons() {
 
       button.textContent =
         isFullscreen
-          ? t.exitFullscreen
+          ? '×'
           : t.fullscreen;
 
     });
