@@ -1,294 +1,627 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
+
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0">
 
   <title>시간 도구</title>
 
   <style>
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: #f2f4f7;
-      text-align: center;
+      background: #f3f4f6;
+      color: #111;
     }
 
-    h1 {
-      margin: 50px 0 30px;
-    }
+    /* 위쪽 메뉴 */
 
-    .container {
+    .menu {
       display: flex;
       justify-content: center;
-      gap: 20px;
-      flex-wrap: wrap;
-    }
+      gap: 10px;
 
-    .card {
+      padding: 20px;
+
       background: white;
-      width: 250px;
-      padding: 25px;
-      border-radius: 15px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+
+      box-shadow:
+        0 2px 10px
+        rgba(0, 0, 0, 0.08);
     }
 
-    .display {
-      font-size: 36px;
-      font-weight: bold;
-      margin: 25px 0;
-      font-family: monospace;
-    }
-
-    input {
-      width: 80%;
-      padding: 10px;
-      font-size: 16px;
-      margin-bottom: 10px;
-    }
-
-    button {
-      padding: 10px 14px;
-      margin: 3px;
+    .menu button {
       border: none;
-      border-radius: 8px;
+      background: #eee;
+
+      padding: 12px 25px;
+
+      border-radius: 10px;
+
+      font-size: 16px;
+
       cursor: pointer;
     }
 
-    button:hover {
+    .menu button:hover {
+      background: #ddd;
+    }
+
+    .menu button.active {
+      background: #111;
+      color: white;
+    }
+
+
+    /* 아래 화면 */
+
+    .content {
+      min-height: calc(100vh - 85px);
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      padding: 30px;
+    }
+
+
+    .screen {
+      display: none;
+
+      background: white;
+
+      width: 100%;
+      max-width: 700px;
+
+      padding: 60px 30px;
+
+      border-radius: 20px;
+
+      text-align: center;
+
+      box-shadow:
+        0 10px 30px
+        rgba(0, 0, 0, 0.08);
+    }
+
+    .screen.active {
+      display: block;
+    }
+
+
+    h1 {
+      margin-top: 0;
+      font-size: 28px;
+    }
+
+
+    .display {
+      font-family: monospace;
+
+      font-size: 60px;
+
+      font-weight: bold;
+
+      margin: 40px 0;
+    }
+
+
+    input {
+      padding: 14px;
+
+      width: 200px;
+
+      font-size: 18px;
+
+      text-align: center;
+
+      border: 1px solid #ccc;
+
+      border-radius: 10px;
+
+      margin-bottom: 15px;
+    }
+
+
+    .buttons button {
+      border: none;
+
+      padding: 12px 20px;
+
+      margin: 5px;
+
+      border-radius: 10px;
+
+      font-size: 16px;
+
+      cursor: pointer;
+    }
+
+
+    .buttons button:hover {
       opacity: 0.7;
     }
+
+
+    /* 휴대폰 */
+
+    @media (max-width: 600px) {
+
+      .menu {
+        gap: 5px;
+        padding: 12px;
+      }
+
+      .menu button {
+        padding: 10px 12px;
+        font-size: 14px;
+      }
+
+      .display {
+        font-size: 42px;
+      }
+
+      .screen {
+        padding: 45px 15px;
+      }
+
+    }
+
   </style>
+
 </head>
+
 
 <body>
 
-  <h1>시간 도구</h1>
 
-  <div class="container">
+  <!-- 위쪽 선택 메뉴 -->
+
+  <div class="menu">
+
+    <button
+      id="clockButton"
+      class="active"
+      onclick="showScreen('clock')">
+
+      현재시간
+
+    </button>
+
+
+    <button
+      id="timerButton"
+      onclick="showScreen('timer')">
+
+      타이머
+
+    </button>
+
+
+    <button
+      id="stopwatchButton"
+      onclick="showScreen('stopwatch')">
+
+      초시계
+
+    </button>
+
+  </div>
+
+
+
+  <!-- 아래쪽 화면 -->
+
+  <div class="content">
+
 
     <!-- 현재시간 -->
-    <div class="card">
-      <h2>현재시간</h2>
 
-      <div id="clock" class="display">
+    <div
+      id="clock"
+      class="screen active">
+
+      <h1>현재시간</h1>
+
+      <div
+        id="clockDisplay"
+        class="display">
+
         00:00:00
+
       </div>
+
     </div>
 
 
-    <!-- 타이머 -->
-    <div class="card">
-      <h2>타이머</h2>
 
-      <div id="timer" class="display">
+    <!-- 타이머 -->
+
+    <div
+      id="timer"
+      class="screen">
+
+      <h1>타이머</h1>
+
+      <div
+        id="timerDisplay"
+        class="display">
+
         00:00
+
       </div>
+
 
       <input
         type="number"
         id="timerInput"
         placeholder="초 입력"
-        min="1"
-      >
+        min="1">
 
-      <br>
 
-      <button onclick="startTimer()">시작</button>
-      <button onclick="pauseTimer()">정지</button>
-      <button onclick="resetTimer()">초기화</button>
+      <div class="buttons">
+
+        <button onclick="startTimer()">
+          시작
+        </button>
+
+        <button onclick="pauseTimer()">
+          정지
+        </button>
+
+        <button onclick="resetTimer()">
+          초기화
+        </button>
+
+      </div>
+
     </div>
+
 
 
     <!-- 초시계 -->
-    <div class="card">
-      <h2>초시계</h2>
 
-      <div id="stopwatch" class="display">
+    <div
+      id="stopwatch"
+      class="screen">
+
+      <h1>초시계</h1>
+
+      <div
+        id="stopwatchDisplay"
+        class="display">
+
         00:00:00
+
       </div>
 
-      <button onclick="startStopwatch()">시작</button>
-      <button onclick="pauseStopwatch()">정지</button>
-      <button onclick="resetStopwatch()">초기화</button>
+
+      <div class="buttons">
+
+        <button onclick="startStopwatch()">
+          시작
+        </button>
+
+        <button onclick="pauseStopwatch()">
+          정지
+        </button>
+
+        <button onclick="resetStopwatch()">
+          초기화
+        </button>
+
+      </div>
+
     </div>
+
 
   </div>
 
 
-  <script>
 
-    // =========================
-    // 현재시간
-    // =========================
+<script>
 
-    function updateClock() {
 
-      const now = new Date();
+  // =====================================
+  // 화면 전환
+  // =====================================
 
-      const h = String(now.getHours()).padStart(2, "0");
-      const m = String(now.getMinutes()).padStart(2, "0");
-      const s = String(now.getSeconds()).padStart(2, "0");
+  function showScreen(screenName) {
 
-      document.getElementById("clock").textContent =
-        h + ":" + m + ":" + s;
+
+    // 모든 화면 숨기기
+
+    document
+      .querySelectorAll(".screen")
+      .forEach(function(screen) {
+
+        screen.classList.remove("active");
+
+      });
+
+
+    // 모든 버튼 비활성화
+
+    document
+      .querySelectorAll(".menu button")
+      .forEach(function(button) {
+
+        button.classList.remove("active");
+
+      });
+
+
+    // 선택한 화면 보여주기
+
+    document
+      .getElementById(screenName)
+      .classList.add("active");
+
+
+    // 선택한 버튼 활성화
+
+    document
+      .getElementById(screenName + "Button")
+      .classList.add("active");
+
+  }
+
+
+
+  // =====================================
+  // 현재시간
+  // =====================================
+
+  function updateClock() {
+
+    const now = new Date();
+
+
+    const hours =
+      String(now.getHours())
+      .padStart(2, "0");
+
+
+    const minutes =
+      String(now.getMinutes())
+      .padStart(2, "0");
+
+
+    const seconds =
+      String(now.getSeconds())
+      .padStart(2, "0");
+
+
+    document
+      .getElementById("clockDisplay")
+      .textContent =
+
+      hours + ":" +
+      minutes + ":" +
+      seconds;
+
+  }
+
+
+  updateClock();
+
+  setInterval(updateClock, 1000);
+
+
+
+  // =====================================
+  // 타이머
+  // =====================================
+
+  let timerTime = 0;
+
+  let timerInterval = null;
+
+
+  function updateTimer() {
+
+    const minutes =
+      Math.floor(timerTime / 60);
+
+
+    const seconds =
+      timerTime % 60;
+
+
+    document
+      .getElementById("timerDisplay")
+      .textContent =
+
+      String(minutes).padStart(2, "0") +
+      ":" +
+      String(seconds).padStart(2, "0");
+
+  }
+
+
+  function startTimer() {
+
+
+    if (timerInterval !== null) {
+      return;
     }
 
-    updateClock();
 
-    setInterval(updateClock, 1000);
-
-
-    // =========================
-    // 타이머
-    // =========================
-
-    let timerTime = 0;
-    let timerInterval = null;
+    if (timerTime === 0) {
 
 
-    function updateTimer() {
-
-      const minutes = Math.floor(timerTime / 60);
-      const seconds = timerTime % 60;
-
-      document.getElementById("timer").textContent =
-        String(minutes).padStart(2, "0") +
-        ":" +
-        String(seconds).padStart(2, "0");
-    }
+      const input =
+        document.getElementById("timerInput");
 
 
-    function startTimer() {
+      timerTime =
+        Number(input.value);
 
-      if (timerInterval !== null) {
+
+      if (timerTime <= 0) {
+
+        alert("초를 입력해주세요.");
+
         return;
+
       }
 
-      if (timerTime === 0) {
+    }
 
-        const input =
-          document.getElementById("timerInput");
 
-        timerTime = Number(input.value);
+    timerInterval =
+      setInterval(function() {
 
-        if (timerTime <= 0) {
-          alert("초를 입력해주세요.");
-          return;
-        }
-      }
-
-      timerInterval = setInterval(function() {
 
         timerTime--;
 
         updateTimer();
 
+
         if (timerTime <= 0) {
+
 
           clearInterval(timerInterval);
 
           timerInterval = null;
 
+
           alert("타이머가 끝났습니다!");
 
         }
 
+
       }, 1000);
+
+  }
+
+
+  function pauseTimer() {
+
+    clearInterval(timerInterval);
+
+    timerInterval = null;
+
+  }
+
+
+  function resetTimer() {
+
+    clearInterval(timerInterval);
+
+    timerInterval = null;
+
+    timerTime = 0;
+
+    document
+      .getElementById("timerInput")
+      .value = "";
+
+    updateTimer();
+
+  }
+
+
+
+  // =====================================
+  // 초시계
+  // =====================================
+
+  let stopwatchTime = 0;
+
+  let stopwatchInterval = null;
+
+
+  function updateStopwatch() {
+
+
+    const hours =
+      Math.floor(stopwatchTime / 3600);
+
+
+    const minutes =
+      Math.floor(
+        (stopwatchTime % 3600) / 60
+      );
+
+
+    const seconds =
+      stopwatchTime % 60;
+
+
+    document
+      .getElementById("stopwatchDisplay")
+      .textContent =
+
+      String(hours).padStart(2, "0") +
+      ":" +
+
+      String(minutes).padStart(2, "0") +
+      ":" +
+
+      String(seconds).padStart(2, "0");
+
+  }
+
+
+  function startStopwatch() {
+
+
+    if (stopwatchInterval !== null) {
+      return;
     }
 
 
-    function pauseTimer() {
+    stopwatchInterval =
+      setInterval(function() {
 
-      clearInterval(timerInterval);
-
-      timerInterval = null;
-    }
-
-
-    function resetTimer() {
-
-      clearInterval(timerInterval);
-
-      timerInterval = null;
-
-      timerTime = 0;
-
-      document.getElementById("timerInput").value = "";
-
-      updateTimer();
-    }
-
-
-    // =========================
-    // 초시계
-    // =========================
-
-    let stopwatchTime = 0;
-    let stopwatchInterval = null;
-
-
-    function updateStopwatch() {
-
-      const hours =
-        Math.floor(stopwatchTime / 3600);
-
-      const minutes =
-        Math.floor((stopwatchTime % 3600) / 60);
-
-      const seconds =
-        stopwatchTime % 60;
-
-
-      document.getElementById("stopwatch").textContent =
-
-        String(hours).padStart(2, "0") +
-        ":" +
-
-        String(minutes).padStart(2, "0") +
-        ":" +
-
-        String(seconds).padStart(2, "0");
-    }
-
-
-    function startStopwatch() {
-
-      if (stopwatchInterval !== null) {
-        return;
-      }
-
-      stopwatchInterval = setInterval(function() {
 
         stopwatchTime++;
 
         updateStopwatch();
 
+
       }, 1000);
-    }
+
+  }
 
 
-    function pauseStopwatch() {
+  function pauseStopwatch() {
 
-      clearInterval(stopwatchInterval);
+    clearInterval(stopwatchInterval);
 
-      stopwatchInterval = null;
-    }
+    stopwatchInterval = null;
+
+  }
 
 
-    function resetStopwatch() {
+  function resetStopwatch() {
 
-      clearInterval(stopwatchInterval);
+    clearInterval(stopwatchInterval);
 
-      stopwatchInterval = null;
+    stopwatchInterval = null;
 
-      stopwatchTime = 0;
+    stopwatchTime = 0;
 
-      updateStopwatch();
-    }
+    updateStopwatch();
 
-  </script>
+  }
+
+
+</script>
+
 
 </body>
-</html>
+
 </html>
