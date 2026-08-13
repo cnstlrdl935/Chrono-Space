@@ -3607,5 +3607,84 @@ updateStopwatch();
 
 </script>
 
+
+<style>
+/* 최종 워치 전용 전체화면 설정
+   일반 기기에서는 이 규칙이 적용되지 않습니다. */
+body.watch-device #clock:fullscreen .clock-content{
+  width:min(76vw,270px);height:min(76vw,270px);
+  max-width:270px;max-height:270px;border-radius:50%;
+  border:2px solid rgba(51,65,85,.18);
+  background:rgba(255,255,255,.55);
+  box-shadow:0 8px 30px var(--shadow);
+  position:relative;
+}
+body.watch-device #clock:fullscreen h1{
+  top:14%;font-size:clamp(11px,3.5vw,17px);line-height:1.1;
+}
+body.watch-device #clock:fullscreen .display{
+  top:43%;font-size:clamp(20px,7vw,42px);
+  line-height:1;letter-spacing:-.04em;
+}
+body.watch-device #clock:fullscreen .date{
+  top:67%;width:72%;font-size:clamp(7px,2.4vw,11px);
+  line-height:1.25;overflow-wrap:anywhere;
+}
+body.watch-device #clock:fullscreen .timezone,
+body.watch-device #clock:fullscreen #timezone{
+  display:none!important;
+}
+body.watch-device .screen:fullscreen .fullscreen-button{
+  top:max(8px,env(safe-area-inset-top));
+  right:max(8px,env(safe-area-inset-right));
+  width:28px;height:28px;padding:0;border:0;border-radius:50%;
+  background:transparent!important;box-shadow:none!important;
+  backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
+  font-size:0;color:var(--text-color);
+}
+body.watch-device .screen:fullscreen .fullscreen-button::after{
+  content:"×";font-size:22px;line-height:28px;font-weight:700;
+}
+body.watch-device #timer:fullscreen h1,
+body.watch-device #stopwatch:fullscreen h1{
+  top:13%;font-size:clamp(11px,3.5vw,17px);line-height:1.1;
+}
+body.watch-device #timer:fullscreen .display,
+body.watch-device #stopwatch:fullscreen .display{
+  top:39%;font-size:clamp(20px,6.5vw,40px);
+  line-height:1;letter-spacing:-.04em;
+}
+body.watch-device #timer:fullscreen .timer-inputs{
+  top:57%;transform:translateX(-50%) scale(.65);transform-origin:center;
+}
+body.watch-device #timer:fullscreen .buttons,
+body.watch-device #stopwatch:fullscreen .buttons{
+  bottom:11%;transform:translateX(-50%) scale(.70);transform-origin:center;
+}
+@media (max-width:300px),(max-height:360px){
+  body.watch-device #clock:fullscreen .clock-content{
+    width:min(72vw,220px);height:min(72vw,220px);
+  }
+  body.watch-device #clock:fullscreen h1{top:13%;font-size:10px}
+  body.watch-device #clock:fullscreen .display{
+    top:43%;font-size:clamp(18px,6.5vw,32px)
+  }
+  body.watch-device #clock:fullscreen .date{top:67%;font-size:7px}
+  body.watch-device #timer:fullscreen h1,
+  body.watch-device #stopwatch:fullscreen h1{top:12%;font-size:10px}
+  body.watch-device #timer:fullscreen .display,
+  body.watch-device #stopwatch:fullscreen .display{
+    top:38%;font-size:clamp(18px,6vw,30px)
+  }
+  body.watch-device #timer:fullscreen .timer-inputs{
+    top:57%;transform:translateX(-50%) scale(.55)
+  }
+  body.watch-device #timer:fullscreen .buttons,
+  body.watch-device #stopwatch:fullscreen .buttons{
+    bottom:9%;transform:translateX(-50%) scale(.58)
+  }
+}
+</style>
+
 </body>
 </html>
